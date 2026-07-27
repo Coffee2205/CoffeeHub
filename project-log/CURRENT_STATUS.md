@@ -33,5 +33,5 @@ Next.js 16.2.12 App Router, React 19.2.8, TypeScript strict, Tailwind CSS 4 và 
 - Typecheck: Đạt (`npm run typecheck`).
 - Test: Chưa có script test.
 - Build: Đạt (`npm run build`).
-- Commit: Sẽ ghi sau khi tạo commit task.
-- Push: Chưa thực hiện.
+- Commit: `e46973b` (`chore(bootstrap): verify project environment`).
+- Push: Chuẩn bị push lên `origin/dev` trong phiên Task 00.

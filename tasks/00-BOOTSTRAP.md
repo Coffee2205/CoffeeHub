@@ -76,5 +76,5 @@ Không tạo hoặc thay đổi production database. Prisma chỉ được khở
 - Lint: `npm run lint` thành công.
 - Typecheck: `npm run typecheck` thành công.
 - Build: `npm run build` thành công với Next.js 16.2.12.
-- Commit: Sẽ ghi sau khi tạo commit task.
-- Push: Chưa thực hiện.
+- Commit: `e46973b` (`chore(bootstrap): verify project environment`).
+- Push: Chuẩn bị push lên `origin/dev` trong phiên Task 00.
