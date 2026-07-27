@@ -2,15 +2,15 @@
 
 ## Ưu tiên sau cập nhật Supabase
 
-Thực hiện phần Supabase foundation được mở lại trong `tasks/00-BOOTSTRAP.md`: packages có lockfile, Prisma/Supabase clients và helpers, `.env.example`, pooled runtime/direct migration guidance. Không tạo cloud resource hoặc bật billing nếu chưa có task và xác nhận phù hợp.
+Task 00 đã hoàn thành foundation cục bộ mà không tạo cloud resource. Tiếp tục roadmap với App Shell ở yêu cầu mới.
 
 ## Task đề xuất
 
-`tasks/00-BOOTSTRAP.md` — phần Supabase foundation
+`tasks/03-APP-SHELL.md`
 
 ## Lý do
 
-Kiến trúc mới yêu cầu Prisma/Supabase clients, helpers và env contract trước khi tiếp tục App Shell, Database và Auth.
+Task 00, Repository Audit và Design Foundation đã hoàn thành; App Shell là task pending đầu tiên có dependency đạt.
 
 ## Điều kiện bắt đầu
 

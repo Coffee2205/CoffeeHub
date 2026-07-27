@@ -22,7 +22,7 @@ Nhận yêu cầu
 
 ## Chạy ứng dụng cục bộ
 
-Yêu cầu Node.js 20.9 trở lên và npm. Cài dependency rồi khởi động dev server:
+Yêu cầu Node.js 20.19 trở lên và npm. Cài dependency rồi khởi động dev server:
 
 ```bash
 npm install
@@ -37,7 +37,18 @@ npm run typecheck
 npm run build
 ```
 
-Khi dự án bắt đầu dùng biến môi trường, sao chép `.env.example` thành `.env.local`. Không commit `.env.local` hoặc secret thật.
+Sao chép `.env.example` thành `.env.local` và thay placeholder bằng giá trị của môi trường được cấp. Không commit `.env.local`, connection string hoặc secret thật.
+
+`DATABASE_URL` là kết nối pooled dùng ở runtime. `DIRECT_URL` là kết nối direct dành cho Prisma migration và công cụ backup. Luôn lấy cả hai từ Supabase tại thời điểm cấu hình; không suy đoán hoặc hard-code định dạng kết nối.
+
+Trước khi chạy ứng dụng sau khi clone hoặc thay đổi Prisma schema:
+
+```bash
+npm run prisma:validate
+npm run prisma:generate
+```
+
+Bootstrap chỉ tạo client/helper cục bộ. Nó không tạo Supabase project, bucket, schema cloud hay chạy migration.
 
 ## Thứ tự đọc chính
 

@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-27 — Task 00 Supabase foundation
+
+- Summary: Cài dependency có khóa phiên bản; thêm Prisma 7 config/client, Supabase SSR/Auth/Storage helpers và env contract.
+- Files: package manifest/lockfile, Prisma config/schema, `src/lib`, `.env.example`, `.gitignore`, README, Task 00 và project-log.
+- Database impact: Không kết nối hoặc thay đổi database; không tạo migration/cloud resource.
+- Validation: Prisma validate/generate, lint, typecheck và build đạt. Audit ghi nhận 7 advisory không có auto-fix an toàn.
+- Commit/push: cập nhật bằng kết quả Git của phiên này.
+- Known issues: Chưa có Supabase project/credential; dependency advisories được theo dõi trong `ISSUES.md`.
+
+---
+
 ## 2026-07-27 — Task 02 Design Foundation
 
 - Summary: Thêm Midnight Blue Aurora tokens, Geist typography và UI/data-state primitives responsive.

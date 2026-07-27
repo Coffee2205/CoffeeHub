@@ -2,7 +2,7 @@
 
 ## Trạng thái
 
-In Progress
+Completed
 
 ## Mục tiêu
 
@@ -14,10 +14,10 @@ Không có. Đây là task đầu tiên.
 
 ## Công việc
 
-- [ ] Cài và cấu hình Prisma cùng `@supabase/supabase-js`/`@supabase/ssr` theo phiên bản tương thích, có lockfile.
-- [ ] Tạo khung Prisma client, Supabase browser/server client, auth helper và Storage helper nhưng chưa tạo tài nguyên cloud.
-- [ ] Bổ sung `.env.example` với toàn bộ biến Supabase, database và AI cần thiết nhưng không có giá trị thật.
-- [ ] Ghi rõ pooled runtime connection và direct migration connection mà không hard-code format.
+- [x] Cài và cấu hình Prisma cùng `@supabase/supabase-js`/`@supabase/ssr` theo phiên bản tương thích, có lockfile.
+- [x] Tạo khung Prisma client, Supabase browser/server client, auth helper và Storage helper nhưng chưa tạo tài nguyên cloud.
+- [x] Bổ sung `.env.example` với toàn bộ biến Supabase, database và AI cần thiết nhưng không có giá trị thật.
+- [x] Ghi rõ pooled runtime connection và direct migration connection mà không hard-code format.
 
 - [x] Kiểm tra repository và bảo toàn mọi file hiện có.
 - [x] Xác định package manager từ lockfile; nếu chưa có thì dùng npm.
@@ -55,11 +55,15 @@ Không tạo hoặc thay đổi production database. Prisma chỉ được khở
 - `.env.example` không chứa secret.
 - README có hướng dẫn chạy project.
 - `CURRENT_STATUS.md` chuyển sang mode Development.
-- Task tiếp theo là Repository Audit.
+- Task tiếp theo là App Shell vì Repository Audit và Design Foundation đã hoàn thành.
 
 ## Kết quả thực hiện
 
 ### File đã tạo hoặc sửa
+
+- Thêm Prisma 7 schema/config, generated-client workflow và singleton PostgreSQL adapter.
+- Thêm Supabase browser/server SSR clients, verified-claims helper, Storage validation và env boundary helpers.
+- Khóa dependency Prisma/Supabase; cập nhật `.env.example`, `.gitignore` và README.
 
 - Xác minh và giữ nguyên cấu hình Next.js, TypeScript, Tailwind và ESLint hiện có.
 - Bổ sung lại hướng dẫn cài đặt, chạy dev và kiểm tra chất lượng trong `README.md`.
@@ -68,16 +72,28 @@ Không tạo hoặc thay đổi production database. Prisma chỉ được khở
 
 ### Quyết định kỹ thuật
 
+- Runtime dùng `DATABASE_URL` pooled qua `@prisma/adapter-pg`; Prisma CLI dùng `DIRECT_URL` direct.
+- Anon key phục vụ user context. Service role chỉ có server env accessor và chưa được dùng.
+- Auth proxy, domain model, migration và bucket thuộc task sau.
+
 - Dùng npm theo `package-lock.json` hiện có.
 - Giữ Next.js 16 App Router và Server Components làm mặc định.
-- Không thêm Prisma, auth, CMS hoặc dependency của task tương lai.
+- Ở lần bootstrap Next.js ban đầu chưa thêm Prisma/auth/CMS; quyết định này được thay thế cho phần foundation bởi kiến trúc Supabase ngày 2026-07-27.
 
 ### Vấn đề còn lại
 
+- Chưa có Supabase project/credential nên xác minh bằng placeholder không nhạy cảm, không query database.
+- Audit báo 7 advisory (1 moderate, 6 high) qua Prisma tooling và Next.js transitive; không dùng `--force` vì có thay đổi phá vỡ.
+
 - npm audit báo 12 advisory high, trong đó 3 advisory thuộc dependency production bắc cầu của Next.js; không chạy `audit fix --force` vì npm đề xuất thay đổi phá vỡ.
-- Bộ task mới và một số task cũ đang cùng tồn tại với số trùng nhau; chuyển việc xác minh/xử lý sang Repository Audit để không xóa file ngoài phạm vi bootstrap.
+- Các task legacy trùng số đã được xử lý trong phiên chuẩn hóa tài liệu trước khi mở lại Task 00.
 
 ### Kiểm tra
+
+- Prisma validate/generate, lint, typecheck và production build đạt.
+- Supabase helpers import/typecheck đạt; không tạo cloud resource hoặc billing.
+- Dependency audit hoàn tất; 7 advisory được ghi nhận.
+- Commit/push: cập nhật bằng kết quả Git của phiên này.
 
 - Install: `npm install` thành công.
 - Dev: HTTP 200 tại `127.0.0.1:3100`, có nội dung CoffeeHub và server đã dừng.

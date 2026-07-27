@@ -1,8 +1,12 @@
 # Current Status
 
+## Task 00 Supabase foundation — 2026-07-27
+
+Completed: Prisma/Supabase packages, Prisma schema/config and client, Supabase SSR/Auth/Storage helpers, env contract and setup guidance are ready. No project, credential, database migration, Auth flow, bucket, RLS or billing was created.
+
 ## Supabase documentation update — 2026-07-27
 
-Bộ tài liệu đã chọn Supabase PostgreSQL, Auth và Storage làm backend đích, với Prisma cho data access nghiệp vụ. Repository chưa cài Prisma/Supabase, chưa tạo project/credentials, schema, Auth, Storage, RLS hoặc backup. Task 00 được mở lại cho phần Supabase foundation và là task sẵn sàng tiếp theo; không có code task đang chạy.
+Bộ tài liệu và code foundation đã chọn Supabase PostgreSQL, Auth và Storage làm backend đích, với Prisma cho data access nghiệp vụ. Repository đã có packages và helpers nhưng chưa tạo project/credentials, domain schema, Auth flow, Storage bucket, RLS hoặc backup cloud.
 
 ## Operating mode
 
@@ -10,7 +14,7 @@ Development
 
 ## Active task
 
-Không có phiên triển khai đang chạy. Task 00 đang `In Progress` vì được mở lại cho Supabase foundation; đây là task sẵn sàng tiếp theo.
+Task 00 Supabase foundation đã hoàn thành; không có task tiếp theo đang thực thi.
 
 ## Repository state
 
@@ -23,17 +27,17 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 ## Completed
 
 - Bộ tài liệu sản phẩm, task và agent workflow đã được chuẩn hóa.
-- Phạm vi Next.js ban đầu của Task 00 đã hoàn thành; phần Supabase foundation mới bổ sung chưa triển khai.
+- Task 00 Bootstrap, gồm phần Supabase foundation mở lại, đã hoàn thành.
 - Task 01 Repository Audit đã hoàn thành.
 - Task 02 Design Foundation đã hoàn thành.
 
 ## In progress
 
-- Không có task đang thực thi.
+- Không có task tiếp theo đang thực thi.
 
 ## Blockers
 
-- Không có blocker cho Task 03. Có issue dependency và artifact legacy cần theo dõi.
+- Không có blocker cho Task 03. Dependency advisories cần tiếp tục theo dõi.
 
 ## Validation status
 
@@ -41,7 +45,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 - Dev: Đạt (HTTP 200 tại `127.0.0.1:3100`).
 - Lint: Đạt (`npm run lint`).
 - Typecheck: Đạt (`npm run typecheck`).
-- Test: Chưa có script test.
+- Test: Chưa có test runner; Prisma validate/generate và TypeScript kiểm tra các helper foundation.
 - Build: Đạt (`npm run build`).
 - Commit: `e46973b` (`chore(bootstrap): verify project environment`).
 - Push Task 00: Thành công lên `origin/dev` (`d0de57f`).
