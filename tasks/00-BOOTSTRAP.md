@@ -1,5 +1,12 @@
 # Task 00 — Bootstrap project
 
+## Maintenance verification — 2026-07-27
+
+- Đồng bộ `@prisma/client`, `@prisma/adapter-pg` và Prisma CLI lên bản vá `7.9.1`.
+- Loại secret/service-role key chưa dùng khỏi environment contract; thêm runtime validation cho application/Supabase URL, publishable key và PostgreSQL URL.
+- Thêm 4 environment validation tests; toàn bộ 12 test, Prisma validate/generate, lint, typecheck và build đạt.
+- Production audit giảm từ 7 xuống 3 high advisory; phần còn lại thuộc `postcss`/`sharp` đóng gói cùng Next.js và chưa có đường nâng cấp an toàn từ npm.
+
 ## Trạng thái
 
 Completed
@@ -73,7 +80,7 @@ Không tạo hoặc thay đổi production database. Prisma chỉ được khở
 ### Quyết định kỹ thuật
 
 - Runtime dùng `DATABASE_URL` pooled qua `@prisma/adapter-pg`; Prisma CLI dùng `DIRECT_URL` direct.
-- Anon key phục vụ user context. Service role chỉ có server env accessor và chưa được dùng.
+- Publishable key phục vụ user context. Foundation không yêu cầu secret/service-role key khi chưa có luồng quản trị thực sự cần bypass RLS.
 - Auth proxy, domain model, migration và bucket thuộc task sau.
 
 - Dùng npm theo `package-lock.json` hiện có.

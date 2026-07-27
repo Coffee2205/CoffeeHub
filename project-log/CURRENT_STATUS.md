@@ -1,5 +1,9 @@
 # Current Status
 
+## Task 00 maintenance — 2026-07-27
+
+Completed: Prisma foundation is patched to 7.9.1, unused privileged-key configuration was removed, environment boundaries now validate URL/protocol/key type, and 12 tests plus lint/typecheck/build pass. Task 07 remains the active product task; no Task 07 subtask was started in this maintenance session.
+
 ## Task 07A Admin Projects — 2026-07-27
 
 Completed subtask 07A: protected Admin foundation and Projects CRUD without media. Task 07 remains In Progress; no next subtask was started.

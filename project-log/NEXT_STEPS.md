@@ -1,5 +1,9 @@
 # Next Steps
 
+## After Task 00 maintenance
+
+Task 00 foundation maintenance is complete. Keep Task 07B as the next ready product subtask and wait for a new user request before starting it.
+
 ## After Task 07A
 
 Wait for a new request. The next ready subtask is 07B — Media assets and Supabase Storage; do not start it automatically.

@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-27 — Task 00 foundation maintenance
+
+- Summary: Patched Prisma to 7.9.1, removed unused privileged-key configuration and added strict environment validation.
+- Files: package manifest/lockfile, env helpers/contract, login action, tests, deployment handoff, Task 00 and project-log.
+- Database impact: None; no migration, data mutation or cloud resource change.
+- Validation: Prisma validate/generate, 12 tests, lint, typecheck and production build passed. Audit now has 3 high Next.js transitive advisories, down from 7.
+- Commit/push: pending final Git step in this session.
+- Known issues: Next.js-packaged `postcss`/`sharp` advisories have no safe npm upgrade path yet.
+
+---
+
 ## 2026-07-27 — Task 07A Admin Projects
 
 - Summary: Added protected Admin foundation and Projects CRUD without media, including status, ordering and confirmed soft delete.

@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 
+import { getPublicAppUrl } from "@/lib/env/public";
 import { createClient } from "@/lib/supabase/server";
 
 export type AuthActionState = {
@@ -63,7 +64,13 @@ export async function signupAction(_state: AuthActionState, formData: FormData):
   }
 
   const supabase = await createClient();
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL;
+  const appUrl = (() => {
+    try {
+      return getPublicAppUrl();
+    } catch {
+      return null;
+    }
+  })();
 
   if (!appUrl) {
     return { status: "error", message: "Cấu hình ứng dụng chưa đầy đủ. Vui lòng thử lại sau.", fields: { email: credentials.email } };

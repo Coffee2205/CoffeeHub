@@ -1,9 +1,9 @@
 # Issues
 
-## I-002 — Dependency advisories
+## I-002 — Next.js transitive dependency advisories
 
-- Trạng thái: Open, không chặn bootstrap hoặc Task 03.
-- `npm audit --omit=dev` ngày 2026-07-27 báo 7 advisory production/transitive: 1 moderate và 6 high.
-- Nhánh Next.js liên quan `postcss`/`sharp`; nhánh Prisma tooling liên quan `find-my-way`/`valibot`.
-- npm chỉ đề xuất `audit fix --force` với thay đổi phiên bản phá vỡ; không tự áp dụng.
-- Cần theo dõi bản vá upstream và nâng cấp có kiểm thử trong maintenance task riêng.
+- Trạng thái: Open; không chặn development hiện tại, cần đánh giá lại trước release.
+- `npm audit --omit=dev` ngày 2026-07-27 còn 3 high advisory thuộc `next` qua `postcss` và `sharp`.
+- Nhánh Prisma đã được xử lý bằng bản vá đồng bộ `7.9.1` và không còn xuất hiện trong production audit.
+- npm chỉ đề xuất hạ Next.js xuống `9.3.3`; đây là thay đổi phá vỡ App Router/React hiện tại nên không áp dụng và không chạy `audit fix --force`.
+- Theo dõi bản vá upstream, sau đó nâng cấp trong maintenance task có đầy đủ regression test.
