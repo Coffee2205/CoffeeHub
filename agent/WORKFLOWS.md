@@ -4,6 +4,8 @@ File này chỉ định cách thực thi theo mode. Quy tắc code và Git nằm
 
 ## Bootstrap
 
+Với Supabase, bootstrap chỉ chuẩn bị packages, clients/helpers và `.env.example`; không tự tạo project/bucket, lấy secret, chạy cloud migration, bật billing hoặc nâng gói.
+
 Dùng khi project chưa thể cài đặt hoặc build.
 
 Trình tự:

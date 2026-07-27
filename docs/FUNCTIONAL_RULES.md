@@ -83,3 +83,9 @@ Không triển khai hai khái niệm giống nhau chỉ khác tên.
 - Không dùng dữ liệu cá nhân thật trên public routes.
 - Demo data phải được đánh dấu hoặc tách khỏi production user data.
 - Public portfolio không được truy cập database private nếu không cần.
+# Trạng thái nội dung và quyền truy cập
+
+- Public chỉ đọc nội dung `published`; draft/hidden chỉ admin có quyền mới đọc và sửa.
+- Nội dung riêng tư luôn scope owner; admin override phải rõ trong policy và audit được.
+- Thao tác Admin đi qua server validation, Supabase Auth/AuthZ, service, repository và Prisma; RLS là lớp phòng vệ bổ sung.
+- Media public/private phải khớp trạng thái nội dung; không công khai signed URL dài hạn hoặc service role key.

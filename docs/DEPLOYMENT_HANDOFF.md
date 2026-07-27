@@ -19,13 +19,15 @@ Danh sách chính xác phải được tạo sau repository audit.
 Nhóm dự kiến:
 
 ```text
+NEXT_PUBLIC_APP_URL
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY
 DATABASE_URL
-DIRECT_URL nếu Prisma/Neon cần
-AUTH_SECRET hoặc biến auth tương ứng
-APP_URL
+DIRECT_URL
 OPENAI_API_KEY
 GROQ_API_KEY
-GEMINI_API_KEY
+GOOGLE_GENERATIVE_AI_API_KEY
 AI_PROVIDER_ORDER
 ```
 
@@ -35,6 +37,8 @@ Quy tắc:
 - Tạo `.env.example` chỉ chứa tên biến và hướng dẫn.
 - Không dùng prefix public cho secret.
 - Không in secret trong log hoặc screenshot.
+- Chỉ `NEXT_PUBLIC_SUPABASE_URL` và `NEXT_PUBLIC_SUPABASE_ANON_KEY` được dùng phía client. Service role key, database URLs và AI keys chỉ ở server.
+- `DATABASE_URL` dành cho runtime pooled; `DIRECT_URL` dành cho migration/backup theo chuỗi Supabase cung cấp tại thời điểm cấu hình. Không sao chép connection string thật vào tài liệu hay log.
 
 ## Database deployment
 
@@ -47,6 +51,17 @@ Trước production migration:
 - Ghi migration vào changelog.
 
 Không chạy `db push` tùy tiện trên production nếu project đã dùng migrations.
+
+RLS policies và Storage policies phải đi cùng migration có review. Kiểm tra ít nhất anonymous, authenticated owner, authenticated non-owner và admin; không xem UI ẩn menu là kiểm soát quyền.
+
+## Supabase và khả năng phục hồi
+
+- Tách project/environment theo nhu cầu và quota thực tế; không tự tạo thêm project hoặc nâng gói.
+- Xác minh giới hạn Free Plan hiện hành trước handoff, cấu hình cảnh báo quota khi gói hỗ trợ và dừng xin xác nhận trước mọi chi phí.
+- Trước migration lớn, tạo bản export PostgreSQL có thể kiểm tra restore; schema và Prisma migrations luôn ở Git.
+- Export riêng danh sách bucket/object cùng metadata/path tham chiếu trong database và sao lưu object cần thiết. Backup database không đồng nghĩa backup file Storage.
+- Recovery runbook ghi rõ thứ tự: restore database, restore objects, đối soát path/reference, rồi smoke test Auth/RLS/media.
+- Portability runbook dùng định dạng PostgreSQL chuẩn và repository/service; không dựa Supabase SDK cho query nghiệp vụ thông thường.
 
 ## Vercel
 

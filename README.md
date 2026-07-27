@@ -1,5 +1,7 @@
 # CoffeeHub Agent Kit
 
+Kiến trúc đích: Next.js/React/TypeScript/Tailwind trên Vercel; Supabase PostgreSQL/Auth/Storage ở backend; Prisma cho data access nghiệp vụ; AI theo OpenAI → Groq → Gemini. Nội dung thay đổi sau bàn giao phải quản trị được qua Admin/CMS.
+
 Bộ tài liệu điều phối coding agent phát triển CoffeeHub theo quy trình:
 
 ```text

@@ -36,6 +36,7 @@ File này xác định nhiệm vụ, nguồn sự thật và liên kết của t
 | `docs/ARCHITECTURE_RULES.md` | Ràng buộc kiến trúc bắt buộc |
 | `docs/TECHNICAL_DESIGN.md` | Thiết kế triển khai kỹ thuật |
 | `docs/DEPLOYMENT_HANDOFF.md` | Chuẩn bị deploy và bàn giao |
+| `docs/REPOSITORY_AUDIT.md` | Ảnh chụp repository đã xác minh; không phải kiến trúc đích |
 
 Phân biệt:
 
@@ -54,6 +55,8 @@ Phân biệt:
 | `tasks/00-...` đến `tasks/21-...` | Phạm vi và acceptance criteria của từng giai đoạn |
 
 Task file là nguồn sự thật cho **phạm vi phiên hiện tại**, nhưng không được ghi đè PRD hoặc quyết định đã chấp nhận.
+
+Roadmap canonical chỉ có đúng một file cho mỗi số `00`–`21`.
 
 ## 5. Project log
 

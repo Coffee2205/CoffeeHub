@@ -14,6 +14,13 @@ Kiểm tra toàn bộ sản phẩm, xử lý lỗi và deploy production
 
 ## Công việc
 
+- [ ] Kiểm thử Supabase Auth: login/logout, persistence/refresh/expiry, protected route/mutation, user/admin và role metadata.
+- [ ] Kiểm thử RLS: anonymous, owner, non-owner, admin, public-published/draft; không public-all hoặc service-role bypass trong luồng thường.
+- [ ] Kiểm thử Storage public/private, signed URL, validation, overwrite/delete/orphan, alt/fallback và không lộ service role.
+- [ ] Kiểm tra Prisma migration ở non-production, pooled runtime/direct migration env và rollback/restore rehearsal.
+- [ ] Kiểm tra env Vercel/Supabase không in giá trị; export PostgreSQL, inventory/metadata và object Storage.
+- [ ] Kiểm tra pagination/index/rate limit/upload limit/quota; dừng trước nâng gói hoặc billing.
+
 - [ ] Lint/typecheck/build
 - [ ] Unit/integration/E2E phù hợp
 - [ ] Accessibility
@@ -22,7 +29,7 @@ Kiểm tra toàn bộ sản phẩm, xử lý lỗi và deploy production
 - [ ] PWA test
 - [ ] AI failure test
 - [ ] Migration review
-- [ ] Vercel deploy
+- [ ] Chuẩn bị Vercel deploy; production deploy chỉ sau xác nhận trực tiếp
 - [ ] Domain/HTTPS
 - [ ] Final README/handoff
 

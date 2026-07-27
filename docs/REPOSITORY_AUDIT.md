@@ -82,7 +82,7 @@ Repository là một Next.js App Router bootstrap tối thiểu, build được 
 
 Các mục sau đến từ tài liệu thiết kế, chưa phải trạng thái code:
 
-- PostgreSQL/Neon, Prisma, data ownership và migration workflow.
+- Supabase PostgreSQL, Prisma, Supabase Auth/Storage, data ownership, RLS và migration workflow (đều chưa được triển khai tại thời điểm audit).
 - Authentication và admin authorization.
 - Service/repository layers và runtime validation.
 - PWA, offline queue, autosave conflict handling và idempotency.
@@ -108,7 +108,7 @@ Không được báo cáo các mục này là đã có cho đến khi task tươ
 - Theo dõi bản Next.js stable có dependency đã vá; không dùng `audit fix --force` hiện tại.
 - Sửa project-log sau mỗi push để kết quả không còn ghi “chuẩn bị push”.
 
-### Có thể xóa sau khi xác nhận phạm vi cleanup
+### Artifact legacy được phát hiện tại thời điểm audit
 
 Các file dưới đây không nằm trong roadmap canonical và trùng với task đã đánh số lại:
 
@@ -131,7 +131,7 @@ tasks/19-AI-PERSONAL-ASSISTANT.md
 tasks/20-QA-DEPLOY.md
 ```
 
-`CONSOLIDATION_NOTES.md` và `agent/QUALITY_CHECKLIST.md` cũng được `REVIEW_REPORT.md` mô tả là đã xóa nhưng vẫn đang được Git track. Không xóa artifact nào trong phiên này vì Task 01 cấm xóa code/file cũ và báo cáo review mâu thuẫn với filesystem.
+Đây là phát hiện lịch sử của Task 01. Các artifact trên đã được xóa trong phiên chuẩn hóa Supabase ngày 2026-07-27; tên file được giữ tại đây chỉ để bảo toàn bằng chứng audit, không phải Markdown reference hoặc roadmap hiện hành.
 
 ## Validation thực tế
 

@@ -24,6 +24,13 @@ Xây dựng giao diện Admin/CMS để người dùng tự cập nhật thông 
 
 ## Công việc
 
+- [ ] CRUD từ Admin UI cho profile/about/avatar; project (title, slug, summary, description, role, tech stack, GitHub/live URL, status, dates, cover/gallery); experience, skills, education; posts; banner/sections/menu/footer/social/FAQ/SEO/site settings.
+- [ ] Có draft/published/hidden, ordering, preview, publish/unpublish, soft delete và xác nhận xóa.
+- [ ] Mỗi entity có Prisma schema/migration, runtime validation, service, repository, Auth/AuthZ, UI states và test access.
+- [ ] Upload qua Supabase Storage với MIME/size/name/path/overwrite validation, alt, fallback và orphan cleanup; database chỉ lưu bucket/path/URL/metadata.
+- [ ] Private object chỉ qua server hoặc signed URL; service role key không xuống client.
+- [ ] RLS phân biệt public-published, admin draft, owner-private và admin.
+
 ### Nền tảng Admin
 
 - [ ] Tạo layout và navigation `/admin`.
@@ -99,13 +106,15 @@ Các entity phải có trường ownership hoặc quyền quản trị phù hợ
 
 ## Tiêu chí hoàn thành
 
+- Người quản trị có thể bổ sung dự án và cập nhật toàn bộ nội dung/media từ UI, gồm publish và ordering, không sửa code hoặc database thủ công.
+
 - Người dùng có thể đăng nhập và tự thêm/sửa/ẩn một dự án.
 - Người dùng có thể cập nhật profile, kỹ năng, kinh nghiệm và học vấn.
 - Người dùng có thể cập nhật nội dung công khai, menu/footer và SEO metadata.
 - Thay đổi đã publish xuất hiện trên website/app mà không sửa code.
 - Draft không xuất hiện công khai.
 - Validation và authorization được kiểm tra.
-- Không cần mở Prisma Studio hoặc Supabase/Neon dashboard cho hoạt động biên tập thông thường.
+- Không cần mở Prisma Studio, SQL editor hoặc Supabase dashboard cho hoạt động biên tập thông thường.
 - Lint, typecheck, test/build liên quan đạt khi môi trường cho phép.
 - Task và project-log được cập nhật.
 

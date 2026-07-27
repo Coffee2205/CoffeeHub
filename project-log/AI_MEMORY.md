@@ -18,3 +18,9 @@
 - Không yêu cầu người dùng xác định lại task nếu roadmap đã rõ.
 - Không tự tiếp tục task kế tiếp.
 - Không lặp lại quyết định đã bị từ chối.
+# Supabase architecture memory
+
+- Backend duy nhất là Supabase PostgreSQL/Auth/Storage; Prisma phụ trách query nghiệp vụ và migrations.
+- Supabase SDK chỉ dành cho Auth, Storage và tính năng đặc thù; service role tuyệt đối server-only.
+- Admin mutation kiểm tra session và permission ở server rồi qua service/repository/Prisma; RLS là lớp bổ sung.
+- Ưu tiên Free Plan nhưng không tự bật billing/add-on/nâng gói; nội dung phải sửa được qua Admin UI.

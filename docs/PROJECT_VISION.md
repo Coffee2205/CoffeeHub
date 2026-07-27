@@ -90,3 +90,6 @@ Phiên bản đầu được coi là hoàn thành khi:
 - AI foundation có provider abstraction và structured action.
 - AI không thể âm thầm xóa hoặc sửa dữ liệu quan trọng.
 - Lint, typecheck và build không có lỗi nghiêm trọng.
+# Nền tảng và tính bền vững
+
+CoffeeHub hợp nhất backend trên Supabase (PostgreSQL, Auth, Storage) và triển khai Next.js trên Vercel. Thiết kế ưu tiên gói miễn phí khi đủ nhu cầu nhưng không phụ thuộc lời hứa “miễn phí mãi mãi”: dữ liệu PostgreSQL, migrations trong Git, media inventory/export và ranh giới repository/service phải cho phép backup, recovery và chuyển sang PostgreSQL khác.

@@ -137,3 +137,13 @@ Admin/CMS phải hỗ trợ theo nhu cầu từng entity:
 - xác nhận trước hành động phá hủy.
 
 Các route, permission name, enum kỹ thuật và hằng số hệ thống có thể nằm trong code. Nội dung biên tập không được hard-code.
+# Quyền biên tập qua Admin/CMS
+
+Mọi nội dung thay đổi sau bàn giao phải sửa được trong giao diện Admin/CMS, không yêu cầu sửa code, Prisma Studio, SQL editor hoặc Supabase dashboard. Phạm vi tối thiểu gồm:
+
+- hồ sơ, giới thiệu, avatar, kinh nghiệm, kỹ năng và học vấn;
+- dự án với tiêu đề, slug, tóm tắt, mô tả, vai trò, tech stack, GitHub URL, live URL, trạng thái, ngày, ảnh bìa và gallery;
+- bài viết, banner, section, menu, footer, social links, FAQ, SEO và site settings;
+- draft/published/hidden, thứ tự hiển thị, preview, publish/unpublish và soft delete.
+
+Media phải có alt text, fallback, MIME/kích thước và metadata tham chiếu. Binary nằm trong Supabase Storage; PostgreSQL chỉ lưu bucket/path/URL/metadata.

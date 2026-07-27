@@ -20,7 +20,7 @@ Server UI     API/Actions
           │
        Prisma
           │
- PostgreSQL / Neon
+ Supabase PostgreSQL
 ```
 
 Hệ thống AI đi qua backend:
@@ -247,7 +247,25 @@ Không hứa notification khi app đóng trên mọi môi trường nếu chưa 
 ## 14. Deployment
 
 - Vercel cho Next.js.
-- Neon PostgreSQL.
+- Supabase làm backend platform: PostgreSQL, Auth và Storage.
 - Environment tách development/preview/production.
 - Migration production có quy trình rõ ràng.
 - Không dùng production database cho test tự động.
+
+## 15. Supabase integration
+
+```text
+Admin UI → file validation → Supabase Storage
+                              ↓
+             bucket/path/URL/metadata → Prisma → Supabase PostgreSQL
+
+Supabase Auth → cookie session → server verification
+              → role/permission → protected route or mutation
+```
+
+- Tạo browser/server clients bằng `@supabase/supabase-js` và `@supabase/ssr`; server client đọc/ghi cookie theo API Next.js hiện hành. Không tin session chỉ đọc từ UI.
+- Prisma client là singleton an toàn cho development và dùng `DATABASE_URL` pooled phù hợp Vercel. Prisma migration, `pg_dump` và công cụ dài hạn dùng `DIRECT_URL`/direct connection do dashboard cung cấp; không ghi cố định định dạng chuỗi kết nối vào tài liệu.
+- Mapping hồ sơ ứng dụng tham chiếu `auth.users.id`; role quản trị tin cậy lấy từ `app_metadata` và được kiểm tra tại service/action. RLS là lớp phòng vệ cho đường truy cập Supabase API, không thay kiểm tra quyền trong server code.
+- Storage bắt đầu với bucket tối thiểu theo feature. Có thể tách `avatars`, `projects`, `posts`, `site-assets` khi task thực sự cần; không tạo tất cả ở bootstrap.
+- Public media chỉ dùng public bucket khi nội dung đã xuất bản. Draft/private dùng private bucket và signed URL hoặc server delivery. Delete phải xử lý cả record tham chiếu lẫn object theo thứ tự có rollback/cleanup.
+- Không bật Realtime mặc định. Chỉ thêm khi task riêng chứng minh polling/refetch không đủ và đã đánh giá quota.

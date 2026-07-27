@@ -156,3 +156,23 @@ Settings hoặc User Menu
 → Xóa dữ liệu cache nhạy cảm phù hợp
 → Chuyển về public website hoặc login
 ```
+# Luồng Supabase trọng yếu
+
+## Xác thực
+
+```text
+Email/password → Supabase Auth → cookie session
+→ server verification → role/permission → protected route or mutation
+```
+
+UI phải xử lý loading, lỗi sai thông tin, session hết hạn, refresh và logout. Admin bị kiểm tra quyền tại server, không chỉ ẩn navigation.
+
+## Biên tập dự án và media
+
+```text
+Admin form → runtime validation → Auth/AuthZ → service
+→ upload Supabase Storage → lưu metadata qua repository/Prisma
+→ preview → publish → public page
+```
+
+Lỗi giữa upload và ghi database phải cleanup hoặc đưa vào hàng đợi orphan; xóa cần xác nhận và ưu tiên soft delete cho record quan trọng.

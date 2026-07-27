@@ -22,7 +22,7 @@ UI
 → Service layer
 → Repository layer
 → Prisma
-→ PostgreSQL
+→ Supabase PostgreSQL
 ```
 
 Không phải mọi chức năng đều bắt buộc tạo đủ số file nếu quá nhỏ, nhưng phải giữ ranh giới trách nhiệm.
@@ -88,18 +88,37 @@ Không bắt buộc tạo folder rỗng.
 
 ## Authentication và authorization
 
-- Kiểm tra session ở server.
+- Supabase Auth là nguồn danh tính duy nhất; phiên phải được xác minh ở server bằng client SSR dùng cookie.
+- Email/password là phương thức đầu tiên. OAuth chỉ được thêm bằng task riêng; không mặc định Google và không dùng NextAuth/Auth.js.
 - Query private luôn kèm `userId` hoặc ownership condition.
 - Không tìm record bằng ID trước rồi mới kiểm tra ở client.
 - Không dựa duy nhất vào middleware cho quyền dữ liệu.
+- Admin route và mutation phải kiểm tra cả authentication lẫn role/permission; role tin cậy nằm trong `app_metadata`, không lấy từ metadata người dùng tự sửa.
 
 ## Database
 
-- Prisma là data access layer chính nếu repository hiện tại đã dùng Prisma.
+- Supabase PostgreSQL là database duy nhất; Prisma là lớp truy cập chính cho schema, migration, transaction, repository và type-safe query.
+- Supabase SDK chỉ dùng cho Auth, Storage và tính năng đặc thù Supabase. Client không gọi Data API cho business logic; Realtime cần task riêng.
+- Bảng thuộc schema được expose phải bật RLS và có policy theo public-published, owner-private hoặc admin. Authorization ở ứng dụng và RLS là hai lớp bổ sung, không thay thế nhau.
+- Không dùng policy `public all`, không vô hiệu hóa RLS và không dùng service role làm đường truy cập bình thường.
 - Mutation nhiều bản ghi dùng transaction.
 - Xóa dữ liệu quan trọng ưu tiên soft delete.
 - Bản ghi autosave cần version hoặc cơ chế conflict tương đương.
 - Migration phải được review trước khi chạy production.
+
+## Media và tính di động
+
+- File nằm trong Supabase Storage; PostgreSQL chỉ lưu bucket, object path, URL/metadata, MIME, kích thước và alt text.
+- Upload phải kiểm tra MIME, kích thước, tên/path, overwrite và orphan cleanup. Bucket private được đọc qua server hoặc signed URL; service role key tuyệt đối không xuống client.
+- Mọi thao tác object đi qua Storage API, không sửa trực tiếp schema `storage`.
+- Repository/service cho query nghiệp vụ không phụ thuộc Supabase SDK để vẫn có thể chuyển sang PostgreSQL khác.
+- Schema và Prisma migrations lưu trong Git; quy trình bàn giao phải có export PostgreSQL, metadata và object Storage, backup trước migration lớn và hướng dẫn recovery.
+
+## Giới hạn chi phí
+
+- Ưu tiên Supabase Free Plan khi phù hợp, nhưng không khẳng định miễn phí vĩnh viễn.
+- Không tự bật billing, add-on, nâng gói, tạo nhiều project/bucket hoặc tính năng trả phí.
+- Dùng pagination, index, giới hạn upload, nén media, rate limit và cleanup orphan; không polling hoặc bật Realtime cho toàn bộ bảng.
 
 ## Error handling
 

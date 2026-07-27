@@ -10,7 +10,7 @@ Agent dừng với thay đổi phá hủy dữ liệu, dịch vụ trả phí, s
 
 ## D-003 — Initial stack
 
-CoffeeHub ưu tiên Next.js, React, TypeScript, Tailwind CSS, Prisma và PostgreSQL/Neon trong một codebase web/PWA.
+CoffeeHub dùng Next.js, React, TypeScript và Tailwind CSS trên Vercel. Supabase là backend platform chính, gồm Supabase PostgreSQL, Supabase Auth và Supabase Storage. Prisma vẫn là ORM cho truy cập dữ liệu nghiệp vụ. Ưu tiên Supabase Free Plan khi đáp ứng nhu cầu; mọi nâng cấp hoặc tính năng trả phí cần người dùng xác nhận trực tiếp.
 
 ## D-004 — AI provider strategy
 

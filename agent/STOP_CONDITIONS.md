@@ -6,7 +6,9 @@ Dừng và hỏi người dùng khi cần:
 - xóa bảng, cột hoặc dữ liệu;
 - production migration;
 - bật billing hoặc dịch vụ trả phí;
+- tạo Supabase project/bucket ngoài phạm vi task, nâng Supabase plan, bật add-on hoặc vượt quota có khả năng phát sinh phí;
 - secret, OAuth credential hoặc tài khoản ngoài;
+- cần service role key, database connection string thật hoặc thay đổi RLS/Storage policy có thể công khai dữ liệu đang private;
 - đổi framework, database, ORM, auth provider hoặc kiến trúc nền;
 - public dữ liệu đang private;
 - thay đổi permission model nhạy cảm;

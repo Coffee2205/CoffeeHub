@@ -49,3 +49,11 @@ Commit:
 Push result:
 Known issues:
 ```
+# 2026-07-27 — Supabase documentation architecture
+
+- Đọc và rà soát toàn bộ Markdown trong repository.
+- Chuyển backend đích sang Supabase PostgreSQL/Auth/Storage; giữ Prisma cho data access nghiệp vụ.
+- Bổ sung Admin/CMS, RLS, media, env, deployment, Free Plan, backup/recovery và portability.
+- Mở lại phần Supabase của Task 00; cập nhật Task 04, 05, 07, 16 và 21.
+- Xóa task legacy trùng số và tài liệu legacy không còn trách nhiệm vận hành.
+- Commit/push: cập nhật sau kiểm tra.

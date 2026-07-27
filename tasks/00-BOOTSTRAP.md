@@ -2,7 +2,7 @@
 
 ## Trạng thái
 
-Completed
+In Progress
 
 ## Mục tiêu
 
@@ -13,6 +13,11 @@ Khởi tạo và xác minh môi trường CoffeeHub để project có thể phá
 Không có. Đây là task đầu tiên.
 
 ## Công việc
+
+- [ ] Cài và cấu hình Prisma cùng `@supabase/supabase-js`/`@supabase/ssr` theo phiên bản tương thích, có lockfile.
+- [ ] Tạo khung Prisma client, Supabase browser/server client, auth helper và Storage helper nhưng chưa tạo tài nguyên cloud.
+- [ ] Bổ sung `.env.example` với toàn bộ biến Supabase, database và AI cần thiết nhưng không có giá trị thật.
+- [ ] Ghi rõ pooled runtime connection và direct migration connection mà không hard-code format.
 
 - [x] Kiểm tra repository và bảo toàn mọi file hiện có.
 - [x] Xác định package manager từ lockfile; nếu chưa có thì dùng npm.
@@ -39,6 +44,9 @@ Không có. Đây là task đầu tiên.
 Không tạo hoặc thay đổi production database. Prisma chỉ được khởi tạo nếu cần cho cấu trúc nền tảng và không kết nối production.
 
 ## Tiêu chí hoàn thành
+
+- Prisma validate/generate và Supabase client imports đạt; secret không lọt vào client bundle hoặc log.
+- Bootstrap không tạo project/bucket, không chạy cloud migration và không bật billing.
 
 - Dependency cài thành công.
 - Dev server có thể khởi động hoặc compile.

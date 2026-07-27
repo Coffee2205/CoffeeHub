@@ -23,6 +23,9 @@ Biến ứng dụng thành PWA và triển khai mutation queue an toàn
 - [ ] Retry/backoff
 - [ ] Online/offline/sync status
 - [ ] Test desktop/iPhone
+- [ ] Không cache token, auth response, signed URL hoặc dữ liệu private để dùng lại giữa session; logout xóa cache/queue nhạy cảm.
+- [ ] Sync mutation đi qua server validation, Supabase Auth/AuthZ, service/repository/Prisma và RLS.
+- [ ] Không bật Realtime cho toàn bộ bảng; nhu cầu thật phải có task và đánh giá quota riêng.
 
 ## Không thực hiện
 
@@ -46,6 +49,7 @@ Có thể thêm IdempotencyRecord nếu backend chưa có.
 - Offline fallback đúng
 - Queue không duplicate
 - Private cache an toàn
+- Session hết hạn/offline không cho queue vượt quyền; retry không tạo record/media trùng.
 - Build đạt
 
 ## Kết quả thực hiện

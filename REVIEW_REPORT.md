@@ -1,56 +1,59 @@
-# Markdown Review Report
+# CoffeeHub Supabase Markdown Review Report
 
-## Phạm vi
+## 1. Files read
 
-Đã rà soát toàn bộ file Markdown trong bộ kit sau khi tái cấu trúc.
+Đã đọc toàn bộ 71 file `.md` thuộc repository trước khi sửa, gồm entry points, agent control, product/technical docs, task canonical/legacy và project-log. Markdown trong `node_modules` không thuộc bộ kit.
 
-## Kết quả kiểm tra cấu trúc
+## 2. Files modified
 
-- Số task triển khai: 22.
-- Không có task trùng số.
-- Heading của mọi task khớp với tên file.
-- Không có tham chiếu Markdown nội bộ bị thiếu, ngoại trừ `docs/REPOSITORY_AUDIT.md` là artifact được Task 01 tạo khi chạy.
-- Không còn chỉ dẫn tự động bắt đầu task kế tiếp sau khi push.
-- Roadmap kết thúc tại Task 21.
+Đã sửa các nguồn kiến trúc, sản phẩm/nội dung, flow, deployment, agent rules, task Supabase và project-log. Danh sách chính xác được xác minh bằng `git diff --name-status`.
 
-## Các lỗi đã sửa
+## 3. Files added
 
-- Xóa task `03-CONTENT-MANAGEMENT.md` bị trùng số với App Shell.
-- Tạo lại Content Management thành `07-ADMIN-CONTENT-MANAGEMENT.md`.
-- Đặt Database Foundation trước Authentication.
-- Đánh lại số tất cả task phía sau một cách liên tục.
-- Sửa tham chiếu AI Foundation từ Task 16 sang Task 18.
-- Sửa Task Repository Audit để ghi task tiếp theo rồi dừng, thay vì tự tiếp tục.
-- Xóa `QUALITY_CHECKLIST.md` vì trùng với task acceptance criteria và template.
-- Xóa `CONSOLIDATION_NOTES.md` vì chỉ là lịch sử chỉnh sửa, không có chức năng vận hành.
+Không thêm Markdown mới; trách nhiệm được giữ trong file chuyên biệt hiện có.
 
-## Phân tách trách nhiệm
+## 4. Files deleted
 
-- `MANIFEST.md`: bản đồ và nguồn sự thật.
-- `agent/MASTER.md`: điều phối một phiên.
-- `agent/WORKFLOWS.md`: cách thực thi theo mode.
-- `agent/RULES.md`: quy tắc code, CMS, database, AI và Git.
-- `agent/STOP_CONDITIONS.md`: điều kiện bắt buộc dừng.
-- `docs/`: yêu cầu sản phẩm và thiết kế.
-- `tasks/`: phạm vi triển khai.
-- `project-log/`: trạng thái thực tế và lịch sử.
+Đã xóa 16 task legacy trùng số, `CONSOLIDATION_NOTES.md` và `agent/QUALITY_CHECKLIST.md`. Roadmap canonical còn đúng Task 00–21.
 
-## Content Management
+## 5. Neon removed
 
-Yêu cầu chỉnh sửa nội dung không cần code được liên kết qua ba tầng:
+Đã loại Neon khỏi hướng dẫn vận hành, database và deployment. Không còn kiến trúc song song Neon–Supabase.
 
-1. `docs/CONTENT_REQUIREMENTS.md`: xác định nội dung phải quản trị được.
-2. `agent/RULES.md`: cấm hard-code nội dung biên tập và định nghĩa Content-first.
-3. `tasks/07-ADMIN-CONTENT-MANAGEMENT.md`: triển khai schema, CRUD, Admin UI, media, publish và kết nối phần hiển thị.
+## 6. Supabase added
 
-## Thống kê
+Nguồn sự thật mới: Supabase PostgreSQL/Auth/Storage; Next.js/React/TypeScript/Tailwind trên Vercel; Prisma là ORM; AI OpenAI → Groq → Gemini.
 
-- Entry/review files: 4.
-- Agent control files: 4.
-- Product/technical docs: 11.
-- Task files, gồm README và template: 24.
-- Project-log files: 9.
+## 7. Authentication changes
 
-## Giới hạn của review
+Email/password trước; SSR session xác minh server; role admin dùng `app_metadata`; routes/mutations kiểm tra Auth và AuthZ. Không NextAuth/Auth.js; OAuth là task riêng.
 
-Review này xác minh tính nhất quán của tài liệu. Repository, dependency, database và build thực tế vẫn phải được kiểm tra trong Task 00 và Task 01.
+## 8. Database changes
+
+Repository → Prisma → Supabase PostgreSQL, pooled runtime/direct migration connection, migrations trong Git, transaction và RLS public/owner/admin. Service role không là bypass thông thường.
+
+## 9. Storage changes
+
+Binary ở Supabase Storage; PostgreSQL lưu bucket/path/URL/metadata. Có public/private policy, signed URL/server delivery, upload validation, alt/fallback và orphan cleanup.
+
+## 10. Admin/CMS changes
+
+Admin quản lý profile, projects/media, experience/skills/education, posts, landing/navigation/footer/social/FAQ/SEO/settings, ordering và trạng thái xuất bản; không cần sửa code/database thủ công.
+
+## 11. Environment and deployment changes
+
+Đã chuẩn hóa app URL, Supabase public variables, server-only service role, `DATABASE_URL`, `DIRECT_URL` và AI keys. Vercel + Supabase là nền tảng triển khai; production/billing/nâng gói cần xác nhận.
+
+## 12. Markdown link results
+
+Roadmap canonical có một task cho mỗi số 00–21. Relative Markdown references được kiểm tra sau khi xóa legacy files.
+
+## 13. Remaining conflicts
+
+Không còn xung đột chủ động Neon–Supabase. Repository chưa triển khai Supabase và trạng thái này được ghi rõ.
+
+## 14. User confirmation boundaries
+
+Dừng trước billing/add-on/nâng gói, secrets thật, production migration/deploy, công khai dữ liệu private hoặc thay đổi permission nhạy cảm. Free Plan là ưu tiên, không phải cam kết miễn phí vĩnh viễn.
+
+Documentation consistency check: PASSED

@@ -6,7 +6,7 @@ Pending
 
 ## Mục tiêu
 
-Chuẩn hóa schema cốt lõi và migration an toàn.
+Thiết lập Prisma trên Supabase PostgreSQL, schema cốt lõi, migration và lớp bảo vệ dữ liệu an toàn.
 
 ## Dependency
 
@@ -21,6 +21,10 @@ Chuẩn hóa schema cốt lõi và migration an toàn.
 - [ ] Tạo seed demo an toàn.
 - [ ] Kiểm tra relation ownership.
 - [ ] Ghi ERD hoặc mô tả schema.
+- [ ] Cấu hình `DATABASE_URL` pooled cho runtime và `DIRECT_URL` cho migration/backup bằng giá trị Supabase cung cấp; không log chuỗi kết nối.
+- [ ] Xác định bảng/schema expose, bật RLS và viết policy theo owner/admin/public-published; cấm policy public-all hoặc tắt RLS.
+- [ ] Kiểm tra policy `UPDATE` có quyền đọc liên quan, `USING` và `WITH CHECK`; view expose dùng `security_invoker` khi phù hợp.
+- [ ] Kiểm thử anonymous, owner, non-owner và admin; ghi rollback/recovery và export trước migration lớn.
 
 ## Không thực hiện
 
@@ -45,6 +49,7 @@ Thay đổi schema chính; bắt buộc review migration và rollback risk.
 - Prisma validate/generate đạt.
 - Migration không mất dữ liệu ngoài kế hoạch.
 - Query private có đường gắn userId.
+- Migration Prisma/RLS lưu trong Git; service role không dùng cho query nghiệp vụ thông thường.
 - Seed không chứa dữ liệu cá nhân thật.
 - Build đạt.
 

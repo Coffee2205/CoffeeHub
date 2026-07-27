@@ -56,6 +56,8 @@ Nếu là Site setting hoặc CMS entity:
 
 ## Ảnh hưởng database
 
+Nếu chạm Supabase, nêu tác động thực tế đến Prisma/migration, RLS, Auth, Storage, env, backup/recovery và Free Plan/quota; dẫn về tài liệu chuyên trách thay vì lặp quy tắc.
+
 Mô tả schema, migration, dữ liệu hiện có và rollback; hoặc ghi `Không có`.
 
 ## Rủi ro

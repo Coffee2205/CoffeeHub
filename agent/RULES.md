@@ -23,7 +23,7 @@ UI
 → service
 → repository
 → Prisma
-→ PostgreSQL
+→ Supabase PostgreSQL
 ```
 
 Có thể rút gọn cho thao tác nhỏ, nhưng business logic phức tạp không đặt trong UI.
@@ -80,6 +80,11 @@ Người dùng không cần thao tác database trực tiếp. Database vẫn là
 
 ## Database
 
+- Backend chuẩn là Supabase: PostgreSQL, Auth và Storage; deployment frontend là Vercel.
+- Prisma xử lý schema, migration, transaction và query nghiệp vụ. Supabase SDK không thay Prisma cho repository thông thường.
+- Database URL runtime dùng kết nối pooled phù hợp môi trường; migration/backup dùng kết nối direct do Supabase cung cấp. Không hard-code hostname, port hoặc connection format.
+- Bảng expose phải bật RLS với policy cụ thể. `UPDATE` cần cả quyền đọc phù hợp và điều kiện `USING`/`WITH CHECK`; view expose phải cân nhắc `security_invoker`.
+- Không dùng service role để né RLS trong luồng bình thường; key này chỉ ở server và chỉ khi thật sự cần quyền quản trị.
 - Relation, constraint và index phải rõ ràng.
 - Không sửa migration đã áp dụng; tạo migration mới.
 - Ưu tiên migration additive.
@@ -87,6 +92,14 @@ Người dùng không cần thao tác database trực tiếp. Database vẫn là
 - Dùng version cho autosave conflict khi cần.
 - Dùng idempotency key cho mutation có retry.
 - Nội dung công khai phải có trạng thái publish rõ ràng.
+
+## Supabase Auth và Storage
+
+- Dùng Supabase Auth email/password trước; session được xác minh server-side, route và mutation nhạy cảm kiểm tra role/permission.
+- Role tin cậy dùng `app_metadata`; không dùng `user_metadata` làm nguồn phân quyền.
+- Supabase Storage lưu file; PostgreSQL chỉ lưu tham chiếu và metadata. Upload kiểm tra MIME, kích thước, path, alt text và orphan cleanup.
+- Policy Storage nằm trên `storage.objects`; thao tác upsert cần quyền `INSERT`, `SELECT` và `UPDATE` phù hợp.
+- `SUPABASE_SERVICE_ROLE_KEY`, database URL và AI keys không bao giờ có prefix `NEXT_PUBLIC_`, không log và không đưa xuống browser.
 
 ## Autosave và offline
 

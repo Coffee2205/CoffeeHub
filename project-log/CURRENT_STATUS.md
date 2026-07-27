@@ -1,12 +1,16 @@
 # Current Status
 
+## Supabase documentation update — 2026-07-27
+
+Bộ tài liệu đã chọn Supabase PostgreSQL, Auth và Storage làm backend đích, với Prisma cho data access nghiệp vụ. Repository chưa cài Prisma/Supabase, chưa tạo project/credentials, schema, Auth, Storage, RLS hoặc backup. Task 00 được mở lại cho phần Supabase foundation và là task sẵn sàng tiếp theo; không có code task đang chạy.
+
 ## Operating mode
 
 Development
 
 ## Active task
 
-Không có. Task 02 đã hoàn thành; chờ yêu cầu mới trước khi bắt đầu Task 03.
+Không có phiên triển khai đang chạy. Task 00 đang `In Progress` vì được mở lại cho Supabase foundation; đây là task sẵn sàng tiếp theo.
 
 ## Repository state
 
@@ -19,7 +23,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 ## Completed
 
 - Bộ tài liệu sản phẩm, task và agent workflow đã được chuẩn hóa.
-- Task 00 Bootstrap đã hoàn thành.
+- Phạm vi Next.js ban đầu của Task 00 đã hoàn thành; phần Supabase foundation mới bổ sung chưa triển khai.
 - Task 01 Repository Audit đã hoàn thành.
 - Task 02 Design Foundation đã hoàn thành.
 
@@ -46,4 +50,4 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 - Push Task 01: Thành công lên `origin/dev` (`4e66551`).
 - Design Task 02: Lint, typecheck, build, browser desktop/mobile, overflow và contrast đạt.
 - Commit Task 02: `bfdf5e1` (`feat(design): add CoffeeHub UI foundation`).
-- Push Task 02: Chuẩn bị push lên `origin/dev` trong phiên Task 02.
+- Push Task 02: Thành công lên `origin/dev`; commit feature `bfdf5e1`, sau đó commit tài liệu `f703cb7`.

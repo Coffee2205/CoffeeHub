@@ -6,7 +6,7 @@ Pending
 
 ## Mục tiêu
 
-Thiết lập hoặc hoàn thiện authentication và data ownership.
+Triển khai Supabase Auth email/password, session SSR và authorization theo role/ownership.
 
 ## Dependency
 
@@ -14,17 +14,20 @@ Thiết lập hoặc hoàn thiện authentication và data ownership.
 
 ## Công việc
 
-- [ ] Xác nhận auth solution sau audit.
+- [ ] Tạo Supabase Auth browser/server clients bằng `@supabase/ssr` và cookie theo API Next.js hiện hành.
+- [ ] Triển khai đăng ký/đăng nhập email-password, login, logout, session persistence và trạng thái loading/error.
 - [ ] Tạo login và logout.
 - [ ] Tạo server-side session helper.
 - [ ] Bảo vệ private routes.
 - [ ] Tạo unauthorized/error state.
 - [ ] Xác lập quy tắc ownership theo `userId`.
 - [ ] Kiểm tra session hết hạn.
+- [ ] Map `auth.users.id` với profile ứng dụng; role admin lấy từ `app_metadata`, không từ `user_metadata`.
+- [ ] Bảo vệ route và mutation Admin ở server; kiểm thử anonymous, user, admin, session expiry/refresh.
 
 ## Không thực hiện
 
-- Không đổi auth provider nếu không có quyết định được ghi lại.
+- Không dùng NextAuth/Auth.js, không tự lưu mật khẩu và không thêm OAuth/Google mặc định; OAuth là task riêng.
 - Không lưu mật khẩu thủ công nếu dùng provider chuẩn.
 - Không chỉ bảo vệ ở client.
 

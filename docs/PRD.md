@@ -200,7 +200,7 @@ Sau khi hoàn thành phiên bản đầu, CoffeeHub phải:
 
 ## 7. Yêu cầu backend
 
-- PostgreSQL/Neon là nguồn dữ liệu chính thức.
+- Supabase PostgreSQL là nguồn dữ liệu chính thức; Prisma là lớp truy cập dữ liệu nghiệp vụ.
 - Frontend và AI không truy cập database trực tiếp.
 - Input phải validate.
 - Mọi dữ liệu private phải giới hạn theo `userId`.
@@ -231,7 +231,7 @@ Sau khi hoàn thành phiên bản đầu, CoffeeHub phải:
 
 ## 10. Yêu cầu chi phí
 
-- Ưu tiên Vercel, Neon và các gói miễn phí phù hợp.
+- Triển khai Next.js trên Vercel và backend trên Supabase; ưu tiên Supabase Free Plan khi đủ nhu cầu, nhưng phải xác minh giới hạn hiện hành và không được cam kết “miễn phí mãi mãi”.
 - Không cài hoặc bật dịch vụ trả phí nếu chưa được xác nhận.
 - Thiết kế AI không phụ thuộc một nhà cung cấp.
 - ChatGPT Plus không được xem là quyền sử dụng OpenAI API.
