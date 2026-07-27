@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-27 — Task 07A Admin Projects
+
+- Summary: Added protected Admin foundation and Projects CRUD without media, including status, ordering and confirmed soft delete.
+- Database impact: Added `projects`, `ContentStatus`, indexes, trigger and optimized RLS to the Supabase development project.
+- Validation: Prisma validate/generate, 8 tests, lint, typecheck, build and Supabase advisors passed; only expected unused-index INFO remains.
+- Commit/push: pending final Git step in this session.
+- Known issues: Media, preview, remaining content entities and public rendering remain in Task 07.
+
+---
+
 ## 2026-07-27 — Task 06 Dashboard
 
 - Summary: Thêm Dashboard server-rendered với Task hôm nay/quá hạn, Goal active, Event 7 ngày, weekly progress và welcome summary theo dữ liệu thật.

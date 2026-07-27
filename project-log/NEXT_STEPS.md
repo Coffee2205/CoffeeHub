@@ -1,5 +1,9 @@
 # Next Steps
 
+## After Task 07A
+
+Wait for a new request. The next ready subtask is 07B — Media assets and Supabase Storage; do not start it automatically.
+
 ## Ưu tiên sau Dashboard
 
 Dashboard đã hoàn thành. Chờ yêu cầu mới để tiếp tục roadmap với Admin Content Management.

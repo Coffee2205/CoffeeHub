@@ -2,7 +2,16 @@
 
 ## Trạng thái
 
-Pending
+In Progress
+
+## Subtask progress
+
+- [x] 07A — Admin foundation and Projects CRUD (media excluded).
+- [ ] 07B — Media assets and Supabase Storage.
+- [ ] 07C — Remaining content models and CRUD.
+- [ ] 07D — Public rendering, preview and final access verification.
+
+07A result (2026-07-27): added Prisma schema and additive migrations, optimized RLS, runtime validation, repository, Server Actions, protected Admin UI, list/create/edit, ordering, status and confirmed soft delete. Prisma validate/generate, 8 tests, lint, typecheck, build and Supabase advisors passed. Task remains In Progress because media, preview, remaining entities and public rendering are pending.
 
 ## Mục tiêu
 

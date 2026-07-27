@@ -30,6 +30,12 @@ enum TaskStatus {
   CANCELLED
 }
 
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  HIDDEN
+}
+
 model User {
   id        String    @id @db.Uuid
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -44,9 +50,36 @@ model User {
   tasks         Task[]
   events        Event[]
   notes         Note[]
+  projects      Project[]
 
   @@index([deletedAt])
   @@map("users")
+}
+
+model Project {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId String @map("user_id") @db.Uuid
+  title String @db.VarChar(180)
+  slug String @unique @db.VarChar(180)
+  summary String @db.VarChar(320)
+  description String
+  role String? @db.VarChar(180)
+  techStack String[] @default([]) @map("tech_stack")
+  githubUrl String? @map("github_url") @db.VarChar(500)
+  liveUrl String? @map("live_url") @db.VarChar(500)
+  status ContentStatus @default(DRAFT)
+  startedAt DateTime? @map("started_at") @db.Date
+  endedAt DateTime? @map("ended_at") @db.Date
+  displayOrder Int @default(0) @map("display_order")
+  publishedAt DateTime? @map("published_at") @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+  version Int @default(1)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, status, deletedAt])
+  @@index([status, displayOrder, deletedAt])
+  @@map("projects")
 }
 
 model Profile {

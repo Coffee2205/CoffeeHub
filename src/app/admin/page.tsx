@@ -1,6 +1,3 @@
-import { requireAdmin } from "@/lib/supabase/auth";
-
-export default async function AdminPage() {
-  await requireAdmin();
-  return <main className="mx-auto min-h-screen max-w-5xl px-[var(--page-gutter)] py-12"><p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary-hover">Admin</p><h1 className="mt-3 text-3xl font-semibold">Khu vực quản trị đã được bảo vệ</h1><p className="mt-3 text-foreground-secondary">Giao diện quản trị nội dung sẽ được triển khai trong Task 07.</p></main>;
-}
+import Link from "next/link";
+import { countProjects } from "@/features/projects/project.repository";
+export default async function AdminPage() { const total = await countProjects(); return <main className="mx-auto max-w-6xl px-[var(--page-gutter)] py-10"><p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary-hover">Admin</p><h1 className="mt-3 text-3xl font-semibold">Quản trị nội dung</h1><section className="mt-8 rounded-lg border border-border bg-surface p-5"><p className="text-sm text-foreground-secondary">Projects đang hoạt động</p><p className="mt-2 text-3xl font-semibold">{total}</p><Link href="/admin/projects" className="mt-5 inline-block text-sm font-semibold text-primary-hover">Quản lý projects →</Link></section></main>; }

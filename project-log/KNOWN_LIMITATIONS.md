@@ -1,5 +1,7 @@
 # Known Limitations
 
+- Admin/CMS currently covers Projects without cover/gallery; later Task 07 subtasks cover media, preview, public rendering and remaining entities.
+
 - Database và authentication foundation đã có; CMS và feature application vẫn thuộc các task sau.
 - Route `/` hiện là trang preview design foundation, chưa phải landing page hoặc application shell hoàn chỉnh.
 - Dashboard hiện tính ngày/tuần theo UTC vì Profile chưa có timezone preference.

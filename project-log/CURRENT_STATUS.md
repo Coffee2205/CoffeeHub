@@ -1,5 +1,9 @@
 # Current Status
 
+## Task 07A Admin Projects — 2026-07-27
+
+Completed subtask 07A: protected Admin foundation and Projects CRUD without media. Task 07 remains In Progress; no next subtask was started.
+
 ## Task 06 Dashboard — 2026-07-27
 
 Completed: protected Dashboard đọc dữ liệu thật theo user qua Prisma, hiển thị Task hôm nay/quá hạn, Goal active, Event 7 ngày và weekly progress. Boundary tạm thời dùng UTC và được ghi rõ; loading/empty/error cùng responsive layout đã có.
