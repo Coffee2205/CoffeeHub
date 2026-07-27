@@ -73,5 +73,5 @@ Không có.
 - Manual test: agent-browser đạt ở 1264px và 390×844; không error overlay, không horizontal overflow, controls/labels được nhận diện.
 - Contrast: primary control 4.94:1; hover 6.41:1; secondary text 13.25:1; muted text 7.67:1 trên background chính.
 - Reduced motion: global media query tắt animation/transition đáng kể; loading spinner có fallback motion-reduce.
-- Commit: Sẽ ghi sau khi tạo commit task.
-- Push: Chưa thực hiện.
+- Commit: `bfdf5e1` (`feat(design): add CoffeeHub UI foundation`).
+- Push: Chuẩn bị push lên `origin/dev` trong phiên Task 02.

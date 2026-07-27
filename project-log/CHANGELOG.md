@@ -6,8 +6,8 @@
 - Files: layout/global CSS, home preview, `src/components/ui`, `src/lib/cn.ts`, package manifest/lockfile và project-log.
 - Database impact: Không có.
 - Validation: lint, typecheck, build đạt; browser desktop/mobile không overflow/error overlay; contrast chính đạt WCAG AA.
-- Commit: Sẽ ghi sau khi tạo commit task.
-- Push result: Chưa thực hiện.
+- Commit: `bfdf5e1` (`feat(design): add CoffeeHub UI foundation`).
+- Push result: Chuẩn bị push lên `origin/dev` trong phiên Task 02.
 - Known issues: Dependency advisories và artifact task legacy không thay đổi.
 
 ---

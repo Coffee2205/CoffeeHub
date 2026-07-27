@@ -45,5 +45,5 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 - Commit Task 01: `7b3a746` (`docs(repository): audit current application state`).
 - Push Task 01: Thành công lên `origin/dev` (`4e66551`).
 - Design Task 02: Lint, typecheck, build, browser desktop/mobile, overflow và contrast đạt.
-- Commit Task 02: Sẽ ghi sau khi tạo commit task.
-- Push Task 02: Chưa thực hiện.
+- Commit Task 02: `bfdf5e1` (`feat(design): add CoffeeHub UI foundation`).
+- Push Task 02: Chuẩn bị push lên `origin/dev` trong phiên Task 02.
