@@ -1,7 +1,7 @@
 # Known Limitations
 
-- Chưa có database, authentication, CMS hoặc feature application; các phần này thuộc task sau.
+- Database foundation đã có; authentication, CMS và feature application vẫn thuộc các task sau.
 - Route `/` hiện là trang preview design foundation, chưa phải landing page hoặc application shell hoàn chỉnh.
-# Supabase chưa được khởi tạo
+# Supabase đã khởi tạo database foundation
 
-Repository đã có packages và client/helper foundation, nhưng chưa có Supabase project/credentials, domain schema, migration, Auth flow, Storage bucket, RLS hoặc backup thực tế. Các phần này thuộc task sau.
+Supabase CoffeeHub development project đã có domain schema, migrations và RLS nhưng chưa có Auth user/flow, Storage bucket hoặc lịch backup/export vận hành. Seed development chưa chạy vì chưa có Auth user hợp lệ.

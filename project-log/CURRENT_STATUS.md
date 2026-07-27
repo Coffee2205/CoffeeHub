@@ -1,5 +1,9 @@
 # Current Status
 
+## Task 04 Database Foundation — 2026-07-27
+
+Completed: Supabase development project có 8 bảng domain rỗng, Prisma schema, ba migration additive, composite ownership constraints, RLS owner/admin và seed development idempotent. Security advisor sạch; các vai trò anonymous/owner/non-owner/admin đã được kiểm thử bằng transaction rollback. Project chưa có Auth user nên seed chưa chạy.
+
 ## Task 03 App Shell — 2026-07-27
 
 Completed: `/app` có responsive workspace shell với desktop sidebar/header, mobile header/bottom navigation, active state và placeholder tài khoản không giả lập Auth. `/app/dashboard` chỉ là shell preview, chưa có dữ liệu nghiệp vụ.
@@ -18,13 +22,13 @@ Development
 
 ## Active task
 
-Task 03 App Shell đã hoàn thành; không có task tiếp theo đang thực thi.
+Task 04 Database Foundation đã hoàn thành; không có task tiếp theo đang thực thi.
 
 ## Repository state
 
 Next.js 16.2.12 App Router, React 19.2.8, TypeScript strict, Tailwind CSS 4 và ESLint 9 đã được cài đặt và xác minh.
 
-Repository hiện chỉ có route static `/`; chưa có database, auth, private route, PWA hoặc feature domain. Chi tiết nằm trong `docs/REPOSITORY_AUDIT.md`.
+Repository có route static `/`, app shell `/app` và database foundation; chưa có auth, PWA hoặc feature domain hoàn chỉnh. Chi tiết baseline nằm trong `docs/REPOSITORY_AUDIT.md`.
 
 Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các UI/state primitives nền tảng. Route `/` đang hiển thị preview component responsive.
 
@@ -35,6 +39,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 - Task 01 Repository Audit đã hoàn thành.
 - Task 02 Design Foundation đã hoàn thành.
 - Task 03 App Shell đã hoàn thành.
+- Task 04 Database Foundation đã hoàn thành.
 
 ## In progress
 
@@ -42,7 +47,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 
 ## Blockers
 
-- Không có blocker cho Task 04. Dependency advisories cần tiếp tục theo dõi.
+- Không có blocker đã biết cho Task 05. Dependency advisories cần tiếp tục theo dõi.
 
 ## Validation status
 
@@ -60,3 +65,4 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 - Design Task 02: Lint, typecheck, build, browser desktop/mobile, overflow và contrast đạt.
 - Commit Task 02: `bfdf5e1` (`feat(design): add CoffeeHub UI foundation`).
 - Push Task 02: Thành công lên `origin/dev`; commit feature `bfdf5e1`, sau đó commit tài liệu `f703cb7`.
+- Database Task 04: Prisma validate/generate, lint, typecheck, build, Supabase advisors và RLS role tests đạt; migration additive đã áp dụng, dữ liệu test đã rollback.

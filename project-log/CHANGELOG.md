@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-27 — Task 04 Database Foundation
+
+- Summary: Tạo schema domain Prisma/Supabase, migration additive, composite ownership constraints, RLS owner/admin và seed development idempotent.
+- Files: Prisma schema/config/seed/migrations, database doc, env contract, package manifest/lockfile, Task 04 và project-log.
+- Database impact: Tạo 8 bảng public rỗng cùng enum, index, trigger và policy RLS trên Supabase CoffeeHub development project; không có destructive DDL hoặc dữ liệu production.
+- Validation: Prisma validate/generate, lint, typecheck, build, Supabase advisors và RLS role tests đạt; dữ liệu kiểm thử đã rollback.
+- Commit/push: cập nhật bằng kết quả Git của phiên này.
+- Known issues: Chưa có Auth user/flow; unused-index INFO là dự kiến khi database chưa có traffic.
+
+---
+
 ## 2026-07-27 — Task 03 App Shell
 
 - Summary: Thêm responsive private workspace shell, navigation active state và route-level loading/error/not-found states.

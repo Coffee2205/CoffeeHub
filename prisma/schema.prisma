@@ -6,3 +6,204 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum GoalStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+  ARCHIVED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  BLOCKED
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id        String    @id @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+  version   Int       @default(1)
+
+  profile       Profile?
+  goals         Goal[]
+  roadmaps      Roadmap[]
+  roadmapStages RoadmapStage[]
+  tasks         Task[]
+  events        Event[]
+  notes         Note[]
+
+  @@index([deletedAt])
+  @@map("users")
+}
+
+model Profile {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String    @unique @map("user_id") @db.Uuid
+  displayName String?   @map("display_name") @db.VarChar(120)
+  headline    String?   @db.VarChar(180)
+  bio         String?
+  avatarPath  String?   @map("avatar_path")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
+  version     Int       @default(1)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, deletedAt])
+  @@map("profiles")
+}
+
+model Goal {
+  id              String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String     @map("user_id") @db.Uuid
+  title           String     @db.VarChar(180)
+  description     String?
+  status          GoalStatus @default(DRAFT)
+  priority        Priority   @default(MEDIUM)
+  deadline        DateTime?  @db.Timestamptz(6)
+  successCriteria Json?      @map("success_criteria") @db.JsonB
+  createdAt       DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt       DateTime?  @map("deleted_at") @db.Timestamptz(6)
+  version         Int        @default(1)
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roadmaps Roadmap[]
+  tasks    Task[]
+
+  @@index([userId, status, deletedAt])
+  @@index([userId, deadline])
+  @@unique([id, userId])
+  @@map("goals")
+}
+
+model Roadmap {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  goalId      String    @map("goal_id") @db.Uuid
+  title       String    @db.VarChar(180)
+  description String?
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
+  version     Int       @default(1)
+
+  user   User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goal   Goal           @relation(fields: [goalId, userId], references: [id, userId], onDelete: Cascade)
+  stages RoadmapStage[]
+  tasks  Task[]
+
+  @@index([userId, deletedAt])
+  @@index([goalId])
+  @@index([goalId, userId])
+  @@unique([id, userId])
+  @@map("roadmaps")
+}
+
+model RoadmapStage {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  roadmapId   String    @map("roadmap_id") @db.Uuid
+  title       String    @db.VarChar(180)
+  description String?
+  position    Int
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
+  version     Int       @default(1)
+
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roadmap Roadmap @relation(fields: [roadmapId, userId], references: [id, userId], onDelete: Cascade)
+  tasks   Task[]
+
+  @@unique([roadmapId, position])
+  @@index([userId, deletedAt])
+  @@index([roadmapId, deletedAt])
+  @@index([roadmapId, userId])
+  @@unique([id, userId])
+  @@map("roadmap_stages")
+}
+
+model Task {
+  id             String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String     @map("user_id") @db.Uuid
+  goalId         String?    @map("goal_id") @db.Uuid
+  roadmapId      String?    @map("roadmap_id") @db.Uuid
+  roadmapStageId String?    @map("roadmap_stage_id") @db.Uuid
+  title          String     @db.VarChar(220)
+  description    String?
+  status         TaskStatus @default(TODO)
+  priority       Priority   @default(MEDIUM)
+  dueAt          DateTime?  @map("due_at") @db.Timestamptz(6)
+  position       Int        @default(0)
+  createdAt      DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime?  @map("deleted_at") @db.Timestamptz(6)
+  version        Int        @default(1)
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goal         Goal?         @relation(fields: [goalId, userId], references: [id, userId], onDelete: Restrict)
+  roadmap      Roadmap?      @relation(fields: [roadmapId, userId], references: [id, userId], onDelete: Restrict)
+  roadmapStage RoadmapStage? @relation(fields: [roadmapStageId, userId], references: [id, userId], onDelete: Restrict)
+
+  @@index([userId, status, deletedAt])
+  @@index([userId, dueAt])
+  @@index([goalId])
+  @@index([goalId, userId])
+  @@index([roadmapId])
+  @@index([roadmapId, userId])
+  @@index([roadmapStageId])
+  @@index([roadmapStageId, userId])
+  @@map("tasks")
+}
+
+model Event {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  title       String    @db.VarChar(220)
+  description String?
+  startsAt    DateTime  @map("starts_at") @db.Timestamptz(6)
+  endsAt      DateTime? @map("ends_at") @db.Timestamptz(6)
+  timezone    String    @default("UTC") @db.VarChar(64)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
+  version     Int       @default(1)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, startsAt])
+  @@index([userId, deletedAt])
+  @@map("events")
+}
+
+model Note {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  title     String    @db.VarChar(220)
+  content   String    @default("")
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+  version   Int       @default(1)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, updatedAt])
+  @@index([userId, deletedAt])
+  @@map("notes")
+}

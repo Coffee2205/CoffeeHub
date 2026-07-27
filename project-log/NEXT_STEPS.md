@@ -1,16 +1,16 @@
 # Next Steps
 
-## Ưu tiên sau App Shell
+## Ưu tiên sau Database Foundation
 
-App Shell đã hoàn thành. Tiếp tục roadmap với Database Foundation ở yêu cầu mới.
+Database Foundation đã hoàn thành. Chờ yêu cầu mới để tiếp tục roadmap với Authentication.
 
 ## Task đề xuất
 
-`tasks/04-DATABASE-FOUNDATION.md`
+`tasks/05-AUTHENTICATION.md`
 
 ## Lý do
 
-Task 03 đã hoàn thành; Database Foundation là task pending đầu tiên có dependency đạt.
+Task 04 đã hoàn thành; Authentication là task pending đầu tiên có dependency đạt.
 
 ## Điều kiện bắt đầu
 
