@@ -8,6 +8,10 @@ Pending
 
 Xác định chính xác trạng thái code hiện tại trước khi thay đổi lớn.
 
+## Dependency
+
+- `00-BOOTSTRAP.md` phải hoàn thành.
+
 ## Công việc
 
 - [ ] Đọc toàn bộ cấu trúc thư mục và file hướng dẫn agent.
@@ -35,7 +39,6 @@ Xác định chính xác trạng thái code hiện tại trước khi thay đổ
 - `project-log/NEXT_STEPS.md`
 - `project-log/ISSUES.md`
 - `project-log/CHANGELOG.md`
-- `tasks/00-REPOSITORY-AUDIT.md`
 
 ## Ảnh hưởng database
 
@@ -46,7 +49,7 @@ Không thay đổi schema. Chỉ đọc và báo cáo.
 - Báo cáo phân biệt rõ phần đã xác minh và phần suy luận.
 - Có danh sách chức năng giữ lại, cần sửa và có thể xóa.
 - Có kết quả kiểm tra thực tế.
-- Xác định task tiếp theo và tiếp tục nếu không gặp điều kiện bắt buộc dừng.
+- Xác định task tiếp theo, ghi vào `project-log/NEXT_STEPS.md`, sau đó commit, push và dừng.
 
 ## Kết quả thực hiện
 

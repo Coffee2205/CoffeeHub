@@ -1,17 +1,33 @@
-# CoffeeHub Complete Agent Kit
+# CoffeeHub Agent Kit
 
-Bộ tài liệu này là nguồn thông tin chính để coding agent có thể khởi tạo, phát triển, bảo trì và chuẩn bị phát hành CoffeeHub.
+Bộ tài liệu điều phối coding agent phát triển CoffeeHub theo quy trình:
 
-## Chạy dự án cục bộ
+```text
+Nhận yêu cầu
+→ đọc trạng thái
+→ chọn đúng một task
+→ triển khai
+→ kiểm tra
+→ cập nhật tài liệu
+→ commit
+→ push lên origin/dev
+→ dừng
+```
 
-Yêu cầu Node.js 20.9 trở lên và npm.
+## Bắt đầu nhanh
+
+Đưa cho coding agent nội dung trong [`START_AGENT.md`](START_AGENT.md).
+
+## Chạy ứng dụng cục bộ
+
+Yêu cầu Node.js 20.9 trở lên và npm. Cài dependency rồi khởi động dev server:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Mở `http://localhost:3000`. Các kiểm tra trước khi commit:
+Mở `http://localhost:3000`. Trước khi commit thay đổi code, chạy:
 
 ```bash
 npm run lint
@@ -19,41 +35,22 @@ npm run typecheck
 npm run build
 ```
 
-Khi dự án cần biến môi trường, sao chép `.env.example` thành `.env.local` và chỉ điền secret ở máy cục bộ. Không commit `.env.local`.
+Khi dự án bắt đầu dùng biến môi trường, sao chép `.env.example` thành `.env.local`. Không commit `.env.local` hoặc secret thật.
 
-## Cấu trúc
+## Thứ tự đọc chính
 
-```text
-agent/        Quy trình điều phối agent
-docs/         Yêu cầu sản phẩm và thiết kế kỹ thuật
-tasks/        Roadmap triển khai theo thứ tự
-project-log/  Trạng thái thực tế và bộ nhớ dài hạn
-```
+1. [`MANIFEST.md`](MANIFEST.md)
+2. [`agent/MASTER.md`](agent/MASTER.md)
+3. Các file được `MASTER.md` yêu cầu
+4. Task hiện tại trong [`tasks/`](tasks/)
+5. Tài liệu nghiệp vụ hoặc kỹ thuật liên quan trong [`docs/`](docs/)
+6. Trạng thái dự án trong [`project-log/`](project-log/)
 
-## Cách bắt đầu
+## Nguyên tắc quan trọng
 
-Đưa cho coding agent câu lệnh:
-
-```text
-Đọc `agent/MASTER.md` và bắt đầu làm việc tự động theo đúng quy trình. Dự án có thể chưa được khởi tạo môi trường, vì vậy hãy tự xác định trạng thái và bắt đầu từ task sẵn sàng đầu tiên. Chỉ dừng khi gặp điều kiện trong `agent/STOP_CONDITIONS.md`.
-```
-
-Agent phải tự đọc `project-log/NEXT_STEPS.md` và thư mục `tasks/` để xác định task hiện tại. Tuy nhiên, sau khi hoàn thành, commit và push task đó lên `origin/dev`, agent phải dừng và chờ người dùng yêu cầu task tiếp theo.
-
-
-## Chính sách Git mặc định
-
-Sau mỗi task hoặc subtask có thay đổi code và đã kiểm tra, agent sẽ tự động:
-
-```text
-commit
-→ đồng bộ an toàn với origin/dev
-→ push lên origin/dev
-```
-
-Agent không được push lên `main`, không được force push và phải dừng khi gặp conflict hoặc thiếu quyền truy cập.
-
-
-## Chính sách dừng sau push
-
-Mỗi phiên chỉ thực hiện một task hoặc một đơn vị công việc. Sau khi push thành công lên `origin/dev`, agent báo cáo kết quả và dừng. Task tiếp theo chỉ được bắt đầu khi người dùng gửi yêu cầu mới.
+- Mỗi phiên chỉ thực hiện một task hoặc một subtask rõ ràng.
+- Sau khi push thành công lên `origin/dev`, agent phải dừng.
+- Không push lên `main`, không force push.
+- Nội dung thường xuyên thay đổi phải quản trị được từ giao diện Admin/CMS, không hard-code.
+- Người dùng không cần sửa code hoặc thao tác database trực tiếp để cập nhật hồ sơ, dự án, bài viết, menu, footer, SEO và nội dung công khai.
+- Thay đổi cấu trúc dữ liệu, logic nghiệp vụ hoặc bố cục mới vẫn có thể cần một task code riêng.

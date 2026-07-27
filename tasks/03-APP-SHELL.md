@@ -8,6 +8,10 @@ Pending
 
 Tạo bộ khung điều hướng cho private application trên desktop và mobile.
 
+## Dependency
+
+- `02-DESIGN-FOUNDATION.md` phải hoàn thành.
+
 ## Công việc
 
 - [ ] Tạo desktop sidebar.
@@ -30,7 +34,6 @@ Tạo bộ khung điều hướng cho private application trên desktop và mobi
 - `src/app/app/layout.tsx hoặc route group tương ứng`
 - `src/components/layout/*`
 - `src/components/navigation/*`
-- `tasks/02-APP-SHELL.md`
 - `project-log/*`
 
 ## Ảnh hưởng database

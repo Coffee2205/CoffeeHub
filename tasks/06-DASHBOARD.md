@@ -8,6 +8,10 @@ Pending
 
 Tạo Dashboard đọc dữ liệu thật và hiển thị tổng quan ngày/tuần
 
+## Dependency
+
+- `05-AUTHENTICATION.md` phải hoàn thành.
+
 ## Công việc
 
 - [ ] Welcome summary

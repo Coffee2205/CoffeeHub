@@ -1,33 +1,27 @@
 # Changelog
 
-## Bootstrap Next.js application
+## 2026-07-27 — Task 00 Bootstrap
 
-- Khởi tạo Next.js 16 App Router với React 19 và TypeScript strict.
-- Cấu hình Tailwind CSS 4, ESLint 9, npm scripts và Turbopack repository root.
-- Thêm app shell tối thiểu, `.env.example`, `.gitignore` và hướng dẫn chạy local.
-- Xác minh install, lint, typecheck, production build và dev HTTP smoke test.
-- Ghi nhận advisory dependency hiện chưa có bản sửa tương thích; không áp dụng audit fix phá vỡ.
-- Git commit: `5029959` (`chore(bootstrap): initialize CoffeeHub application`).
-- Push: Chuẩn bị push lên `origin/dev` trong phiên bootstrap.
+- Summary: Xác minh môi trường Next.js hiện có, bổ sung hướng dẫn setup và hoàn tất trạng thái bootstrap.
+- Files: README, package lock, task/project-log và bộ tài liệu điều phối đang chờ commit.
+- Database impact: Không có.
+- Validation: `npm install`, lint, typecheck, build và dev HTTP smoke-test đều đạt; chưa có test script.
+- Commit: Sẽ ghi sau khi tạo commit task.
+- Push result: Chưa thực hiện.
+- Known issues: Task files trùng số và dependency advisories đã ghi trong `ISSUES.md`.
 
-## Initial documentation consolidation
+---
 
-- Hợp nhất Agent Kit và Agent OS.
-- Xóa prompt thủ công trùng lặp.
-- Hợp nhất các workflow và rule nhỏ thành bộ file điều phối duy nhất.
-- Thêm Bootstrap làm task đầu tiên.
-- Chuẩn hóa task roadmap và project-log.
+Mỗi entry mới dùng mẫu:
 
-
-## Automatic dev push policy
-
-- Bật tự động commit sau mỗi đơn vị code hoàn chỉnh.
-- Bật tự động push lên `origin/dev`.
-- Thêm guard chống force push, push nhầm branch và tự resolve conflict.
-
-
-## Stop-after-push policy
-
-- Giới hạn mỗi phiên ở một task hoặc một subtask.
-- Agent dừng ngay sau khi push thành công lên `origin/dev`.
-- Task tiếp theo chỉ bắt đầu khi có yêu cầu mới từ người dùng.
+```text
+Date:
+Task:
+Summary:
+Files:
+Database impact:
+Validation:
+Commit:
+Push result:
+Known issues:
+```

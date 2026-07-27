@@ -107,3 +107,33 @@ Không dùng từ ngữ khiến người dùng hiểu rằng AI đã lưu khi m�
 - Ảnh hoặc mockup được phép dùng trên landing page.
 - Nội dung portfolio.
 - Chính sách privacy thực tế sau khi chọn auth và AI provider.
+
+
+## Quản trị nội dung
+
+Các nội dung sau phải chỉnh sửa được từ giao diện Admin/CMS:
+
+- hồ sơ cá nhân;
+- dự án, ảnh, liên kết, vai trò, công nghệ và trạng thái dự án;
+- kinh nghiệm;
+- kỹ năng;
+- học vấn;
+- bài viết;
+- banner và section công khai;
+- menu, footer và social links;
+- FAQ;
+- SEO title, description, image và canonical metadata;
+- thứ tự hiển thị;
+- trạng thái draft/published/hidden.
+
+Admin/CMS phải hỗ trợ theo nhu cầu từng entity:
+
+- tạo, xem, sửa, xóa mềm hoặc ẩn;
+- publish/unpublish;
+- upload/chọn media;
+- xem trước;
+- sắp xếp thứ tự;
+- validation;
+- xác nhận trước hành động phá hủy.
+
+Các route, permission name, enum kỹ thuật và hằng số hệ thống có thể nằm trong code. Nội dung biên tập không được hard-code.

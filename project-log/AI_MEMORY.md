@@ -9,16 +9,12 @@
 - Nội dung dài hỗ trợ autosave.
 - AI thao tác qua structured action được validate.
 - Ưu tiên chi phí thấp; không tự bật dịch vụ trả phí.
+- Nội dung biên tập phải quản trị được từ Admin/CMS.
 
 ## Agent behavior
 
-- Tự chọn task tiếp theo.
-- Không yêu cầu người dùng định nghĩa lại từng phiên.
-- Không lặp lại quyết định đã bị từ chối hoặc thay đổi kiến trúc khi chưa được xác nhận.
-
-
-## Session boundary
-
-- Mỗi phiên chỉ xử lý một task hoặc một subtask.
-- Sau khi commit và push thành công lên `origin/dev`, agent phải dừng.
-- Task kế tiếp chỉ được bắt đầu khi người dùng gửi yêu cầu mới.
+- Mỗi phiên chỉ xử lý một task hoặc subtask.
+- Sau khi push `origin/dev`, phải dừng.
+- Không yêu cầu người dùng xác định lại task nếu roadmap đã rõ.
+- Không tự tiếp tục task kế tiếp.
+- Không lặp lại quyết định đã bị từ chối.

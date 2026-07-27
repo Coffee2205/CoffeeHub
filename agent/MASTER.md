@@ -1,15 +1,14 @@
 # CoffeeHub Agent — Master Controller
 
-## Nhiệm vụ
+## Trách nhiệm
 
-Bạn là coding agent phát triển CoffeeHub từ lúc chưa có môi trường cho đến khi có thể phát hành. Bạn phải tự xác định trạng thái dự án, chọn task hợp lệ tiếp theo, thực hiện, kiểm tra và cập nhật tài liệu.
+Điều phối đúng một phiên làm việc. Mỗi phiên chỉ xử lý một task hoặc một subtask rõ ràng.
 
-Không hỏi người dùng “làm task nào tiếp theo?” khi `project-log/NEXT_STEPS.md` hoặc thư mục `tasks/` đã có câu trả lời.
+## Quy trình bắt buộc
 
-## Quy trình khởi động bắt buộc
-
-1. Kiểm tra repository root và Git status.
-2. Đọc theo thứ tự:
+1. Đọc `MANIFEST.md`.
+2. Kiểm tra repository root và `git status`.
+3. Đọc:
    - `project-log/CURRENT_STATUS.md`
    - `project-log/NEXT_STEPS.md`
    - `project-log/DECISIONS.md`
@@ -17,76 +16,57 @@ Không hỏi người dùng “làm task nào tiếp theo?” khi `project-log/N
    - `project-log/ISSUES.md`
    - `project-log/KNOWN_LIMITATIONS.md`
    - `project-log/TECH_DEBT.md`
-   - `tasks/README.md`
-   - task đang làm hoặc task pending đầu tiên
-   - các tài liệu liên quan trong `docs/`
-3. Đọc `agent/WORKFLOWS.md`.
-4. Đọc `agent/RULES.md`.
-5. Đọc `agent/STOP_CONDITIONS.md`.
-6. Xác định mode hiện tại:
-   - Bootstrap
-   - Development
-   - Maintenance
-   - Release
-7. Audit phần code liên quan trước khi chỉnh sửa.
-8. Thực hiện một đơn vị công việc nhất quán.
-9. Chạy kiểm tra phù hợp.
-10. Cập nhật task và project-log.
-11. Commit thay đổi của đơn vị công việc hiện tại.
-12. Push commit lên `origin/dev` theo quy tắc trong `agent/RULES.md`.
-13. Dừng phiên làm việc sau khi push thành công.
-14. Chỉ bắt đầu task tiếp theo khi người dùng gửi yêu cầu mới.
+4. Đọc `tasks/README.md`.
+5. Chọn đúng một task:
+   - task đang `In Progress`; hoặc
+   - task pending đầu tiên có dependency đã hoàn thành.
+6. Đọc toàn bộ task đó.
+7. Đọc các tài liệu trong `docs/` được task tham chiếu hoặc có liên quan trực tiếp.
+8. Đọc:
+   - `agent/WORKFLOWS.md`
+   - `agent/RULES.md`
+   - `agent/STOP_CONDITIONS.md`
+9. Xác định mode.
+10. Audit code liên quan trước khi sửa.
+11. Triển khai đúng phạm vi task.
+12. Chạy kiểm tra phù hợp.
+13. Cập nhật task và project-log.
+14. Commit thay đổi.
+15. Push lên duy nhất `origin/dev`.
+16. Báo cáo và dừng.
 
-## Thứ tự ưu tiên nguồn sự thật
-
-1. Yêu cầu trực tiếp mới nhất của người dùng.
-2. `project-log/DECISIONS.md`.
-3. Tài liệu trong `docs/`.
-4. Acceptance criteria của task hiện tại.
-5. Code và Git history đã được xác minh.
-6. Suy luận của agent.
-
-Không tự giải quyết âm thầm một mâu thuẫn lớn.
-
-## Cách chọn task
-
-Agent chỉ chọn một task cho mỗi yêu cầu của người dùng.
+## Chọn task
 
 Ưu tiên:
 
-1. Task đang `In Progress`.
-2. Task đầu tiên trong `project-log/NEXT_STEPS.md`.
-3. Task pending đầu tiên có dependency đã hoàn thành.
-4. Lỗi build, typecheck, lint, test hoặc migration đang chặn dự án.
-5. Task nền tảng đang chặn nhiều task khác.
+1. Task `In Progress`.
+2. Task được chỉ định trực tiếp bởi người dùng.
+3. Task đầu tiên trong `NEXT_STEPS.md` nếu dependency đã hoàn thành.
+4. Lỗi build/type/lint/test đang chặn task đó.
 
-Không chọn task chỉ vì dễ hoặc hấp dẫn về giao diện.
+Không tự bắt đầu task kế tiếp sau khi push.
 
-Sau khi hoàn thành, commit và push task hiện tại, agent không được tự chọn hoặc bắt đầu task kế tiếp trong cùng phiên.
-
-## Vòng lặp thực thi
+## Vòng lặp một phiên
 
 ```text
 Đọc trạng thái
-→ Chọn task sẵn sàng
-→ Audit
-→ Lập kế hoạch
-→ Triển khai
-→ Kiểm tra
-→ Cập nhật tài liệu
-→ Commit
-→ Push `origin/dev`
-→ Báo cáo kết quả
-→ Dừng phiên
-→ Chờ người dùng yêu cầu task tiếp theo
+→ chọn một task
+→ audit
+→ triển khai
+→ kiểm tra
+→ cập nhật tài liệu
+→ commit
+→ push origin/dev
+→ báo cáo
+→ dừng
 ```
 
 ## Báo cáo cuối phiên
 
 ```text
 Mode:
-Tasks completed:
-Tasks partially completed:
+Task:
+Status:
 Files changed:
 Database changes:
 Validation performed:
@@ -94,8 +74,8 @@ Git commit:
 Push result:
 Current blockers:
 Documentation updated:
-Next selected task:
+Recommended next task:
 Reason for stopping:
 ```
 
-Không được khẳng định đã chạy kiểm tra nếu chưa thực sự chạy.
+Không khẳng định đã chạy kiểm tra, commit hoặc push nếu chưa thực sự thực hiện.

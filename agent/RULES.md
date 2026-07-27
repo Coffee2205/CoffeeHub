@@ -1,68 +1,97 @@
 # CoffeeHub Agent — Shared Rules
 
+## Coding
+
+- Thay đổi nhỏ, rõ ràng và đúng phạm vi task.
+- Không dùng `any` để che lỗi.
+- Validate runtime cho form, API, external data và AI output.
+- Không nuốt lỗi.
+- Không cài dependency nếu chưa có nhu cầu thực tế.
+- Không rewrite module không liên quan.
+- Không xóa code chỉ vì chưa hiểu.
+
 ## Kiến trúc
 
 Luồng ưu tiên:
 
 ```text
 UI
-→ Server Action hoặc API Route
-→ Runtime validation
-→ Authentication
-→ Authorization
-→ Service
-→ Repository
+→ Server Action/API
+→ validation
+→ authentication
+→ authorization
+→ service
+→ repository
 → Prisma
 → PostgreSQL
 ```
 
-Không bắt buộc tạo đủ layer cho thao tác rất nhỏ, nhưng không được trộn business logic phức tạp vào UI.
-
-## Coding
-
-- Thay đổi nhỏ, rõ ràng và dễ review.
-- Không dùng `any` để che lỗi.
-- Dùng runtime validation cho form, API, dữ liệu ngoài và AI output.
-- Không nuốt lỗi.
-- Không cài package mới nếu chưa chứng minh cần thiết.
-- Không rewrite module không liên quan.
-- Không xóa code chỉ vì chưa hiểu.
+Có thể rút gọn cho thao tác nhỏ, nhưng business logic phức tạp không đặt trong UI.
 
 ## Frontend
 
 - Server Component làm mặc định khi phù hợp.
-- Chỉ dùng `"use client"` khi cần browser API hoặc interaction.
+- Chỉ dùng `"use client"` khi cần interaction hoặc browser API.
 - Có loading, empty, error và success state.
 - Responsive desktop và iPhone.
 - Có keyboard navigation, contrast và touch target hợp lý.
-- Giữ concept dark, hiện đại, blue-first.
-- Không dùng mock data trong production flow khi task yêu cầu persistence thật.
+- Tuân thủ `docs/DESIGN_RULES.md`.
+
+## Content-first và Admin/CMS
+
+Nội dung có khả năng thay đổi sau bàn giao không được hard-code.
+
+Mặc định phải quản trị được:
+
+- hồ sơ cá nhân;
+- dự án và ảnh dự án;
+- kinh nghiệm, kỹ năng, học vấn;
+- bài viết;
+- banner và nội dung landing page;
+- menu, footer và liên kết;
+- FAQ;
+- SEO metadata;
+- trạng thái publish/unpublish;
+- thứ tự hiển thị;
+- site settings.
+
+Một loại nội dung mới phải được phân loại:
+
+1. **Code constant**: hằng kỹ thuật như route hoặc permission.
+2. **Site setting**: một giá trị cấu hình toàn site.
+3. **CMS entity**: danh sách nội dung có CRUD.
+4. **Feature flag**: bật/tắt hành vi có kiểm soát.
+
+Nếu là Site setting hoặc CMS entity, task phải bao gồm schema, validation, CRUD, quyền truy cập, giao diện quản trị và kết nối phần hiển thị.
+
+Người dùng không cần thao tác database trực tiếp. Database vẫn là nơi lưu dữ liệu phía sau.
 
 ## Backend và bảo mật
 
 - Không tin `userId` do client gửi.
-- Query dữ liệu private phải scope theo current user.
+- Dữ liệu private phải scope theo current user.
 - Validate mọi input.
 - Dùng transaction cho thao tác nhiều record.
 - Không trả stack trace cho client.
-- Không log secret, token, mật khẩu hoặc dữ liệu nhạy cảm.
+- Không log secret, token hoặc dữ liệu nhạy cảm.
 - Không đưa secret vào `NEXT_PUBLIC_*`.
 - Không commit `.env`.
+- Admin route phải yêu cầu authentication và authorization.
 
 ## Database
 
-- Dữ liệu private phải thuộc về user.
 - Relation, constraint và index phải rõ ràng.
 - Không sửa migration đã áp dụng; tạo migration mới.
 - Ưu tiên migration additive.
+- Không tự chạy production migration.
 - Dùng version cho autosave conflict khi cần.
 - Dùng idempotency key cho mutation có retry.
-- Không tự chạy production migration.
+- Nội dung công khai phải có trạng thái publish rõ ràng.
 
 ## Autosave và offline
 
 - Debounce nội dung dài khoảng 800–1200 ms.
-- Không autosave ngay lần render đầu.
+- Không autosave ở lần render đầu.
 - Hiển thị `Saving`, `Saved`, `Failed`, `Offline`.
 - Không ghi đè version mới hơn.
 - Optimistic update phải rollback khi lỗi.
@@ -79,115 +108,60 @@ OpenAI → Groq → Gemini
 
 ChatGPT Plus không phải OpenAI API credit.
 
-Luồng AI:
+AI phải đi qua:
 
 ```text
-User request
-→ Context builder
-→ Provider
-→ Structured output
-→ Runtime validation
-→ Proposal
-→ Confirmation khi cần
-→ Service
-→ Transaction
-→ Database
-→ Audit log
+request
+→ context builder
+→ provider
+→ structured output
+→ runtime validation
+→ proposal
+→ confirmation khi cần
+→ service
+→ transaction
+→ database
+→ audit log
 ```
 
-AI không được:
+AI không được truy cập Prisma/SQL trực tiếp, nhận secret, xóa dữ liệu tự động hoặc commit cùng một action qua nhiều provider.
 
-- Truy cập Prisma hoặc SQL trực tiếp.
-- Nhận toàn bộ database nếu không cần.
-- Nhận secret hoặc session token.
-- Xóa dữ liệu tự động.
-- Thay đổi hàng loạt dữ liệu quan trọng không xác nhận.
-- Cho nhiều provider cùng commit một action.
+Fallback chỉ dùng cho timeout, rate limit, quota hoặc provider unavailable.
 
-Fallback chỉ dùng cho timeout, rate limit, quota hoặc provider unavailable; không fallback cho lỗi validation, authorization hoặc request không an toàn.
+## Git: commit và push `dev`
 
-## Git và tự động push nhánh `dev`
+Sau khi hoàn thành một task hoặc subtask:
 
-### Hành vi bắt buộc sau mỗi đơn vị code hoàn chỉnh
+1. Chạy kiểm tra phù hợp.
+2. Kiểm tra `git status` và `git diff`.
+3. Loại secret, `.env`, build output và file không liên quan.
+4. Chuyển sang branch `dev`.
+5. Nếu cần, tạo tracking branch từ `origin/dev`.
+6. Commit với message tập trung một mục đích.
+7. Khi working tree sạch, đồng bộ bằng `git pull --rebase origin dev`.
+8. Push lên `origin/dev`.
+9. Ghi commit hash và push result vào task và changelog.
+10. Dừng phiên.
 
-Sau khi hoàn thành một task hoặc subtask có thay đổi code, agent phải:
+Không được:
 
-1. Chạy các kiểm tra phù hợp với `package.json`.
-2. Chỉ tiếp tục commit khi các lỗi do thay đổi mới đã được xử lý.
-3. Kiểm tra Git status và Git diff.
-4. Không đưa secret, `.env`, build output hoặc file không liên quan vào commit.
-5. Chuyển sang nhánh `dev`.
-6. Nếu nhánh `dev` chưa tồn tại cục bộ nhưng tồn tại trên remote, tạo tracking branch từ `origin/dev`.
-7. Nếu nhánh `dev` chưa tồn tại cả local lẫn remote, tạo nhánh local `dev` từ branch hiện tại.
-8. Commit toàn bộ thay đổi thuộc đúng task với commit message rõ ràng.
-9. Đồng bộ thay đổi mới nhất từ remote bằng cách an toàn.
-10. Push commit lên `origin/dev`.
-11. Ghi commit hash và kết quả push vào task file và `project-log/CHANGELOG.md`.
-12. Dừng phiên ngay sau khi push thành công.
-13. Không bắt đầu task kế tiếp cho đến khi người dùng yêu cầu.
+- push lên `main`, `master`, `production`;
+- force push hoặc `--force-with-lease`;
+- tự resolve conflict không rõ nguồn gốc;
+- đổi remote URL;
+- hiển thị access token;
+- lặp push vô hạn.
 
-### Quy tắc đồng bộ trước khi push
-
-- Ưu tiên `git pull --rebase origin dev` khi working tree sạch và không có commit chưa xử lý.
-- Nếu rebase tạo conflict, dừng ngay và báo người dùng.
-- Không tự resolve conflict khi có thay đổi không rõ nguồn gốc.
-- Không force push.
-- Không dùng `--force-with-lease`.
-- Không push lên `main`, `master`, `production` hoặc branch khác.
-- Không tự merge `dev` vào branch release.
-- Không tạo Pull Request nếu người dùng chưa yêu cầu.
-
-### Điều kiện được push
-
-Agent chỉ push khi:
-
-- Đang ở đúng repository.
-- Remote `origin` tồn tại.
-- Đang ở nhánh `dev`.
-- Commit chỉ chứa file thuộc phạm vi task.
-- Không phát hiện secret.
-- Các kiểm tra liên quan đã chạy hoặc agent đã ghi rõ vì sao không thể chạy.
-- Không có merge conflict.
-- Push không yêu cầu thay đổi quyền truy cập hoặc cấu hình credential mới.
-
-### Khi không thể push
-
-Nếu thiếu remote, thiếu quyền Git, cần đăng nhập, repository chưa có `origin`, hoặc push bị từ chối:
-
-- Không lặp lại push vô hạn.
-- Không thay đổi remote URL.
-- Không yêu cầu hoặc hiển thị access token trong log.
-- Cập nhật task và project-log với trạng thái `Push blocked`.
-- Dừng và báo rõ lệnh đã chạy, lỗi nhận được và bước người dùng cần thực hiện.
-
-### Commit message
-
-Mỗi commit phải tập trung một mục đích, ví dụ:
-
-```text
-feat(goals): add goal creation flow
-fix(notes): prevent stale autosave overwrite
-refactor(ai): extract provider abstraction
-docs(project): update task status
-test(tasks): cover task completion service
-```
+Nếu thiếu remote, credential, quyền truy cập hoặc gặp conflict: ghi `Push blocked`, báo lỗi và dừng.
 
 ## Documentation
 
-Sau mỗi đơn vị công việc:
+Sau mỗi phiên cập nhật:
 
-- Cập nhật task hiện tại.
-- Cập nhật `CURRENT_STATUS.md`, `CHANGELOG.md`, `NEXT_STEPS.md`.
-- Cập nhật `DECISIONS.md` khi có quyết định lâu dài.
-- Cập nhật `TECH_DEBT.md`, `KNOWN_LIMITATIONS.md`, `ISSUES.md` khi cần.
-- Cập nhật `AI_MEMORY.md` khi có bài học agent sau phải nhớ.
+- task hiện tại;
+- `CURRENT_STATUS.md`;
+- `NEXT_STEPS.md`;
+- `CHANGELOG.md`;
+- file log chuyên biệt khi có quyết định, issue, limitation hoặc technical debt.
 
-Không đánh dấu task hoàn thành khi acceptance criteria chưa đạt.
-
-
-## Giới hạn một task mỗi phiên
-
-- Mỗi yêu cầu chỉ xử lý một task hoặc một subtask được xác định rõ.
-- Sau khi push thành công lên `origin/dev`, agent phải dừng.
-- Agent có thể đề xuất task kế tiếp trong báo cáo nhưng không được triển khai.
-- Không được tiếp tục roadmap tự động trong cùng phiên.
+Không đánh dấu `Completed` khi acceptance criteria chưa đạt.

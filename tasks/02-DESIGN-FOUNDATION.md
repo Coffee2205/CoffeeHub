@@ -8,6 +8,10 @@ Pending
 
 Thiết lập design tokens và component nền tảng theo concept dark-blue.
 
+## Dependency
+
+- `01-REPOSITORY-AUDIT.md` phải hoàn thành.
+
 ## Công việc
 
 - [ ] Xác nhận font và typography.
@@ -28,7 +32,6 @@ Thiết lập design tokens và component nền tảng theo concept dark-blue.
 - `src/app/globals.css`
 - `src/components/ui/*`
 - `src/lib/* nếu cần`
-- `tasks/01-DESIGN-FOUNDATION.md`
 - `project-log/*`
 
 ## Ảnh hưởng database

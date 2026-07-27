@@ -1,7 +1,16 @@
-# Khởi động coding agent
-
-Sao chép nguyên văn lệnh sau cho Codex, GPT, Gemini hoặc coding agent:
+# Lệnh khởi động coding agent
 
 ```text
-Đọc `agent/MASTER.md` và bắt đầu làm việc tự động theo đúng quy trình. Dự án có thể chưa được khởi tạo môi trường, vì vậy hãy tự xác định trạng thái và bắt đầu từ task sẵn sàng đầu tiên. Thực hiện đúng một task sẵn sàng, tự cập nhật project-log, commit và push task đó lên `origin/dev`. Sau khi push thành công, báo cáo kết quả và dừng hoàn toàn. Chỉ bắt đầu task tiếp theo khi tôi gửi yêu cầu mới. Vẫn phải dừng sớm nếu gặp điều kiện trong `agent/STOP_CONDITIONS.md`.
+Đọc `MANIFEST.md`, sau đó đọc `agent/MASTER.md` và thực hiện đúng một task sẵn sàng.
+
+Dự án có thể chưa được khởi tạo, vì vậy hãy tự xác định mode hiện tại. Đọc đầy đủ project-log, task hiện tại và các tài liệu liên quan trước khi sửa code.
+
+Sau khi hoàn thành task:
+1. chạy các kiểm tra phù hợp;
+2. cập nhật task và project-log;
+3. commit;
+4. push lên duy nhất `origin/dev`;
+5. báo cáo kết quả và dừng hoàn toàn.
+
+Không tự bắt đầu task tiếp theo. Chỉ tiếp tục khi tôi gửi yêu cầu mới. Dừng sớm nếu gặp điều kiện trong `agent/STOP_CONDITIONS.md`.
 ```

@@ -1,9 +1,15 @@
 # Issues
 
-## Dependency advisories
+## I-001 — Task files trùng số
+
+- Trạng thái: Open.
+- `tasks/README.md` định nghĩa roadmap mới từ Task 00 đến Task 21, nhưng filesystem vẫn có một số file task cũ trùng số.
+- `REVIEW_REPORT.md` nói các file cũ đã được xóa, không khớp trạng thái repository thực tế.
+- Task 00 không xóa file vì yêu cầu bảo toàn dữ liệu hiện có.
+- Hành động đề xuất: Task 01 xác minh file canonical theo manifest/roadmap và lập danh sách file legacy trước khi xóa hoặc di chuyển.
+
+## I-002 — Dependency advisories
 
 - Trạng thái: Open, không chặn bootstrap local.
-- `npm audit`: 12 high (bao gồm toolchain phát triển).
-- `npm audit --omit=dev`: 3 high từ `postcss` và `sharp` qua Next.js 16.2.12.
-- Hành động đã tránh: không chạy `npm audit fix --force` vì npm đề xuất downgrade phá vỡ xuống Next.js 9.3.3.
-- Bước tiếp theo: kiểm tra lại khi Next.js phát hành bản stable chứa dependency đã vá.
+- `npm install` báo 12 advisory high; audit trước đó xác định 3 advisory production-transitive qua Next.js.
+- Không chạy `npm audit fix --force` vì có nguy cơ thay đổi dependency phá vỡ.

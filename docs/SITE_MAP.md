@@ -128,3 +128,25 @@ More
 ```
 
 `More` mở các mục Notes, Roadmaps, AI Assistant, Profile và Settings.
+
+
+## Khu vực quản trị nội dung
+
+Các route yêu cầu đăng nhập và quyền quản trị:
+
+```text
+/admin
+/admin/profile
+/admin/projects
+/admin/experiences
+/admin/skills
+/admin/education
+/admin/posts
+/admin/pages
+/admin/navigation
+/admin/media
+/admin/seo
+/admin/settings
+```
+
+Có thể hợp nhất một số route nếu giao diện dùng tabs, nhưng chức năng phải đầy đủ.

@@ -8,6 +8,10 @@ Completed
 
 Khởi tạo và xác minh môi trường CoffeeHub để project có thể phát triển ổn định.
 
+## Dependency
+
+Không có. Đây là task đầu tiên.
+
 ## Công việc
 
 - [x] Kiểm tra repository và bảo toàn mọi file hiện có.
@@ -49,32 +53,28 @@ Không tạo hoặc thay đổi production database. Prisma chỉ được khở
 
 ### File đã tạo hoặc sửa
 
-- Khởi tạo cấu hình Next.js, TypeScript strict, Tailwind CSS và ESLint.
-- Tạo App Router tối thiểu trong `src/app`.
-- Tạo `.gitignore`, `.env.example`, npm lockfile và bổ sung hướng dẫn setup vào README.
-- Cập nhật task và project-log theo kết quả kiểm tra thực tế.
+- Xác minh và giữ nguyên cấu hình Next.js, TypeScript, Tailwind và ESLint hiện có.
+- Bổ sung lại hướng dẫn cài đặt, chạy dev và kiểm tra chất lượng trong `README.md`.
+- Đồng bộ `package-lock.json` bằng `npm install`.
+- Cập nhật task và project-log theo kết quả thực tế.
 
 ### Quyết định kỹ thuật
 
-- Dùng npm vì repository ban đầu không có lockfile.
-- Dùng Next.js 16 App Router và Server Components mặc định.
-- Chỉ cài dependency bootstrap cốt lõi; hoãn Prisma và Zod đến task cần dùng.
-- Khai báo rõ `turbopack.root` để không nhận nhầm lockfile ngoài repository.
+- Dùng npm theo `package-lock.json` hiện có.
+- Giữ Next.js 16 App Router và Server Components làm mặc định.
+- Không thêm Prisma, auth, CMS hoặc dependency của task tương lai.
 
 ### Vấn đề còn lại
 
-- Chưa ghi nhận blocker. Repository Audit là task tiếp theo.
+- npm audit báo 12 advisory high, trong đó 3 advisory thuộc dependency production bắc cầu của Next.js; không chạy `audit fix --force` vì npm đề xuất thay đổi phá vỡ.
+- Bộ task mới và một số task cũ đang cùng tồn tại với số trùng nhau; chuyển việc xác minh/xử lý sang Repository Audit để không xóa file ngoài phạm vi bootstrap.
 
 ### Kiểm tra
 
 - Install: `npm install` thành công.
-- Dev: HTTP 200 tại `127.0.0.1:3100`, nội dung bootstrap được xác nhận và server đã dừng.
+- Dev: HTTP 200 tại `127.0.0.1:3100`, có nội dung CoffeeHub và server đã dừng.
 - Lint: `npm run lint` thành công.
 - Typecheck: `npm run typecheck` thành công.
 - Build: `npm run build` thành công với Next.js 16.2.12.
-- Audit: `npm audit --omit=dev` báo 3 advisory high từ dependency bắc cầu của Next.js; chưa có đường nâng cấp tương thích do npm chỉ đề xuất downgrade phá vỡ.
-
-### Git
-
-- Commit: `5029959` (`chore(bootstrap): initialize CoffeeHub application`).
-- Push: Chuẩn bị push lên `origin/dev` trong phiên bootstrap.
+- Commit: Sẽ ghi sau khi tạo commit task.
+- Push: Chưa thực hiện.

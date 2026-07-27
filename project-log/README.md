@@ -1,25 +1,21 @@
 # Project Log — CoffeeHub
 
-Đây là bộ nhớ trạng thái thực tế của dự án.
+Project-log lưu trạng thái thực tế, không lưu yêu cầu sản phẩm.
 
-## Thứ tự đọc
+## File và trách nhiệm
 
-1. `CURRENT_STATUS.md`
-2. `NEXT_STEPS.md`
-3. `DECISIONS.md`
-4. `AI_MEMORY.md`
-5. `ISSUES.md`
-6. `KNOWN_LIMITATIONS.md`
-7. `TECH_DEBT.md`
-8. `CHANGELOG.md`
+- `CURRENT_STATUS.md`: snapshot hiện tại.
+- `NEXT_STEPS.md`: task đề xuất kế tiếp.
+- `DECISIONS.md`: quyết định đã chấp nhận.
+- `AI_MEMORY.md`: bài học cho agent sau.
+- `ISSUES.md`: blocker/lỗi đang hoạt động.
+- `KNOWN_LIMITATIONS.md`: giới hạn đã biết.
+- `TECH_DEBT.md`: thỏa hiệp kỹ thuật.
+- `CHANGELOG.md`: lịch sử phiên đã hoàn thành.
 
-## Quy tắc cập nhật
+## Quy tắc
 
-Sau mỗi đơn vị công việc có thể kiểm tra:
-
-- Cập nhật trạng thái thực tế.
-- Cập nhật task tiếp theo.
-- Ghi quyết định mới.
-- Ghi blocker, limitation hoặc technical debt.
-- Ghi thay đổi vào changelog.
-- Không ghi một chức năng là hoàn thành nếu chưa xác minh.
+- Không sao chép cùng một nội dung vào nhiều file.
+- Chỉ ghi kết quả đã xác minh.
+- Mỗi changelog entry phải có task, validation, commit và push result.
+- Sau push, cập nhật `NEXT_STEPS.md` nhưng không tự triển khai task đó.
