@@ -1,16 +1,16 @@
 # Next Steps
 
-## Ưu tiên sau Database Foundation
+## Ưu tiên sau Authentication
 
-Database Foundation đã hoàn thành. Chờ yêu cầu mới để tiếp tục roadmap với Authentication.
+Authentication đã hoàn thành. Chờ yêu cầu mới để tiếp tục roadmap với Dashboard.
 
 ## Task đề xuất
 
-`tasks/05-AUTHENTICATION.md`
+`tasks/06-DASHBOARD.md`
 
 ## Lý do
 
-Task 04 đã hoàn thành; Authentication là task pending đầu tiên có dependency đạt.
+Task 05 đã hoàn thành; Dashboard là task pending đầu tiên có dependency đạt.
 
 ## Điều kiện bắt đầu
 

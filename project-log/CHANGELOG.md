@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-27 — Task 05 Authentication
+
+- Summary: Thêm Supabase email/password Auth, SSR cookie refresh, server guards, login/signup/logout, confirmation callback, admin authorization và Auth-to-Profile mapping.
+- Files: auth routes/actions/UI, Supabase helpers/proxy, protected shell/admin state, mapping migration, tests, auth doc, env contract và project-log.
+- Database impact: Thêm private trigger function và trigger additive trên `auth.users`; mapping test đã rollback, không còn test data.
+- Validation: 3 unit tests, Prisma validate/generate, lint, typecheck, build, HTTP anonymous route smoke-test và Supabase Security Advisor đạt.
+- Commit/push: cập nhật bằng kết quả Git của phiên này.
+- Known issues: E2E email confirmation/refresh/logout với account thật cần cấu hình redirect URL và email của môi trường triển khai; không tạo external credential trong task.
+
+---
+
 ## 2026-07-27 — Task 04 Database Foundation
 
 - Summary: Tạo schema domain Prisma/Supabase, migration additive, composite ownership constraints, RLS owner/admin và seed development idempotent.

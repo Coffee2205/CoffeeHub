@@ -21,7 +21,7 @@ Nhóm dự kiến:
 ```text
 NEXT_PUBLIC_APP_URL
 NEXT_PUBLIC_SUPABASE_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 SUPABASE_SERVICE_ROLE_KEY
 DATABASE_URL
 DIRECT_URL
@@ -37,7 +37,7 @@ Quy tắc:
 - Tạo `.env.example` chỉ chứa tên biến và hướng dẫn.
 - Không dùng prefix public cho secret.
 - Không in secret trong log hoặc screenshot.
-- Chỉ `NEXT_PUBLIC_SUPABASE_URL` và `NEXT_PUBLIC_SUPABASE_ANON_KEY` được dùng phía client. Service role key, database URLs và AI keys chỉ ở server.
+- Chỉ `NEXT_PUBLIC_SUPABASE_URL` và `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` được dùng phía client. Service role key, database URLs và AI keys chỉ ở server.
 - `DATABASE_URL` dành cho runtime pooled; `DIRECT_URL` dành cho migration/backup theo chuỗi Supabase cung cấp tại thời điểm cấu hình. Không sao chép connection string thật vào tài liệu hay log.
 
 ## Database deployment
