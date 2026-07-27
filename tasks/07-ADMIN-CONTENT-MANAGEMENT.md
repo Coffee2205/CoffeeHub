@@ -7,11 +7,13 @@ In Progress
 ## Subtask progress
 
 - [x] 07A — Admin foundation and Projects CRUD (media excluded).
-- [ ] 07B — Media assets and Supabase Storage.
+- [x] 07B — Media assets and Supabase Storage.
 - [ ] 07C — Remaining content models and CRUD.
 - [ ] 07D — Public rendering, preview and final access verification.
 
 07A result (2026-07-27): added Prisma schema and additive migrations, optimized RLS, runtime validation, repository, Server Actions, protected Admin UI, list/create/edit, ordering, status and confirmed soft delete. Prisma validate/generate, 8 tests, lint, typecheck, build and Supabase advisors passed. Task remains In Progress because media, preview, remaining entities and public rendering are pending.
+
+07B result (2026-07-27): added private `project-media` bucket, 5 MB/MIME restrictions, Storage and metadata RLS, `MediaAsset`/`ProjectMedia`, cover/gallery upload, alt text, controlled paths and confirmed cleanup from Admin. Security Advisor is clean; 14 tests, Prisma checks, lint, typecheck and build pass. Authenticated live upload remains an environment E2E check because the development project has no real test account.
 
 ## Mục tiêu
 

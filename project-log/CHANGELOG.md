@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-27 — Task 07B Project media
+
+- Summary: Added private Supabase Storage project media with cover/gallery metadata and protected Admin upload/delete.
+- Files: Prisma schema/migrations, Storage helpers, project media actions/components, edit route, tests and project-log.
+- Database impact: Added `media_assets`, `project_media`, `ProjectMediaKind`, private `project-media` bucket and RLS/Storage policies on the development project.
+- Validation: Prisma validate/generate, 14 tests, lint, typecheck, build, bucket/policy inspection and Supabase Security Advisor passed.
+- Commit/push: pending final Git step in this session.
+- Known issues: Live upload with an authenticated admin awaits a real development account; no secret/service-role key is required.
+
+---
+
 ## 2026-07-27 — Task 00 foundation maintenance
 
 - Summary: Patched Prisma to 7.9.1, removed unused privileged-key configuration and added strict environment validation.

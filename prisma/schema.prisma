@@ -36,6 +36,11 @@ enum ContentStatus {
   HIDDEN
 }
 
+enum ProjectMediaKind {
+  COVER
+  GALLERY
+}
+
 model User {
   id        String    @id @db.Uuid
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -51,6 +56,7 @@ model User {
   events        Event[]
   notes         Note[]
   projects      Project[]
+  mediaAssets   MediaAsset[]
 
   @@index([deletedAt])
   @@map("users")
@@ -77,9 +83,43 @@ model Project {
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
   version Int @default(1)
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  media ProjectMedia[]
   @@index([userId, status, deletedAt])
   @@index([status, displayOrder, deletedAt])
   @@map("projects")
+}
+
+model MediaAsset {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId String @map("user_id") @db.Uuid
+  bucket String @db.VarChar(63)
+  objectPath String @unique @map("object_path") @db.VarChar(500)
+  originalName String @map("original_name") @db.VarChar(255)
+  mimeType String @map("mime_type") @db.VarChar(100)
+  sizeBytes Int @map("size_bytes")
+  altText String @map("alt_text") @db.VarChar(240)
+  width Int?
+  height Int?
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projects ProjectMedia[]
+  @@index([userId, deletedAt])
+  @@map("media_assets")
+}
+
+model ProjectMedia {
+  projectId String @map("project_id") @db.Uuid
+  mediaAssetId String @map("media_asset_id") @db.Uuid
+  kind ProjectMediaKind @default(GALLERY)
+  displayOrder Int @default(0) @map("display_order")
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  mediaAsset MediaAsset @relation(fields: [mediaAssetId], references: [id], onDelete: Cascade)
+  @@id([projectId, mediaAssetId])
+  @@index([mediaAssetId])
+  @@index([projectId, kind, displayOrder])
+  @@map("project_media")
 }
 
 model Profile {

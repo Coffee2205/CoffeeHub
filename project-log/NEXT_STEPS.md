@@ -1,5 +1,9 @@
 # Next Steps
 
+## After Task 07B
+
+Wait for a new request. The next ready subtask is 07C — remaining content models and CRUD; do not start it automatically.
+
 ## After Task 00 maintenance
 
 Task 00 foundation maintenance is complete. Keep Task 07B as the next ready product subtask and wait for a new user request before starting it.

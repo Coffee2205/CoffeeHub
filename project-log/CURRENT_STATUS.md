@@ -1,5 +1,9 @@
 # Current Status
 
+## Task 07B Project media — 2026-07-27
+
+Completed: private project media Storage, metadata/reference schema, cover/gallery Admin upload, alt text, validation, RLS and cleanup are ready. Task 07 remains In Progress; no 07C work was started.
+
 ## Task 00 maintenance — 2026-07-27
 
 Completed: Prisma foundation is patched to 7.9.1, unused privileged-key configuration was removed, environment boundaries now validate URL/protocol/key type, and 12 tests plus lint/typecheck/build pass. Task 07 remains the active product task; no Task 07 subtask was started in this maintenance session.
