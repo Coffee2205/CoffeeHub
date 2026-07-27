@@ -1,5 +1,9 @@
 # Current Status
 
+## Task 07C2 Resume content CMS — 2026-07-27
+
+Completed subtask 07C2: Experience, Skills and Education now have separate schemas and protected Admin CRUD with ordering and publishing controls. Task 07 remains In Progress; no 07C3 or 07D work was started.
+
 ## Task 07C1 Profile/About CMS — 2026-07-27
 
 Completed subtask 07C1: Admin can edit Profile/About text and publishing state. The development database has additive profile status fields and public-published/owner/admin RLS. Task 07 remains In Progress; no Experience, Skills, Education or later content work was started.
@@ -46,7 +50,7 @@ Development
 
 ## Active task
 
-Task 07 remains In Progress after completed subtask 07C1; no subtask is currently executing.
+Task 07 remains In Progress after completed subtask 07C2; no subtask is currently executing.
 
 ## Repository state
 
@@ -69,7 +73,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 
 ## In progress
 
-- Task 07 Admin and Content Management; completed through 07C1 and waiting for a new request.
+- Task 07 Admin and Content Management; completed through 07C2 and waiting for a new request.
 
 ## Blockers
 

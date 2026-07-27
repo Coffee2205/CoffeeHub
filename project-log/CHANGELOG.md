@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-27 — Task 07C2 Resume content CMS
+
+- Summary: Added Experience, Skill and Education Admin CRUD with ordering and publishing controls.
+- Files: Prisma models/migration, shared resume validation/repository/actions/forms, Admin routes/navigation, tests, task and project-log.
+- Database impact: Added `experiences`, `skills` and `education` with constraints, indexes, triggers, explicit grants and RLS to the Supabase development project.
+- Validation: Prisma validate/generate, 20 tests, lint, typecheck, build, rollback RLS checks for anonymous/owner/non-owner and clean Supabase Security Advisor.
+- Commit/push: pending final Git step in this session.
+- Known issues: Authenticated Admin browser E2E awaits a real development account; public rendering remains 07D.
+
+---
+
 ## 2026-07-27 — Task 07C1 Profile/About CMS
 
 - Summary: Added protected Profile/About text editing with draft, published and hidden states.

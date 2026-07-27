@@ -9,7 +9,7 @@ In Progress
 - [x] 07A — Admin foundation and Projects CRUD (media excluded).
 - [x] 07B — Media assets and Supabase Storage.
 - [x] 07C1 — Profile/About text content and publishing controls.
-- [ ] 07C2 — Experience, Skills and Education CRUD.
+- [x] 07C2 — Experience, Skills and Education CRUD.
 - [ ] 07C3 — Remaining site content and settings CRUD.
 - [ ] 07D — Public rendering, preview and final access verification.
 
@@ -18,6 +18,8 @@ In Progress
 07B result (2026-07-27): added private `project-media` bucket, 5 MB/MIME restrictions, Storage and metadata RLS, `MediaAsset`/`ProjectMedia`, cover/gallery upload, alt text, controlled paths and confirmed cleanup from Admin. Security Advisor is clean; 14 tests, Prisma checks, lint, typecheck and build pass. Authenticated live upload remains an environment E2E check because the development project has no real test account.
 
 07C1 result (2026-07-27): added protected Profile/About editing for display name, headline, bio and draft/published/hidden status. The additive migration and RLS expose only published, non-deleted profiles to anonymous clients; Prisma checks, 16 tests, lint, typecheck, build and Supabase Security Advisor pass. Avatar editing and authenticated browser E2E remain for later Task 07 work.
+
+07C2 result (2026-07-27): added separate Experience, Skill and Education models with protected Admin create/list/edit/soft-delete flows, ordering, runtime validation and draft/published/hidden controls. The additive Supabase migration uses explicit Data API grants and public-published/owner/admin RLS; role checks passed in a rollback transaction, Security Advisor is clean, and Prisma checks, 20 tests, lint, typecheck and build pass. Authenticated browser E2E still requires a development admin account.
 
 ## Mục tiêu
 

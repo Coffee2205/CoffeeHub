@@ -57,9 +57,75 @@ model User {
   notes         Note[]
   projects      Project[]
   mediaAssets   MediaAsset[]
+  experiences   Experience[]
+  skills        Skill[]
+  education     Education[]
 
   @@index([deletedAt])
   @@map("users")
+}
+
+model Experience {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String        @map("user_id") @db.Uuid
+  role         String        @db.VarChar(180)
+  organization String        @db.VarChar(180)
+  location     String?       @db.VarChar(180)
+  description  String
+  startedAt    DateTime      @map("started_at") @db.Date
+  endedAt      DateTime?     @map("ended_at") @db.Date
+  status       ContentStatus @default(DRAFT)
+  displayOrder Int           @default(0) @map("display_order")
+  publishedAt  DateTime?     @map("published_at") @db.Timestamptz(6)
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime?     @map("deleted_at") @db.Timestamptz(6)
+  version      Int           @default(1)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, status, deletedAt])
+  @@index([status, displayOrder, deletedAt])
+  @@map("experiences")
+}
+
+model Skill {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String        @map("user_id") @db.Uuid
+  name         String        @db.VarChar(120)
+  category     String        @db.VarChar(120)
+  proficiency  Int?
+  status       ContentStatus @default(DRAFT)
+  displayOrder Int           @default(0) @map("display_order")
+  publishedAt  DateTime?     @map("published_at") @db.Timestamptz(6)
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime?     @map("deleted_at") @db.Timestamptz(6)
+  version      Int           @default(1)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, status, deletedAt])
+  @@index([status, displayOrder, deletedAt])
+  @@map("skills")
+}
+
+model Education {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String        @map("user_id") @db.Uuid
+  institution  String        @db.VarChar(180)
+  degree       String        @db.VarChar(180)
+  fieldOfStudy String?       @map("field_of_study") @db.VarChar(180)
+  description  String?
+  startedAt    DateTime?     @map("started_at") @db.Date
+  endedAt      DateTime?     @map("ended_at") @db.Date
+  status       ContentStatus @default(DRAFT)
+  displayOrder Int           @default(0) @map("display_order")
+  publishedAt  DateTime?     @map("published_at") @db.Timestamptz(6)
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime?     @map("deleted_at") @db.Timestamptz(6)
+  version      Int           @default(1)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, status, deletedAt])
+  @@index([status, displayOrder, deletedAt])
+  @@map("education")
 }
 
 model Project {
