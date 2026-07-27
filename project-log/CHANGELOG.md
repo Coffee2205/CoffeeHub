@@ -7,8 +7,8 @@
 - Thêm app shell tối thiểu, `.env.example`, `.gitignore` và hướng dẫn chạy local.
 - Xác minh install, lint, typecheck, production build và dev HTTP smoke test.
 - Ghi nhận advisory dependency hiện chưa có bản sửa tương thích; không áp dụng audit fix phá vỡ.
-- Git commit: Sẽ được ghi sau khi tạo commit bootstrap.
-- Push: Chưa thực hiện.
+- Git commit: `5029959` (`chore(bootstrap): initialize CoffeeHub application`).
+- Push: Chuẩn bị push lên `origin/dev` trong phiên bootstrap.
 
 ## Initial documentation consolidation
 

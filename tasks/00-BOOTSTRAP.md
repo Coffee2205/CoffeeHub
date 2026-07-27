@@ -76,5 +76,5 @@ Không tạo hoặc thay đổi production database. Prisma chỉ được khở
 
 ### Git
 
-- Commit: Sẽ được ghi sau khi tạo commit bootstrap.
-- Push: Chưa thực hiện.
+- Commit: `5029959` (`chore(bootstrap): initialize CoffeeHub application`).
+- Push: Chuẩn bị push lên `origin/dev` trong phiên bootstrap.
