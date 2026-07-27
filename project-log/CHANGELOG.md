@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-27 — Task 03 App Shell
+
+- Summary: Thêm responsive private workspace shell, navigation active state và route-level loading/error/not-found states.
+- Files: `src/app/app`, `src/components/layout`, `src/components/navigation`, Task 03 và project-log.
+- Database impact: Không có; không query Prisma/Supabase và không tạo migration.
+- Validation: lint, typecheck, build, HTTP markup smoke-test và Edge headless desktop/mobile đạt.
+- Commit/push: cập nhật bằng kết quả Git của phiên này.
+- Known issues: Auth protection thuộc Task 05; feature navigation targets chưa có page cho tới task tương ứng.
+
+---
+
 ## 2026-07-27 — Task 00 Supabase foundation
 
 - Summary: Cài dependency có khóa phiên bản; thêm Prisma 7 config/client, Supabase SSR/Auth/Storage helpers và env contract.

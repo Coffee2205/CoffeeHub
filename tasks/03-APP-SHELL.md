@@ -2,7 +2,7 @@
 
 ## Trạng thái
 
-Pending
+Completed
 
 ## Mục tiêu
 
@@ -14,14 +14,14 @@ Tạo bộ khung điều hướng cho private application trên desktop và mobi
 
 ## Công việc
 
-- [ ] Tạo desktop sidebar.
-- [ ] Tạo desktop header.
-- [ ] Tạo mobile header.
-- [ ] Tạo mobile bottom navigation.
-- [ ] Tạo main content layout.
-- [ ] Tạo active navigation state.
-- [ ] Tạo user menu placeholder hoặc kết nối auth nếu đã có.
-- [ ] Kiểm tra responsive.
+- [x] Tạo desktop sidebar.
+- [x] Tạo desktop header.
+- [x] Tạo mobile header.
+- [x] Tạo mobile bottom navigation.
+- [x] Tạo main content layout.
+- [x] Tạo active navigation state.
+- [x] Tạo user menu placeholder hoặc kết nối auth nếu đã có.
+- [x] Kiểm tra responsive.
 
 ## Không thực hiện
 
@@ -52,19 +52,25 @@ Không có.
 
 ### File đã tạo hoặc sửa
 
-- Chưa cập nhật.
+- Thêm workspace layout tại `src/app/app`, route redirect `/app`, placeholder `/app/dashboard` và loading/error/not-found states.
+- Thêm desktop sidebar/header, mobile bottom navigation, navigation config, icon và active link components.
 
 ### Quyết định kỹ thuật
 
-- Chưa cập nhật.
+- Layout là Server Component; chỉ `NavLink` và error boundary là Client Components vì cần pathname hoặc interaction.
+- Navigation dùng đúng route trong sitemap. Các route feature chưa được tạo trong task này.
+- User menu là disabled placeholder có accessible label; không giả lập danh tính hoặc session trước Task 05.
+- Shell chưa bảo vệ Auth vì Task 05 chịu trách nhiệm session/proxy/route guard; hiện không hiển thị dữ liệu private.
 
 ### Vấn đề còn lại
 
-- Chưa cập nhật.
+- `agent-browser` không có trong môi trường; visual verification dùng Edge headless desktop/mobile và HTTP markup smoke-test thay thế.
+- Các navigation target ngoài Dashboard sẽ dùng not-found state cho tới task feature tương ứng.
 
 ### Kiểm tra
 
-- Lint: Chưa chạy.
-- Typecheck: Chưa chạy.
-- Build: Chưa chạy.
-- Manual test: Chưa chạy.
+- Lint: Đạt.
+- Typecheck: Đạt.
+- Build: Đạt; `/app` và `/app/dashboard` prerender thành công.
+- HTTP smoke-test: 200, đúng một `main`, một `aside`, hai `nav`; nội dung shell chính xuất hiện.
+- Visual: Edge headless xác minh desktop 1440px và mobile 390px; sidebar không che content, mobile header/bottom navigation hiển thị, active Dashboard rõ ràng.

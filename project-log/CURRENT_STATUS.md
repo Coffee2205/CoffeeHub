@@ -1,5 +1,9 @@
 # Current Status
 
+## Task 03 App Shell — 2026-07-27
+
+Completed: `/app` có responsive workspace shell với desktop sidebar/header, mobile header/bottom navigation, active state và placeholder tài khoản không giả lập Auth. `/app/dashboard` chỉ là shell preview, chưa có dữ liệu nghiệp vụ.
+
 ## Task 00 Supabase foundation — 2026-07-27
 
 Completed: Prisma/Supabase packages, Prisma schema/config and client, Supabase SSR/Auth/Storage helpers, env contract and setup guidance are ready. No project, credential, database migration, Auth flow, bucket, RLS or billing was created.
@@ -14,7 +18,7 @@ Development
 
 ## Active task
 
-Task 00 Supabase foundation đã hoàn thành; không có task tiếp theo đang thực thi.
+Task 03 App Shell đã hoàn thành; không có task tiếp theo đang thực thi.
 
 ## Repository state
 
@@ -30,6 +34,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 - Task 00 Bootstrap, gồm phần Supabase foundation mở lại, đã hoàn thành.
 - Task 01 Repository Audit đã hoàn thành.
 - Task 02 Design Foundation đã hoàn thành.
+- Task 03 App Shell đã hoàn thành.
 
 ## In progress
 
@@ -37,7 +42,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 
 ## Blockers
 
-- Không có blocker cho Task 03. Dependency advisories cần tiếp tục theo dõi.
+- Không có blocker cho Task 04. Dependency advisories cần tiếp tục theo dõi.
 
 ## Validation status
 
