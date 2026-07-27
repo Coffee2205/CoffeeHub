@@ -1,6 +1,6 @@
 # Known Limitations
 
-- Admin/CMS covers Projects with private cover/gallery media, Profile/About text, Experience, Skills and Education with publishing state. Profile avatar editing, preview, public rendering and remaining site content/settings are deferred to later Task 07 subtasks; authenticated browser E2E needs a development admin account.
+- Admin/CMS covers Projects with private cover/gallery media, Profile/About text, Experience, Skills, Education, Posts and Page Sections with publishing state. Profile avatar editing, Navigation/Footer/Social/FAQ/SEO/Site Settings, preview and public rendering are deferred to later Task 07 subtasks; authenticated browser E2E needs a development admin account.
 
 - Database và authentication foundation đã có; CMS và feature application vẫn thuộc các task sau.
 - Route `/` hiện là trang preview design foundation, chưa phải landing page hoặc application shell hoàn chỉnh.

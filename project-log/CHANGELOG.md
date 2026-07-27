@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-27 — Task 07C3a Posts and Page Sections CMS
+
+- Summary: Added Post and ContentSection Admin CRUD with ordering, CTA validation and publishing controls.
+- Files: Prisma models/migration, site-content validation/repository/actions/forms, Admin routes/navigation/dashboard, tests, task and project-log.
+- Database impact: Added `posts` and `content_sections` with constraints, indexes, triggers, explicit grants and RLS to the Supabase development project.
+- Validation: Prisma validate/generate, 24 tests, clean lint, typecheck, build, rollback RLS checks for anonymous/owner/non-owner and clean Supabase Security Advisor.
+- Commit/push: pending final Git step in this session.
+- Known issues: Authenticated Admin browser E2E awaits a real development account; remaining site settings are 07C3b and public rendering is 07D.
+
+---
+
 ## 2026-07-27 — Task 07C2 Resume content CMS
 
 - Summary: Added Experience, Skill and Education Admin CRUD with ordering and publishing controls.

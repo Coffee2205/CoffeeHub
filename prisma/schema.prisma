@@ -60,9 +60,54 @@ model User {
   experiences   Experience[]
   skills        Skill[]
   education     Education[]
+  posts         Post[]
+  contentSections ContentSection[]
 
   @@index([deletedAt])
   @@map("users")
+}
+
+model Post {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String        @map("user_id") @db.Uuid
+  title        String        @db.VarChar(180)
+  slug         String        @unique @db.VarChar(180)
+  excerpt      String        @db.VarChar(320)
+  body         String
+  status       ContentStatus @default(DRAFT)
+  displayOrder Int           @default(0) @map("display_order")
+  publishedAt  DateTime?     @map("published_at") @db.Timestamptz(6)
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime?     @map("deleted_at") @db.Timestamptz(6)
+  version      Int           @default(1)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, status, deletedAt])
+  @@index([status, publishedAt, deletedAt])
+  @@map("posts")
+}
+
+model ContentSection {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String        @map("user_id") @db.Uuid
+  pageKey      String        @map("page_key") @db.VarChar(80)
+  sectionKey   String        @map("section_key") @db.VarChar(80)
+  heading      String        @db.VarChar(180)
+  body         String
+  ctaLabel     String?       @map("cta_label") @db.VarChar(120)
+  ctaUrl       String?       @map("cta_url") @db.VarChar(500)
+  status       ContentStatus @default(DRAFT)
+  displayOrder Int           @default(0) @map("display_order")
+  publishedAt  DateTime?     @map("published_at") @db.Timestamptz(6)
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime?     @map("deleted_at") @db.Timestamptz(6)
+  version      Int           @default(1)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([userId, pageKey, sectionKey])
+  @@index([userId, status, deletedAt])
+  @@index([pageKey, status, displayOrder, deletedAt])
+  @@map("content_sections")
 }
 
 model Experience {
