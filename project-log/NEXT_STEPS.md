@@ -2,11 +2,11 @@
 
 ## Task đề xuất
 
-`tasks/01-REPOSITORY-AUDIT.md`
+`tasks/02-DESIGN-FOUNDATION.md`
 
 ## Lý do
 
-Bootstrap đã hoàn thành. Repository Audit cần xác minh codebase, dependency và các file task cũ đang trùng số với roadmap mới.
+Bootstrap và Repository Audit đã hoàn thành. Design Foundation là task pending đầu tiên có dependency đạt.
 
 ## Điều kiện bắt đầu
 

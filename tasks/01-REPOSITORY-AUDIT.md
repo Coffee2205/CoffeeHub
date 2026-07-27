@@ -2,7 +2,7 @@
 
 ## Trạng thái
 
-Pending
+Completed
 
 ## Mục tiêu
 
@@ -14,16 +14,16 @@ Xác định chính xác trạng thái code hiện tại trước khi thay đổ
 
 ## Công việc
 
-- [ ] Đọc toàn bộ cấu trúc thư mục và file hướng dẫn agent.
-- [ ] Đọc `package.json`, lockfile và scripts.
-- [ ] Xác nhận phiên bản Next.js, React, TypeScript, Tailwind, Prisma và auth.
-- [ ] Kiểm tra App Router hoặc Pages Router.
-- [ ] Đọc schema Prisma, migrations và seed nếu tồn tại.
-- [ ] Liệt kê route và feature đã có.
-- [ ] Kiểm tra cách bảo vệ private route và ownership.
-- [ ] Chạy lint, typecheck và build nếu không phá dữ liệu.
-- [ ] Tạo `docs/REPOSITORY_AUDIT.md`.
-- [ ] Cập nhật project-log theo kết quả thực tế.
+- [x] Đọc toàn bộ cấu trúc thư mục và file hướng dẫn agent.
+- [x] Đọc `package.json`, lockfile và scripts.
+- [x] Xác nhận phiên bản Next.js, React, TypeScript, Tailwind, Prisma và auth.
+- [x] Kiểm tra App Router hoặc Pages Router.
+- [x] Đọc schema Prisma, migrations và seed nếu tồn tại.
+- [x] Liệt kê route và feature đã có.
+- [x] Kiểm tra cách bảo vệ private route và ownership.
+- [x] Chạy lint, typecheck và build nếu không phá dữ liệu.
+- [x] Tạo `docs/REPOSITORY_AUDIT.md`.
+- [x] Cập nhật project-log theo kết quả thực tế.
 
 ## Không thực hiện
 
@@ -55,19 +55,27 @@ Không thay đổi schema. Chỉ đọc và báo cáo.
 
 ### File đã tạo hoặc sửa
 
-- Chưa cập nhật.
+- Tạo `docs/REPOSITORY_AUDIT.md`.
+- Cập nhật Task 01 và các project-log liên quan.
 
 ### Quyết định kỹ thuật
 
-- Chưa cập nhật.
+- Giữ source hiện tại; audit không viết lại ứng dụng hoặc cài dependency.
+- Dùng `tasks/README.md` làm danh sách task canonical.
+- Chỉ liệt kê artifact legacy là ứng viên cleanup, không tự xóa.
 
 ### Vấn đề còn lại
 
-- Chưa cập nhật.
+- Chưa có Prisma, database, auth, ownership, PWA hoặc feature domain.
+- Có 3 high advisory production-transitive trong dependency của Next.js.
+- Có 16 file task legacy trùng với roadmap đã đánh số lại.
 
 ### Kiểm tra
 
-- Lint: Chưa chạy.
-- Typecheck: Chưa chạy.
-- Build: Chưa chạy.
-- Manual test: Chưa chạy.
+- Lint: `npm run lint` thành công.
+- Typecheck: `npm run typecheck` thành công.
+- Build: `npm run build` thành công.
+- Manual test: Dev server trả HTTP 200 cho `/`, nội dung CoffeeHub được xác nhận và server đã dừng.
+- Audit: `npm audit --omit=dev` báo 3 high advisory production-transitive.
+- Commit: Sẽ ghi sau khi tạo commit task.
+- Push: Chưa thực hiện.
