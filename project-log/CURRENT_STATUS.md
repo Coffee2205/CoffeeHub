@@ -1,5 +1,9 @@
 # Current Status
 
+## Task 06 Dashboard — 2026-07-27
+
+Completed: protected Dashboard đọc dữ liệu thật theo user qua Prisma, hiển thị Task hôm nay/quá hạn, Goal active, Event 7 ngày và weekly progress. Boundary tạm thời dùng UTC và được ghi rõ; loading/empty/error cùng responsive layout đã có.
+
 ## Task 05 Authentication — 2026-07-27
 
 Completed: email/password Auth UI, SSR cookie refresh, verified server claims, `/app` and `/admin` guards, logout, confirmation callback và Auth-to-Profile mapping đã sẵn sàng. Anonymous HTTP flow, user/admin claim mapping và database trigger đã được kiểm thử; không tạo account hoặc credential ngoài.
@@ -26,7 +30,7 @@ Development
 
 ## Active task
 
-Task 05 Authentication đã hoàn thành; không có task tiếp theo đang thực thi.
+Task 06 Dashboard đã hoàn thành; không có task tiếp theo đang thực thi.
 
 ## Repository state
 
@@ -45,6 +49,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 - Task 03 App Shell đã hoàn thành.
 - Task 04 Database Foundation đã hoàn thành.
 - Task 05 Authentication đã hoàn thành.
+- Task 06 Dashboard đã hoàn thành.
 
 ## In progress
 
@@ -52,7 +57,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 
 ## Blockers
 
-- Không có blocker đã biết cho Task 06. Dependency advisories cần tiếp tục theo dõi.
+- Không có blocker đã biết cho Task 07. Dependency advisories cần tiếp tục theo dõi.
 
 ## Validation status
 
@@ -72,3 +77,4 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 - Push Task 02: Thành công lên `origin/dev`; commit feature `bfdf5e1`, sau đó commit tài liệu `f703cb7`.
 - Database Task 04: Prisma validate/generate, lint, typecheck, build, Supabase advisors và RLS role tests đạt; migration additive đã áp dụng, dữ liệu test đã rollback.
 - Authentication Task 05: 3 unit tests, Prisma validate/generate, lint, typecheck, build, HTTP anonymous redirect và Auth mapping transaction đạt.
+- Dashboard Task 06: 6 unit tests, lint, typecheck, build, Supabase transaction query và React quality review đạt.

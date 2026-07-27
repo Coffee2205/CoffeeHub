@@ -1,0 +1,7 @@
+import { Card, CardDescription, CardHeader, CardTitle, EmptyState } from "@/components/ui";
+import { formatUtcDate } from "@/features/dashboard/formatters";
+import type { DashboardGoal } from "@/features/dashboard/dashboard.types";
+
+export function GoalList({ goals }: { goals: DashboardGoal[] }) {
+  return <Card><CardHeader><CardTitle>Goal đang hoạt động</CardTitle><CardDescription>Tiến độ dựa trên Task chưa xóa và không bị hủy của từng Goal.</CardDescription></CardHeader>{goals.length === 0 ? <EmptyState className="min-h-44" title="Bạn chưa có Goal đang hoạt động" description="Goal ở trạng thái ACTIVE sẽ xuất hiện tại đây." /> : <ul className="space-y-5">{goals.map((goal) => { const percentage = goal.totalTasks === 0 ? 0 : Math.round((goal.completedTasks / goal.totalTasks) * 100); return <li key={goal.id}><div className="flex items-start justify-between gap-4"><div><p className="font-medium">{goal.title}</p><p className="mt-1 text-xs text-muted">{goal.deadline ? `Hạn ${formatUtcDate(goal.deadline)} UTC` : "Chưa có deadline"}</p></div><span className="font-mono text-sm text-foreground-secondary">{percentage}%</span></div><div className="mt-3 h-2 overflow-hidden rounded-full bg-background-tertiary" role="progressbar" aria-label={`Tiến độ ${goal.title}`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={percentage}><div className="h-full rounded-full bg-primary" style={{ width: `${percentage}%` }} /></div><p className="mt-2 text-xs text-muted">{goal.completedTasks}/{goal.totalTasks} Task hoàn thành</p></li>; })}</ul>}</Card>;
+}

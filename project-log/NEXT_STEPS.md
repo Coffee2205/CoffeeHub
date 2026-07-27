@@ -1,16 +1,16 @@
 # Next Steps
 
-## Ưu tiên sau Authentication
+## Ưu tiên sau Dashboard
 
-Authentication đã hoàn thành. Chờ yêu cầu mới để tiếp tục roadmap với Dashboard.
+Dashboard đã hoàn thành. Chờ yêu cầu mới để tiếp tục roadmap với Admin Content Management.
 
 ## Task đề xuất
 
-`tasks/06-DASHBOARD.md`
+`tasks/07-ADMIN-CONTENT-MANAGEMENT.md`
 
 ## Lý do
 
-Task 05 đã hoàn thành; Dashboard là task pending đầu tiên có dependency đạt.
+Task 06 đã hoàn thành; Admin Content Management là task pending đầu tiên có dependency đạt.
 
 ## Điều kiện bắt đầu
 

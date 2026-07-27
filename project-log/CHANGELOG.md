@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-27 — Task 06 Dashboard
+
+- Summary: Thêm Dashboard server-rendered với Task hôm nay/quá hạn, Goal active, Event 7 ngày, weekly progress và welcome summary theo dữ liệu thật.
+- Files: dashboard page/loading, feature repository/service/components/helpers, lazy Prisma getter, tests, Dashboard doc, Task 06 và project-log.
+- Database impact: Không đổi schema; chỉ đọc qua Prisma với verified userId. Integration data trong transaction đã rollback.
+- Validation: 6 unit tests, lint, typecheck, build, Supabase query transaction và React best-practices review đạt.
+- Commit/push: cập nhật bằng kết quả Git của phiên này.
+- Known issues: Time boundary đang dùng UTC tới khi Profile có timezone preference; chưa browser-test authenticated UI vì không tạo account thật.
+
+---
+
 ## 2026-07-27 — Task 05 Authentication
 
 - Summary: Thêm Supabase email/password Auth, SSR cookie refresh, server guards, login/signup/logout, confirmation callback, admin authorization và Auth-to-Profile mapping.

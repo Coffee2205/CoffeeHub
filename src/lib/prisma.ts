@@ -9,13 +9,20 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
+let prismaClient: PrismaClient | undefined;
+
 function createPrismaClient() {
   const adapter = new PrismaPg({ connectionString: getDatabaseUrl() });
   return new PrismaClient({ adapter });
 }
 
-export const prisma = globalForPrisma.prisma ?? createPrismaClient();
+export function getPrisma() {
+  const prisma = globalForPrisma.prisma ?? prismaClient ?? createPrismaClient();
+  prismaClient = prisma;
 
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
+  if (process.env.NODE_ENV !== "production") {
+    globalForPrisma.prisma = prisma;
+  }
+
+  return prisma;
 }
