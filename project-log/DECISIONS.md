@@ -27,3 +27,7 @@ Sau khi push thành công, agent báo cáo và dừng. Task tiếp theo chỉ b�
 ## D-007 — Content-first
 
 Thông tin và danh sách nội dung thường xuyên thay đổi phải chỉnh sửa được qua Admin/CMS. Người dùng không phải sửa code hoặc thao tác database trực tiếp cho hoạt động biên tập thông thường.
+
+## D-008 — Design foundation typography
+
+CoffeeHub dùng Geist Sans cho giao diện và Geist Mono cho dữ liệu kỹ thuật. Font được self-host qua package `geist`; UI primitives nền tảng dùng React và Tailwind/CSS thuần, chưa phụ thuộc component library lớn.

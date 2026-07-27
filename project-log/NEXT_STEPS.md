@@ -2,11 +2,11 @@
 
 ## Task đề xuất
 
-`tasks/02-DESIGN-FOUNDATION.md`
+`tasks/03-APP-SHELL.md`
 
 ## Lý do
 
-Bootstrap và Repository Audit đã hoàn thành. Design Foundation là task pending đầu tiên có dependency đạt.
+Design Foundation đã hoàn thành và được kiểm tra responsive. App Shell là task pending đầu tiên có dependency đạt.
 
 ## Điều kiện bắt đầu
 

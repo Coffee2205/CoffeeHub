@@ -2,7 +2,7 @@
 
 ## Trạng thái
 
-Pending
+Completed
 
 ## Mục tiêu
 
@@ -14,12 +14,12 @@ Thiết lập design tokens và component nền tảng theo concept dark-blue.
 
 ## Công việc
 
-- [ ] Xác nhận font và typography.
-- [ ] Tạo color, spacing, radius, border và shadow tokens.
-- [ ] Tạo background navy, radial gradient và grid nhẹ.
-- [ ] Tạo Button, Input, Textarea, Badge, Card và SaveStatus nền tảng.
-- [ ] Tạo loading, empty và error primitives.
-- [ ] Kiểm tra contrast và reduced motion.
+- [x] Xác nhận font và typography.
+- [x] Tạo color, spacing, radius, border và shadow tokens.
+- [x] Tạo background navy, radial gradient và grid nhẹ.
+- [x] Tạo Button, Input, Textarea, Badge, Card và SaveStatus nền tảng.
+- [x] Tạo loading, empty và error primitives.
+- [x] Kiểm tra contrast và reduced motion.
 
 ## Không thực hiện
 
@@ -49,19 +49,29 @@ Không có.
 
 ### File đã tạo hoặc sửa
 
-- Chưa cập nhật.
+- Cập nhật `src/app/layout.tsx`, `globals.css` và trang preview `/`.
+- Tạo `src/lib/cn.ts`.
+- Tạo Button, Input, Textarea, Badge, Card, SaveStatus và data state primitives trong `src/components/ui`.
+- Thêm dependency font self-hosted `geist` và cập nhật npm lockfile.
 
 ### Quyết định kỹ thuật
 
-- Chưa cập nhật.
+- Geist Sans dùng cho UI; Geist Mono dùng cho metrics/dữ liệu kỹ thuật.
+- Component nền tảng dùng React + Tailwind/CSS thuần, không cài component library lớn.
+- Token primary trang trí giữ màu blue-500; control primary dùng blue-600/700 để text trắng đạt WCAG AA.
+- Tất cả component hiện là Server Component tương thích; interaction state sẽ được thêm ở task feature khi cần.
 
 ### Vấn đề còn lại
 
-- Chưa cập nhật.
+- Không có blocker. Next.js dependency advisories và artifact task legacy vẫn được theo dõi trong `project-log/ISSUES.md`.
 
 ### Kiểm tra
 
-- Lint: Chưa chạy.
-- Typecheck: Chưa chạy.
-- Build: Chưa chạy.
-- Manual test: Chưa chạy.
+- Lint: `npm run lint` thành công.
+- Typecheck: `npm run typecheck` thành công.
+- Build: `npm run build` thành công.
+- Manual test: agent-browser đạt ở 1264px và 390×844; không error overlay, không horizontal overflow, controls/labels được nhận diện.
+- Contrast: primary control 4.94:1; hover 6.41:1; secondary text 13.25:1; muted text 7.67:1 trên background chính.
+- Reduced motion: global media query tắt animation/transition đáng kể; loading spinner có fallback motion-reduce.
+- Commit: Sẽ ghi sau khi tạo commit task.
+- Push: Chưa thực hiện.

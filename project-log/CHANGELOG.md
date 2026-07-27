@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-07-27 — Task 02 Design Foundation
+
+- Summary: Thêm Midnight Blue Aurora tokens, Geist typography và UI/data-state primitives responsive.
+- Files: layout/global CSS, home preview, `src/components/ui`, `src/lib/cn.ts`, package manifest/lockfile và project-log.
+- Database impact: Không có.
+- Validation: lint, typecheck, build đạt; browser desktop/mobile không overflow/error overlay; contrast chính đạt WCAG AA.
+- Commit: Sẽ ghi sau khi tạo commit task.
+- Push result: Chưa thực hiện.
+- Known issues: Dependency advisories và artifact task legacy không thay đổi.
+
+---
+
 ## 2026-07-27 — Task 01 Repository Audit
 
 - Summary: Audit framework, dependency, router, source, database/auth/PWA artifacts, security boundaries và task tracker.
