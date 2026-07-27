@@ -77,5 +77,5 @@ Không thay đổi schema. Chỉ đọc và báo cáo.
 - Build: `npm run build` thành công.
 - Manual test: Dev server trả HTTP 200 cho `/`, nội dung CoffeeHub được xác nhận và server đã dừng.
 - Audit: `npm audit --omit=dev` báo 3 high advisory production-transitive.
-- Commit: Sẽ ghi sau khi tạo commit task.
-- Push: Chưa thực hiện.
+- Commit: `7b3a746` (`docs(repository): audit current application state`).
+- Push: Chuẩn bị push lên `origin/dev` trong phiên Task 01.

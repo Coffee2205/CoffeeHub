@@ -39,5 +39,5 @@ Repository hiện chỉ có route static `/`; chưa có database, auth, private 
 - Commit: `e46973b` (`chore(bootstrap): verify project environment`).
 - Push Task 00: Thành công lên `origin/dev` (`d0de57f`).
 - Audit Task 01: Lint, typecheck, build và HTTP smoke-test đạt; audit production dependency báo 3 high advisory.
-- Commit Task 01: Sẽ ghi sau khi tạo commit task.
-- Push Task 01: Chưa thực hiện.
+- Commit Task 01: `7b3a746` (`docs(repository): audit current application state`).
+- Push Task 01: Chuẩn bị push lên `origin/dev` trong phiên Task 01.
