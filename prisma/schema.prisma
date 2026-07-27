@@ -41,6 +41,12 @@ enum ProjectMediaKind {
   GALLERY
 }
 
+enum SiteLinkKind {
+  NAVIGATION
+  FOOTER
+  SOCIAL
+}
+
 model User {
   id        String    @id @db.Uuid
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
@@ -62,9 +68,72 @@ model User {
   education     Education[]
   posts         Post[]
   contentSections ContentSection[]
+  siteLinks      SiteLink[]
+  faqs           Faq[]
+  siteSetting    SiteSetting?
 
   @@index([deletedAt])
   @@map("users")
+}
+
+model SiteLink {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String        @map("user_id") @db.Uuid
+  kind         SiteLinkKind
+  label        String        @db.VarChar(120)
+  url          String        @db.VarChar(500)
+  openNewTab   Boolean       @default(false) @map("open_new_tab")
+  status       ContentStatus @default(DRAFT)
+  displayOrder Int           @default(0) @map("display_order")
+  publishedAt  DateTime?     @map("published_at") @db.Timestamptz(6)
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime?     @map("deleted_at") @db.Timestamptz(6)
+  version      Int           @default(1)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, status, deletedAt])
+  @@index([kind, status, displayOrder, deletedAt])
+  @@map("site_links")
+}
+
+model Faq {
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId       String        @map("user_id") @db.Uuid
+  question     String        @db.VarChar(240)
+  answer       String
+  status       ContentStatus @default(DRAFT)
+  displayOrder Int           @default(0) @map("display_order")
+  publishedAt  DateTime?     @map("published_at") @db.Timestamptz(6)
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime?     @map("deleted_at") @db.Timestamptz(6)
+  version      Int           @default(1)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, status, deletedAt])
+  @@index([status, displayOrder, deletedAt])
+  @@map("faqs")
+}
+
+model SiteSetting {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String        @unique @map("user_id") @db.Uuid
+  siteName       String        @map("site_name") @db.VarChar(120)
+  tagline        String        @db.VarChar(240)
+  footerText     String        @map("footer_text") @db.VarChar(500)
+  privacyNote    String        @map("privacy_note")
+  seoTitle       String        @map("seo_title") @db.VarChar(70)
+  seoDescription String        @map("seo_description") @db.VarChar(180)
+  canonicalUrl   String?       @map("canonical_url") @db.VarChar(500)
+  seoImagePath   String?       @map("seo_image_path") @db.VarChar(500)
+  status         ContentStatus @default(DRAFT)
+  publishedAt    DateTime?     @map("published_at") @db.Timestamptz(6)
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime?     @map("deleted_at") @db.Timestamptz(6)
+  version        Int           @default(1)
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([status, deletedAt])
+  @@map("site_settings")
 }
 
 model Post {

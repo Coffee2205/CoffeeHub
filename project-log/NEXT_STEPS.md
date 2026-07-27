@@ -1,5 +1,9 @@
 # Next Steps
 
+## After Task 07C3b
+
+Wait for a new request. The next ready subtask is 07C4 — Profile avatar media management; do not start it automatically.
+
 ## After Task 07C3a
 
 Wait for a new request. The next ready subtask is 07C3b — Navigation, Footer, Social, FAQ, SEO and Site Settings CMS; do not start it automatically.

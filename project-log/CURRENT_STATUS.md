@@ -1,5 +1,9 @@
 # Current Status
 
+## Task 07C3b Site settings CMS — 2026-07-27
+
+Completed subtask 07C3b: navigation/footer/social links, FAQ, site identity, privacy text and SEO metadata now have protected Admin management, validation, publishing controls and public-published/owner/admin RLS. Task 07 remains In Progress; profile avatar media is next in 07C4 and public rendering/preview remains 07D.
+
 ## Task 07C3a Posts and Page Sections CMS — 2026-07-27
 
 Completed subtask 07C3a: Posts and page sections now have separate schemas and protected Admin CRUD with ordering, CTA and publishing controls. Task 07 remains In Progress; no 07C3b or 07D work was started.

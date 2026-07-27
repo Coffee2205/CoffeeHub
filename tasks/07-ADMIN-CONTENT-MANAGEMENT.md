@@ -11,7 +11,8 @@ In Progress
 - [x] 07C1 — Profile/About text content and publishing controls.
 - [x] 07C2 — Experience, Skills and Education CRUD.
 - [x] 07C3a — Posts and Page/Section CMS.
-- [ ] 07C3b — Navigation, Footer, Social, FAQ, SEO and Site Settings CMS.
+- [x] 07C3b — Navigation, Footer, Social, FAQ, SEO and Site Settings CMS.
+- [ ] 07C4 — Profile avatar media management.
 - [ ] 07D — Public rendering, preview and final access verification.
 
 07A result (2026-07-27): added Prisma schema and additive migrations, optimized RLS, runtime validation, repository, Server Actions, protected Admin UI, list/create/edit, ordering, status and confirmed soft delete. Prisma validate/generate, 8 tests, lint, typecheck, build and Supabase advisors passed. Task remains In Progress because media, preview, remaining entities and public rendering are pending.
@@ -23,6 +24,8 @@ In Progress
 07C2 result (2026-07-27): added separate Experience, Skill and Education models with protected Admin create/list/edit/soft-delete flows, ordering, runtime validation and draft/published/hidden controls. The additive Supabase migration uses explicit Data API grants and public-published/owner/admin RLS; role checks passed in a rollback transaction, Security Advisor is clean, and Prisma checks, 20 tests, lint, typecheck and build pass. Authenticated browser E2E still requires a development admin account.
 
 07C3a result (2026-07-27): added Post and ContentSection models plus protected Admin create/list/edit/soft-delete flows, ordering, runtime validation, CTA pair validation and publishing controls. The additive migration has explicit Data API grants and public-published/owner/admin RLS; rollback role checks passed for both tables, Security Advisor is clean, and Prisma checks, 24 tests, lint, typecheck and build pass. Public rendering remains 07D and authenticated browser E2E still requires a development admin account.
+
+07C3b result (2026-07-27): added SiteLink, Faq and singleton SiteSetting models with protected Admin create/list/edit/soft-delete or upsert flows for navigation/footer/social links, FAQs, identity, privacy and SEO metadata. Runtime URL/length validation, ordering and publishing controls are covered by tests. The additive Supabase migration uses explicit grants and public-published/owner/admin RLS; rollback role checks passed, Security Advisor is clean, and Prisma checks, 31 tests, lint, typecheck and build pass. Profile avatar remains 07C4; public rendering/preview remains 07D.
 
 ## Mục tiêu
 
