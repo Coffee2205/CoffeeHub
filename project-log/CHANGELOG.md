@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-27 — Task 07C1 Profile/About CMS
+
+- Summary: Added protected Profile/About text editing with draft, published and hidden states.
+- Files: Prisma profile model/migration, Profile schema/repository/action, Admin page/navigation, tests, task and project-log.
+- Database impact: Added `status`, `published_at`, constraint/index and command-specific RLS policies to `profiles` on the Supabase development project.
+- Validation: Prisma validate/generate, 16 tests, lint, typecheck, build, migration/policy inspection and Supabase Security Advisor passed.
+- Commit/push: pending final Git step in this session.
+- Known issues: Avatar editing and authenticated Admin browser E2E remain; the development project has no real test account.
+
+---
+
 ## 2026-07-27 — Task 07B Project media
 
 - Summary: Added private Supabase Storage project media with cover/gallery metadata and protected Admin upload/delete.

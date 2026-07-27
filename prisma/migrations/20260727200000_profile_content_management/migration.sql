@@ -1,0 +1,11 @@
+ALTER TABLE public.profiles ADD COLUMN status "ContentStatus" NOT NULL DEFAULT 'DRAFT';
+ALTER TABLE public.profiles ADD COLUMN published_at timestamptz;
+ALTER TABLE public.profiles ADD CONSTRAINT profiles_publish_timestamp CHECK (status <> 'PUBLISHED' OR published_at IS NOT NULL);
+CREATE INDEX profiles_public_status_idx ON public.profiles(status, deleted_at);
+DROP POLICY owner_or_admin_all ON public.profiles;
+GRANT SELECT ON public.profiles TO anon;
+CREATE POLICY profiles_public_select ON public.profiles FOR SELECT TO anon USING (status = 'PUBLISHED' AND deleted_at IS NULL);
+CREATE POLICY profiles_authenticated_select ON public.profiles FOR SELECT TO authenticated USING (status = 'PUBLISHED' AND deleted_at IS NULL OR user_id = (SELECT auth.uid()) OR (SELECT auth.jwt()) -> 'app_metadata' ->> 'role' = 'admin');
+CREATE POLICY profiles_owner_admin_insert ON public.profiles FOR INSERT TO authenticated WITH CHECK (user_id = (SELECT auth.uid()) OR (SELECT auth.jwt()) -> 'app_metadata' ->> 'role' = 'admin');
+CREATE POLICY profiles_owner_admin_update ON public.profiles FOR UPDATE TO authenticated USING (user_id = (SELECT auth.uid()) OR (SELECT auth.jwt()) -> 'app_metadata' ->> 'role' = 'admin') WITH CHECK (user_id = (SELECT auth.uid()) OR (SELECT auth.jwt()) -> 'app_metadata' ->> 'role' = 'admin');
+CREATE POLICY profiles_owner_admin_delete ON public.profiles FOR DELETE TO authenticated USING (user_id = (SELECT auth.uid()) OR (SELECT auth.jwt()) -> 'app_metadata' ->> 'role' = 'admin');

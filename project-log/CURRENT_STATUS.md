@@ -1,5 +1,9 @@
 # Current Status
 
+## Task 07C1 Profile/About CMS — 2026-07-27
+
+Completed subtask 07C1: Admin can edit Profile/About text and publishing state. The development database has additive profile status fields and public-published/owner/admin RLS. Task 07 remains In Progress; no Experience, Skills, Education or later content work was started.
+
 ## Task 07B Project media — 2026-07-27
 
 Completed: private project media Storage, metadata/reference schema, cover/gallery Admin upload, alt text, validation, RLS and cleanup are ready. Task 07 remains In Progress; no 07C work was started.
@@ -42,7 +46,7 @@ Development
 
 ## Active task
 
-Task 06 Dashboard đã hoàn thành; không có task tiếp theo đang thực thi.
+Task 07 remains In Progress after completed subtask 07C1; no subtask is currently executing.
 
 ## Repository state
 
@@ -65,7 +69,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 
 ## In progress
 
-- Không có task tiếp theo đang thực thi.
+- Task 07 Admin and Content Management; completed through 07C1 and waiting for a new request.
 
 ## Blockers
 

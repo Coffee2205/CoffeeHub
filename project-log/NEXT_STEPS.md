@@ -1,5 +1,9 @@
 # Next Steps
 
+## After Task 07C1
+
+Wait for a new request. The next ready subtask is 07C2 — Experience, Skills and Education CRUD; do not start it automatically.
+
 ## After Task 07B
 
 Wait for a new request. The next ready subtask is 07C — remaining content models and CRUD; do not start it automatically.
