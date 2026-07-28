@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-28 — Task 07D1 Public home rendering
+
+- Replaced the `/` design preview with a responsive public CoffeeHub website driven by published CMS data.
+- Added published-only queries for Site Settings, home sections, profile, projects, FAQ and navigation/footer/social links, plus CMS metadata and safe empty/error states.
+- Verified the anonymous fallback at 1440×1000 and 390×844 with no error overlay or horizontal overflow; live CMS records require the missing local Supabase runtime environment.
+
 ## 2026-07-27 — Task 07C3b Site settings CMS
 
 - Summary: Added protected Admin management for navigation/footer/social links, FAQ, identity/privacy content and SEO settings.
