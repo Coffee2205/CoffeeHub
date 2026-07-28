@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-28 — Task 07D2 Public content routes
+
+- Added responsive public About, Projects list/detail and Posts list/detail routes with shared navigation/footer and metadata.
+- Extended the public repository with published-only Profile, Experience, Skill, Education, Project and Post queries; hidden, draft and soft-deleted content is excluded.
+- Added useful empty/unavailable states and a public 404 page; desktop/mobile browser checks and HTTP smoke tests passed without overflow or error overlays.
+- Live published-record verification remains for 07D3 because this workspace has no Supabase runtime environment or development account.
+
 ## 2026-07-28 — Task 07D1 Public home rendering
 
 - Replaced the `/` design preview with a responsive public CoffeeHub website driven by published CMS data.
