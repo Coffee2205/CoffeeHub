@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-07-29 — Task 07D3 Admin preview and live E2E
+
+- Added the protected `/admin/preview` route with Draft/Published/Hidden status labels, editor links and safe empty/error states.
+- Verified a real Admin UI publish appears immediately on anonymous `/` and `/about`; public repositories remain published-only.
+- Verified anonymous redirects to login, regular user redirects to unauthorized, and Admin preview access at 1440×1000 and 390×844 without overflow or error overlays.
+- Added secret-free development account guidance and confirmed 31 tests, lint, typecheck and production build pass.
+
 ## 2026-07-28 — Task 07D2 Public content routes
 
 - Added responsive public About, Projects list/detail and Posts list/detail routes with shared navigation/footer and metadata.

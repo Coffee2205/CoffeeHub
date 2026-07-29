@@ -1,9 +1,9 @@
 # Known Limitations
 
-- Admin/CMS and public Home/About/Projects/Posts rendering are complete. Admin draft preview and profile avatar remain in later Task 07 subtasks. Live published-data and authenticated browser E2E need Supabase runtime configuration and a development admin account.
+- Admin/CMS, public Home/About/Projects/Posts rendering and Admin draft preview are complete with live anonymous/user/Admin browser E2E. Profile avatar remains in Task 07E.
 
 - Database và authentication foundation đã có; CMS và feature application vẫn thuộc các task sau.
-- Public Home, About, Projects list/detail and Posts list/detail routes are implemented; live CMS-record verification remains pending environment configuration.
+- Public Home, About, Projects list/detail and Posts list/detail routes are implemented and verified against live development CMS records.
 - Dashboard hiện tính ngày/tuần theo UTC vì Profile chưa có timezone preference.
 # Supabase đã khởi tạo database foundation
 

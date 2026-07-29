@@ -1,5 +1,18 @@
 # Current Status
 
+## Task 07D3 Admin preview and live E2E — 2026-07-29
+
+Completed subtask 07D3: `/admin/preview` safely displays non-deleted Draft, Published and Hidden CMS content only after server-side Admin verification. Live Supabase E2E passed for anonymous, regular user and Admin, including Admin publish through UI and immediate anonymous rendering on `/` and `/about`, at desktop and mobile viewports. Task 07 remains `In Progress`; only 07E profile avatar remains, and no Task 08 work has started.
+
+
+## Task 07D2 Public content routes — 2026-07-28
+
+Completed subtask 07D2: public About, Projects list/detail and Posts list/detail routes now read only published CMS content, share responsive navigation/footer, provide dynamic metadata and handle empty, unavailable and not-found states. Desktop/mobile browser checks and all route HTTP smoke tests passed using the missing-environment fallback. Task 07 remains `In Progress`; 07D3 Admin preview and live anonymous/user/admin E2E is next, before avatar work or Task 08.
+
+## Task 07D1 Public home — 2026-07-28
+
+Completed subtask 07D1: route `/` is now a complete responsive public CoffeeHub home backed by published CMS Site Settings, home sections, profile, projects, FAQ and links, with CMS metadata and resilient empty/error states. Browser verification passed at desktop and mobile sizes; the workspace had no Supabase runtime environment, so live-record E2E remains for 07D3. Task 07 remains `In Progress`; 07D2 public content routes are next, before avatar work or Task 08.
+
 ## Task 07C3b Site settings CMS — 2026-07-27
 
 Completed subtask 07C3b: navigation/footer/social links, FAQ, site identity, privacy text and SEO metadata now have protected Admin management, validation, publishing controls and public-published/owner/admin RLS. Task 07 remains In Progress; profile avatar media is next in 07C4 and public rendering/preview remains 07D.
@@ -58,7 +71,7 @@ Development
 
 ## Active task
 
-Task 07 remains In Progress after completed subtask 07C3a; no subtask is currently executing.
+Task 07 remains In Progress after completed subtask 07D3; no subtask is currently executing.
 
 ## Repository state
 
