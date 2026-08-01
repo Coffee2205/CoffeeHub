@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-01 — Task 07E Profile avatar media
+
+- Added protected avatar upload, replacement and confirmed deletion on `/admin/profile`, backed by a private Supabase Storage bucket and complete profile media metadata.
+- Added controlled owner paths, MIME/5 MB validation, public-published/owner/Admin Storage RLS, signed URL delivery, orphan cleanup and safe fallback states.
+- Rendered published avatars with alt text on `/` and `/about`; live Admin upload → anonymous render → Admin delete passed at 1440×1000 and 390×844 with no overflow or error overlay.
+- Validation: 32 tests, Prisma validate/generate, lint, typecheck and production build pass. Task 07 is complete; Task 08 was not started.
+
 ## 2026-07-29 — Task 07D3 Admin preview and live E2E
 
 - Added the protected `/admin/preview` route with Draft/Published/Hidden status labels, editor links and safe empty/error states.

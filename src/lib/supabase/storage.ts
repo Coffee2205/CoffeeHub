@@ -30,3 +30,11 @@ export function projectImagePath(userId: string, projectId: string, mimeType: st
   }
   return `${userId}/${projectId}/${assetId}.${extension}`;
 }
+
+export function profileAvatarPath(userId: string, mimeType: string, assetId: string) {
+  const extension = EXTENSIONS[mimeType as keyof typeof EXTENSIONS];
+  if (!extension || !/^[0-9a-f-]{36}$/i.test(userId) || !/^[0-9a-f-]{36}$/i.test(assetId)) {
+    throw new Error("Invalid profile avatar path input.");
+  }
+  return `${userId}/profile/${assetId}.${extension}`;
+}

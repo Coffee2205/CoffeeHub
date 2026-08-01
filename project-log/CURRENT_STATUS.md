@@ -1,5 +1,9 @@
 # Current Status
 
+## Task 07E Profile avatar media — 2026-08-01
+
+Completed subtask 07E and Task 07: Admin can upload, replace and delete a validated profile avatar through `/admin/profile`; published profiles render the private Storage object through signed URLs on `/` and `/about`, with alt text and safe fallbacks. Live upload/render/delete E2E passed at desktop and mobile viewports. Task 08 has not started.
+
 ## Task 07D3 Admin preview and live E2E — 2026-07-29
 
 Completed subtask 07D3: `/admin/preview` safely displays non-deleted Draft, Published and Hidden CMS content only after server-side Admin verification. Live Supabase E2E passed for anonymous, regular user and Admin, including Admin publish through UI and immediate anonymous rendering on `/` and `/about`, at desktop and mobile viewports. Task 07 remains `In Progress`; only 07E profile avatar remains, and no Task 08 work has started.
@@ -71,7 +75,7 @@ Development
 
 ## Active task
 
-Task 07 remains In Progress after completed subtask 07D3; no subtask is currently executing.
+Task 07 is Completed after 07E; no task is currently executing.
 
 ## Repository state
 
@@ -91,10 +95,11 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 - Task 04 Database Foundation đã hoàn thành.
 - Task 05 Authentication đã hoàn thành.
 - Task 06 Dashboard đã hoàn thành.
+- Task 07 Admin and Content Management đã hoàn thành.
 
 ## In progress
 
-- Task 07 Admin and Content Management; completed through 07C3a and waiting for a new request.
+- Không có task đang thực hiện.
 
 ## Blockers
 

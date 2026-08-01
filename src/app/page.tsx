@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
+import { getProfileAvatarUrl } from "@/features/profile/profile-avatar";
 import { getPublicHomeData, type PublicHomeData } from "@/features/public-site/public-site.repository";
 
 export const dynamic = "force-dynamic";
@@ -38,6 +40,7 @@ export default async function Home() {
   const social = (data?.links ?? []).filter((link) => link.kind === "SOCIAL");
   const hasPublishedContent = Boolean(settings || profile || sections.length || projects.length || faqs.length);
   const siteName = settings?.siteName ?? "CoffeeHub";
+  const avatarUrl = await getProfileAvatarUrl(profile?.avatarPath);
 
   return (
     <div className="min-h-screen bg-[#050914] text-slate-50">
@@ -76,8 +79,9 @@ export default async function Home() {
             </div>
             <div className="relative mx-auto aspect-square w-full max-w-sm">
               <div className="absolute inset-0 rotate-6 rounded-[2.5rem] border border-blue-300/20 bg-gradient-to-br from-blue-500/20 to-cyan-300/5" />
-              <div className="absolute inset-5 -rotate-3 rounded-[2rem] border border-white/10 bg-[#09152b]/90 p-8 shadow-2xl shadow-blue-950/70">
-                <div className="flex h-full flex-col justify-between">
+              <div className="absolute inset-5 -rotate-3 overflow-hidden rounded-[2rem] border border-white/10 bg-[#09152b]/90 p-8 shadow-2xl shadow-blue-950/70">
+                {avatarUrl ? <Image src={avatarUrl} alt={profile?.avatarAlt ?? `Ảnh chân dung ${profile?.displayName ?? siteName}`} fill priority sizes="(max-width: 1024px) 384px, 32vw" className="object-cover opacity-35" /> : null}
+                <div className="relative z-10 flex h-full flex-col justify-between">
                   <span className="text-xs uppercase tracking-[.25em] text-cyan-300">Now building</span>
                   <div><p className="text-3xl font-semibold tracking-tight">{profile?.displayName ?? siteName}</p><p className="mt-3 text-sm leading-6 text-slate-400">{projects.length ? `${projects.length} dự án đã xuất bản và đang sẵn sàng để khám phá.` : "Những dự án đầu tiên đang được chuẩn bị để xuất bản."}</p></div>
                   <span className="font-mono text-xs text-blue-300">published / live</span>

@@ -2,7 +2,7 @@
 
 ## Trạng thái
 
-In Progress
+Completed
 
 ## Subtask progress
 
@@ -15,7 +15,9 @@ In Progress
 - [x] 07D1 — Public home rendering from published CMS data.
 - [x] 07D2 — Public Profile, Projects and Posts routes plus navigation/footer/FAQ/SEO.
 - [x] 07D3 — Admin preview and final anonymous/user/admin browser verification.
-- [ ] 07E — Profile avatar media management and public avatar rendering. **NEXT**
+- [x] 07E — Profile avatar media management and public avatar rendering.
+
+07E result (2026-08-01): added protected avatar upload, replacement and confirmed deletion on `/admin/profile`, using a private `profile-avatars` bucket with 5 MB JPEG/PNG/WebP restrictions, controlled owner paths, metadata constraints, public-published/owner/Admin RLS and signed delivery. Published avatars render with alt text and safe fallbacks on `/` and `/about`. Live Admin upload → anonymous desktop/mobile rendering → Admin deletion passed with cleanup; 32 tests, Prisma validation/generation, lint, typecheck and production build pass. Task 07 is complete.
 
 07A result (2026-07-27): added Prisma schema and additive migrations, optimized RLS, runtime validation, repository, Server Actions, protected Admin UI, list/create/edit, ordering, status and confirmed soft delete. Prisma validate/generate, 8 tests, lint, typecheck, build and Supabase advisors passed. Task remains In Progress because media, preview, remaining entities and public rendering are pending.
 
@@ -83,51 +85,51 @@ Xây dựng giao diện Admin/CMS để người dùng tự cập nhật thông 
 
 ## Công việc
 
-- [ ] CRUD từ Admin UI cho profile/about/avatar; project (title, slug, summary, description, role, tech stack, GitHub/live URL, status, dates, cover/gallery); experience, skills, education; posts; banner/sections/menu/footer/social/FAQ/SEO/site settings.
-- [ ] Có draft/published/hidden, ordering, preview, publish/unpublish, soft delete và xác nhận xóa.
-- [ ] Mỗi entity có Prisma schema/migration, runtime validation, service, repository, Auth/AuthZ, UI states và test access.
-- [ ] Upload qua Supabase Storage với MIME/size/name/path/overwrite validation, alt, fallback và orphan cleanup; database chỉ lưu bucket/path/URL/metadata.
-- [ ] Private object chỉ qua server hoặc signed URL; service role key không xuống client.
-- [ ] RLS phân biệt public-published, admin draft, owner-private và admin.
+- [x] CRUD từ Admin UI cho profile/about/avatar; project (title, slug, summary, description, role, tech stack, GitHub/live URL, status, dates, cover/gallery); experience, skills, education; posts; banner/sections/menu/footer/social/FAQ/SEO/site settings.
+- [x] Có draft/published/hidden, ordering, preview, publish/unpublish, soft delete và xác nhận xóa.
+- [x] Mỗi entity có Prisma schema/migration, runtime validation, service, repository, Auth/AuthZ, UI states và test access.
+- [x] Upload qua Supabase Storage với MIME/size/name/path/overwrite validation, alt, fallback và orphan cleanup; database chỉ lưu bucket/path/URL/metadata.
+- [x] Private object chỉ qua server hoặc signed URL; service role key không xuống client.
+- [x] RLS phân biệt public-published, admin draft, owner-private và admin.
 
 ### Nền tảng Admin
 
-- [ ] Tạo layout và navigation `/admin`.
-- [ ] Bảo vệ toàn bộ admin routes bằng authentication và authorization.
-- [ ] Tạo dashboard quản trị với shortcut và trạng thái nội dung.
-- [ ] Có loading, empty, error và permission-denied state.
+- [x] Tạo layout và navigation `/admin`.
+- [x] Bảo vệ toàn bộ admin routes bằng authentication và authorization.
+- [x] Tạo dashboard quản trị với shortcut và trạng thái nội dung.
+- [x] Có loading, empty, error và permission-denied state.
 
 ### Content model
 
-- [ ] Profile.
-- [ ] Projects.
-- [ ] Experiences.
-- [ ] Skills.
-- [ ] Education.
-- [ ] Posts.
-- [ ] Pages/sections.
-- [ ] Navigation và footer links.
-- [ ] FAQ.
-- [ ] Site settings.
-- [ ] SEO metadata.
-- [ ] Media assets hoặc media references.
+- [x] Profile.
+- [x] Projects.
+- [x] Experiences.
+- [x] Skills.
+- [x] Education.
+- [x] Posts.
+- [x] Pages/sections.
+- [x] Navigation và footer links.
+- [x] FAQ.
+- [x] Site settings.
+- [x] SEO metadata.
+- [x] Media assets hoặc media references.
 
 ### CRUD và biên tập
 
-- [ ] Tạo mới, xem, sửa và xóa mềm/ẩn khi phù hợp.
-- [ ] Draft, published, hidden.
-- [ ] Sắp xếp `displayOrder`.
-- [ ] Upload hoặc chọn ảnh.
-- [ ] Preview trước khi publish khi phù hợp.
-- [ ] Inline validation và thông báo lưu thành công/thất bại.
-- [ ] Xác nhận trước hành động phá hủy.
+- [x] Tạo mới, xem, sửa và xóa mềm/ẩn khi phù hợp.
+- [x] Draft, published, hidden.
+- [x] Sắp xếp `displayOrder`.
+- [x] Upload hoặc chọn ảnh.
+- [x] Preview trước khi publish khi phù hợp.
+- [x] Inline validation và thông báo lưu thành công/thất bại.
+- [x] Xác nhận trước hành động phá hủy.
 
 ### Kết nối hiển thị
 
-- [ ] Website công khai đọc nội dung từ database và có route hoàn chỉnh để người dùng xem ngay.
-- [ ] App đọc site settings cần thiết từ database.
-- [ ] Có fallback an toàn khi chưa có nội dung.
-- [ ] Không giữ bản sao hard-code có thể gây lệch dữ liệu.
+- [x] Website công khai đọc nội dung từ database và có route hoàn chỉnh để người dùng xem ngay.
+- [x] App đọc site settings cần thiết từ database.
+- [x] Có fallback an toàn khi chưa có nội dung.
+- [x] Không giữ bản sao hard-code có thể gây lệch dữ liệu.
 
 ## Không thực hiện
 
