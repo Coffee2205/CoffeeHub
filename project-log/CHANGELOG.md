@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-02 — Task 09 Goals
+
+- Added protected Goal list, create and detail/edit routes with status, priority, deadline and success criteria.
+- Added owner-scoped server actions/repository queries, Task-derived progress, useful empty/loading/success/error states and confirmed soft archive without cascade deletion.
+- Validation: 37 tests, Prisma generate, lint, typecheck and production build pass.
+- Browser E2E: create → detail → refresh persistence → update → archive passed at 1440×1000 and 390×844 without overflow or error overlays.
+
 ## 2026-08-02 — Task 08 Workspace Profile
 
 - Added protected `/app/profile` with editable workspace name/timezone, verified account details, public visibility summary and public/Admin navigation.

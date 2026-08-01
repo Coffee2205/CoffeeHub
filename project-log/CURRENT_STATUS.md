@@ -1,5 +1,9 @@
 # Current Status
 
+## Task 09 Goals — 2026-08-02
+
+Completed Task 09: authenticated users can list, create, inspect, edit and soft-archive owned Goals through `/app/goals`. Goal status, priority, deadline and success criteria persist; progress is derived from related non-deleted/non-cancelled Tasks. Live create/refresh/update/archive passed at desktop and mobile viewports.
+
 ## Task 08 Workspace Profile — 2026-08-02
 
 Completed Task 08: authenticated users can view `/app/profile`, save a private workspace name and timezone preference, inspect verified account/public visibility information, and follow explicit public/Admin CMS links. The additive development migration is applied; 34 tests, Prisma validation/generation, lint, typecheck, build and live save flow passed.
@@ -79,7 +83,7 @@ Development
 
 ## Active task
 
-Task 08 is Completed; no task is currently executing.
+Task 09 is Completed; no task is currently executing.
 
 ## Repository state
 
@@ -101,6 +105,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 - Task 06 Dashboard đã hoàn thành.
 - Task 07 Admin and Content Management đã hoàn thành.
 - Task 08 Profile đã hoàn thành.
+- Task 09 Goals đã hoàn thành.
 
 ## In progress
 
@@ -108,7 +113,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 
 ## Blockers
 
-- Không có blocker đã biết cho Task 07. Dependency advisories cần tiếp tục theo dõi.
+- Không có blocker đã biết cho Task 09. Dependency advisories cần tiếp tục theo dõi.
 
 ## Validation status
 
