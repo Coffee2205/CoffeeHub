@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-02 — Task 08 Workspace Profile
+
+- Added protected `/app/profile` with editable workspace name/timezone, verified account details, public visibility summary and public/Admin navigation.
+- Added owner-scoped server persistence, validation tests and an additive `profiles.workspace_name`/`profiles.timezone` migration applied to development.
+- Validation: 34 tests, Prisma validate/generate, lint, typecheck and production build pass; live Admin save returned `?saved=1` with confirmation.
+- Known issue: Dashboard continues to calculate date boundaries in UTC until a later task consumes the stored timezone preference.
+
 ## 2026-08-01 — Task 07E Profile avatar media
 
 - Added protected avatar upload, replacement and confirmed deletion on `/admin/profile`, backed by a private Supabase Storage bucket and complete profile media metadata.

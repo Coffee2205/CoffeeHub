@@ -1,5 +1,9 @@
 # Current Status
 
+## Task 08 Workspace Profile — 2026-08-02
+
+Completed Task 08: authenticated users can view `/app/profile`, save a private workspace name and timezone preference, inspect verified account/public visibility information, and follow explicit public/Admin CMS links. The additive development migration is applied; 34 tests, Prisma validation/generation, lint, typecheck, build and live save flow passed.
+
 ## Task 07E Profile avatar media — 2026-08-01
 
 Completed subtask 07E and Task 07: Admin can upload, replace and delete a validated profile avatar through `/admin/profile`; published profiles render the private Storage object through signed URLs on `/` and `/about`, with alt text and safe fallbacks. Live upload/render/delete E2E passed at desktop and mobile viewports. Task 08 has not started.
@@ -75,7 +79,7 @@ Development
 
 ## Active task
 
-Task 07 is Completed after 07E; no task is currently executing.
+Task 08 is Completed; no task is currently executing.
 
 ## Repository state
 
@@ -96,6 +100,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 - Task 05 Authentication đã hoàn thành.
 - Task 06 Dashboard đã hoàn thành.
 - Task 07 Admin and Content Management đã hoàn thành.
+- Task 08 Profile đã hoàn thành.
 
 ## In progress
 
