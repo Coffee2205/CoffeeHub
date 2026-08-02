@@ -1,0 +1,2 @@
+import type { AIChatInput, AIChatResult, AIGenerationOptions, AIProviderName, AIProviderResult, AIStreamChunk, RuntimeSchema } from "../types/ai.types";
+export interface AIProvider { readonly name: AIProviderName; chat(input: AIChatInput): Promise<AIChatResult>; streamChat?(input: AIChatInput): AsyncIterable<AIStreamChunk>; generateStructured<TInput, TOutput>(input: TInput, schema: RuntimeSchema<TOutput>, options?: AIGenerationOptions): Promise<AIProviderResult<TOutput>>; }

@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-08-02 — AI Foundation architecture and mock flow
+
+- Summary: Added proposal-only AI architecture and an authenticated `/app/ai` Mock Provider workflow with runtime validation, editable preview and disabled persistence.
+- Architecture: Typed actions/config/policies, provider registry/stubs, schemas, context builder, prompt library, mappers, normalized errors, usage metadata and persistence contracts.
+- Network/database: No real AI provider calls, SDKs, keys, migrations or database writes.
+- Validation: 46 tests, lint, typecheck, Prisma generate + Next.js production build; owner desktop/mobile browser flow passed with zero external AI resource requests.
+- Known limitations: Real adapters, persistent rate limiting/audit logs, database-backed contexts and confirmation/save remain future tasks.
+
+---
+
 ## 2026-08-02 — Workspace Profile delivery
 
 - Summary: Completed `/app/profile` with an owner-scoped portfolio snapshot, published counts and Admin-only links to existing Profile, Resume and Project CRUD.

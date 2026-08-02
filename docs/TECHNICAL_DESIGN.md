@@ -1,5 +1,9 @@
 # Thiết kế kỹ thuật — CoffeeHub
 
+## AI Foundation implementation
+
+The provider registry owns OpenAI/Groq/Gemini stubs and Mock Provider, while a single server-only config boundary reads environment values. `/app/ai` uses an authenticated Server Action to produce a runtime-validated mock proposal and passes only serializable preview data to the Client Component. Confirmation/save is disabled and no AI persistence migration exists.
+
 ## 1. Tổng quan hệ thống
 
 ```text

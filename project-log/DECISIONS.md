@@ -1,5 +1,9 @@
 # Decisions
 
+## D-011 — AI proposal-only foundation
+
+AI providers only create runtime-validated proposals. They cannot import Prisma/repositories or commit data. Future create/update actions map proposals into existing forms/services and require owner confirmation; destructive/privileged actions are forbidden. AI Foundation uses a network-free Mock Provider and keeps OpenAI/Groq/Gemini as stubs until dedicated integration tasks.
+
 ## D-001 — Task selection
 
 Agent tự xác định task sẵn sàng từ trạng thái và dependency, nhưng mỗi phiên chỉ thực hiện một task hoặc subtask.

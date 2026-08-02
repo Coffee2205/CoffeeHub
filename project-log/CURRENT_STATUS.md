@@ -1,5 +1,9 @@
 # Current Status
 
+## AI Foundation delivery — 2026-08-02
+
+Completed the proposal-only AI architecture and protected `/app/ai` mock flow. CoffeeHub now has typed actions/config/policies, provider registry with OpenAI/Groq/Gemini stubs plus working Mock Provider, runtime proposal schemas, context/prompt/mapping layers, normalized errors, usage metadata and future persistence contracts. No provider SDK/network, API key, migration or database write was added. Tests 46/46, lint, typecheck, production build and owner desktop/mobile browser verification pass. Goals remains the next ready product task.
+
 ## Workspace Profile delivery — 2026-08-02
 
 Completed the owner Workspace Profile at `/app/profile`. The page now combines the existing owner preference form with an owner-scoped snapshot of Experience, Skills, Education and Projects, including published counts and Admin-only management links. Existing Admin/CMS CRUD remains the single edit path. Tests 41/41, lint, typecheck, production build and authenticated desktop/mobile browser verification pass without overflow or browser errors. Workspace Profile is Completed; Goals is next.
@@ -74,7 +78,7 @@ Development
 
 ## Active task
 
-Feature Workspace Profile is Completed (`tasks/epics/02-owner-workspace/features/02-profile/FEATURE.md`); no task is currently executing.
+Feature AI Foundation is Completed (`tasks/epics/03-pwa-ai/features/02-ai-foundation/FEATURE.md`); no task is currently executing.
 
 ## Repository state
 
@@ -130,7 +134,7 @@ Roadmap đã chuyển sang Epic → Feature → Task → Subtask.
 
 Active hierarchy:
 
-- Epic: Owner Workspace
-- Feature: `tasks/epics/02-owner-workspace/features/02-profile/FEATURE.md`
-- Task: `tasks/epics/02-owner-workspace/features/02-profile/tasks/01-delivery.md`
+- Last completed Epic: PWA and AI
+- Feature: `tasks/epics/03-pwa-ai/features/02-ai-foundation/FEATURE.md`
+- Task: `tasks/epics/03-pwa-ai/features/02-ai-foundation/tasks/01-delivery.md`
 - Next feature: Goals.

@@ -1,5 +1,9 @@
 # PRD — CoffeeHub
 
+## AI Foundation boundary
+
+AI Foundation provides a server-only provider registry, runtime-validated structured proposals and an owner-visible Mock Provider flow at `/app/ai`. It does not integrate or bill a real provider, persist AI records, or save feature entities. Future AI actions must reuse existing feature forms/services and require owner confirmation before any write.
+
 ## 1. Tổng quan
 
 CoffeeHub là ứng dụng quản lý và phát triển cá nhân hoạt động trên web và dưới dạng Progressive Web App. Ứng dụng tập trung các dữ liệu liên quan đến công việc, lịch trình, ghi chú, mục tiêu và kế hoạch phát triển vào một hệ thống duy nhất.

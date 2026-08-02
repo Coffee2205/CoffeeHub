@@ -1,5 +1,13 @@
 # AI Memory
 
+## AI Foundation implementation
+
+- Canonical module: `src/features/ai`; authenticated preview: `/app/ai`.
+- Real providers are stubs; do not add an SDK, key or network call without a dedicated task.
+- AI output must pass runtime schemas, map to existing form values and wait for explicit confirmation before Feature Service writes.
+- Providers never import Prisma, repositories or privileged mutations.
+- Context is owner-scoped, allow-listed, record-limited and treated as untrusted data.
+
 ## Product direction
 
 - Rebuild CoffeeHub từ đầu.

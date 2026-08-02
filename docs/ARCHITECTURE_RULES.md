@@ -1,5 +1,9 @@
 # Quy tắc kiến trúc — CoffeeHub
 
+## AI Foundation implementation boundary
+
+`src/features/ai` separates providers, schemas, context, prompts, mappers and policy. Providers only produce output; runtime parsers validate proposals; mappers prepare existing feature form values; Feature Services remain the only future write path. Mock Provider cannot import Prisma/repositories or call a network. Real providers remain safe stubs until dedicated integration tasks.
+
 ## Mục tiêu
 
 Kiến trúc phải hỗ trợ:

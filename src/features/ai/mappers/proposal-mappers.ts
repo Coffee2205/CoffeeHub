@@ -1,0 +1,5 @@
+import type { GoalProposal, RoadmapProposal, TaskProposal } from "../types/ai.types";
+export type GoalFormValues = { title: string; description: string; status: "DRAFT"; priority: GoalProposal["priority"]; deadline: string; successCriteria: string };
+export function mapGoalProposalToGoalFormValues(proposal: GoalProposal): GoalFormValues { return { title: proposal.title, description: proposal.description ?? "", status: "DRAFT", priority: proposal.priority, deadline: proposal.targetDate ?? "", successCriteria: proposal.successCriteria.join("\n") }; }
+export function mapRoadmapProposalToFormValues(proposal: RoadmapProposal) { return { title: proposal.title, description: proposal.description ?? "", stages: proposal.stages.map((stage) => ({ title: stage.title, description: stage.description ?? "", position: stage.order - 1 })) }; }
+export function mapTaskProposalToFormValues(proposal: TaskProposal) { return { title: proposal.title, description: proposal.description ?? "", priority: proposal.priority, dueAt: proposal.dueDate ?? "", estimatedMinutes: proposal.estimatedMinutes ?? null }; }
