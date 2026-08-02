@@ -1,178 +1,158 @@
 # User Flows — CoffeeHub
 
-## 1. Đăng nhập và vào workspace
+## 1. Khách xem CV/portfolio
 
 ```text
-Người dùng mở website
-→ Chọn Login
-→ Nhập thông tin
-→ Backend xác thực
-→ Tạo session
-→ Chuyển đến /app/dashboard
+Khách mở /
+→ xem thông tin cá nhân đã publish
+→ xem kinh nghiệm, kỹ năng, học vấn và dự án
+→ mở chi tiết dự án hoặc bài viết
+→ dùng CTA liên hệ/GitHub/LinkedIn/CV
 ```
 
-Trường hợp lỗi:
+Không yêu cầu:
 
-- Sai thông tin: giữ nguyên form và hiển thị lỗi rõ ràng.
-- Session hết hạn: chuyển về login và giữ đường dẫn dự định nếu phù hợp.
-- Không có quyền: không hiển thị dữ liệu.
+- đăng ký;
+- đăng nhập;
+- guest account;
+- demo credential.
 
-## 2. Tạo Goal thủ công
+Draft, hidden, soft-deleted và dữ liệu workspace không xuất hiện.
+
+## 2. Owner đăng nhập và vào workspace
 
 ```text
-Goals
+Owner mở /login
+→ nhập email/password
+→ Supabase Auth xác thực
+→ server tạo/xác minh session
+→ chuyển đến next hợp lệ hoặc /app/dashboard
+```
+
+Owner không cần đăng nhập bằng account khác để xem CV. Sau khi đăng nhập, owner sử dụng toàn bộ chức năng cá nhân và có link xem/quản lý CV.
+
+## 3. Owner quản lý nội dung CV
+
+```text
+/app hoặc /admin
+→ Manage CV
+→ chỉnh Profile/Project/Experience/Skill/Education/Post
+→ Save Draft
+→ Preview
+→ Publish
+→ nội dung xuất hiện trên public route
+```
+
+Không cần sửa source code, Prisma Studio, SQL Editor hoặc Supabase Dashboard.
+
+## 4. Owner xem public CV sau khi chỉnh
+
+```text
+Admin publish
+→ mở /admin/preview hoặc cửa sổ anonymous
+→ xác minh nội dung public
+```
+
+Nếu owner mở `/` khi session đang hoạt động và hệ thống redirect về app, dùng `/admin/preview` hoặc cửa sổ private để xem đúng trải nghiệm khách.
+
+## 5. Tạo Goal thủ công
+
+```text
+/app/goals
 → New Goal
-→ Nhập title, mô tả, deadline, priority, success criteria
-→ Validate
-→ Save
-→ Mở Goal Detail
+→ nhập thông tin
+→ validate
+→ save
+→ mở Goal Detail
 ```
 
-Sau khi tạo:
-
-- Goal xuất hiện trên Dashboard nếu đang active.
-- Có thể thêm Roadmap, Task hoặc Checklist.
-- Tạo audit/event history nếu hệ thống có history.
-
-## 3. Tạo Roadmap từ Goal
+## 6. Tạo Roadmap từ Goal
 
 ```text
 Goal Detail
 → Create Roadmap
-→ Thêm các stage
-→ Sắp xếp thứ tự
-→ Save transaction
-→ Hiển thị roadmap trong Goal
+→ thêm stages
+→ reorder
+→ save transaction
+→ hiển thị roadmap
 ```
 
-Không được tạo roadmap thuộc Goal của user khác.
-
-## 4. Toggle Task
+## 7. Toggle Task
 
 ```text
-Người dùng chọn checkbox
-→ UI cập nhật ngay
-→ Gửi mutation với version/idempotency key nếu cần
-→ Backend validate quyền
-→ Lưu database
-→ Thành công: giữ trạng thái
-→ Thất bại: rollback và báo lỗi
+Chọn checkbox
+→ optimistic update
+→ mutation có auth/ownership
+→ success giữ trạng thái
+→ failure rollback và báo lỗi
 ```
 
-## 5. Autosave Note
+## 8. Autosave Note
 
 ```text
 Mở Note
-→ Người dùng nhập
-→ Lưu local draft
-→ Chờ ngừng nhập 800–1200ms
-→ Hiển thị Saving
-→ Gửi content + current version
-→ Backend kiểm tra version
-→ Save
-→ Trả version mới
-→ Hiển thị Saved
+→ nhập
+→ local draft
+→ debounce 800–1200ms
+→ Saving
+→ gửi content + version
+→ save
+→ Saved
 ```
 
-Nếu offline:
+Offline:
 
 ```text
-Lưu IndexedDB
-→ Hiển thị Offline — queued
-→ Có mạng trở lại
-→ Sync queue
-→ Nếu không conflict: save
-→ Nếu conflict: yêu cầu người dùng xử lý
+IndexedDB queue
+→ Offline
+→ có mạng
+→ sync
+→ conflict nếu version cũ
 ```
 
-## 6. Tạo Event và Reminder
+## 9. Event và Reminder
 
 ```text
 Calendar
 → New Event
-→ Nhập thời gian và recurrence
-→ Chọn reminder
-→ Save event
-→ Tạo hoặc cập nhật reminder schedule
+→ nhập thời gian/recurrence
+→ chọn reminder
+→ save
+→ schedule reminder
 ```
 
-Khi thời gian event thay đổi, reminder cũ phải được thay thế hoặc cập nhật.
-
-## 7. AI phân tích Goal
+## 10. AI phân tích hoặc tạo kế hoạch
 
 ```text
-Goal Detail
-→ Analyze with AI
-→ Backend lấy đúng context cần thiết
-→ Gửi provider ưu tiên
-→ Validate response
-→ Hiển thị analysis
-→ Người dùng có thể lưu analysis thành Note hoặc bỏ qua
+Owner yêu cầu AI
+→ backend lấy context được phép
+→ provider
+→ validate structured output
+→ preview proposal
+→ owner confirm
+→ transaction lưu
+→ audit log
 ```
 
-Analysis không được tự động sửa Goal.
+AI không tự sửa dữ liệu quan trọng trước confirm.
 
-## 8. AI tạo Goal và Roadmap
-
-```text
-AI Assistant
-→ Người dùng mô tả mục tiêu
-→ AI trả structured proposal
-→ Backend validate
-→ Hiển thị Goal + Roadmap + Task draft
-→ Người dùng chỉnh sửa
-→ Confirm
-→ Service transaction lưu dữ liệu
-→ Audit log
-→ Hiển thị kết quả và Undo nếu hỗ trợ
-```
-
-Không lưu trước khi confirm đối với Goal, Roadmap hoặc batch Task.
-
-## 9. AI provider fallback
+## 11. Đăng xuất
 
 ```text
-Gửi OpenAI
-→ Thành công: dùng kết quả
-→ Quota/rate-limit/timeout/unavailable: thử Groq
-→ Lỗi tương tự: thử Gemini
-→ Validate output
-→ Tạo proposal
-```
-
-Không fallback khi:
-
-- Prompt không hợp lệ.
-- Người dùng không có quyền.
-- Output vi phạm schema sau số lần retry cho phép.
-- Yêu cầu bị từ chối vì quy tắc an toàn.
-
-## 10. Đăng xuất
-
-```text
-Settings hoặc User Menu
+Owner menu
 → Logout
-→ Hủy session
-→ Xóa dữ liệu cache nhạy cảm phù hợp
-→ Chuyển về public website hoặc login
-```
-# Luồng Supabase trọng yếu
-
-## Xác thực
-
-```text
-Email/password → Supabase Auth → cookie session
-→ server verification → role/permission → protected route or mutation
+→ hủy session
+→ xóa cache private phù hợp
+→ chuyển /
+→ public CV vẫn xem được
 ```
 
-UI phải xử lý loading, lỗi sai thông tin, session hết hạn, refresh và logout. Admin bị kiểm tra quyền tại server, không chỉ ẩn navigation.
+## 12. Authorization tests
 
-## Biên tập dự án và media
+Account thường chỉ dùng trong development/test để xác minh:
 
-```text
-Admin form → runtime validation → Auth/AuthZ → service
-→ upload Supabase Storage → lưu metadata qua repository/Prisma
-→ preview → publish → public page
-```
+- không vào `/admin`;
+- không đọc dữ liệu owner khác;
+- không mở khóa thêm thông tin public.
 
-Lỗi giữa upload và ghi database phải cleanup hoặc đưa vào hàng đợi orphan; xóa cần xác nhận và ưu tiên soft delete cho record quan trọng.
+Account test không phải một persona production.

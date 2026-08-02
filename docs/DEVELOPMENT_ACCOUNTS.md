@@ -1,29 +1,56 @@
-# Development accounts
+# Development Accounts
 
-Task 07 browser verification uses two Supabase Auth accounts in the development project. Never commit their credentials or reuse production accounts.
+## Production account model
 
-## Required personas
+CoffeeHub production dùng một tài khoản owner/admin.
 
-- **Admin**: confirmed email/password account with `app_metadata.role` set to `admin`.
-- **User**: confirmed email/password account without the Admin role.
+- Khách xem CV công khai mà không đăng nhập.
+- Không có guest account.
+- Không có public signup.
+- Owner account dùng email/password Supabase Auth.
+- Owner role lấy từ `app_metadata.role`.
 
-Add credentials only to the ignored `.env.local` file:
+## Development/test accounts
 
-```dotenv
+Có thể tạo tạm:
+
+### Owner/Admin
+
+```env
 E2E_ADMIN_EMAIL="development-admin@example.test"
-E2E_ADMIN_PASSWORD="replace-locally"
-E2E_USER_EMAIL="development-user@example.test"
-E2E_USER_PASSWORD="replace-locally"
+E2E_ADMIN_PASSWORD=""
 ```
 
-If a database password contains URL-reserved characters, URL-encode the password segment in `DATABASE_URL` and `DIRECT_URL`. In particular, encode `$` as `%24` so Next.js does not expand it as an environment-variable reference.
+Dùng để test:
 
-After changing `app_metadata.role`, sign out and sign in again so Supabase issues a refreshed JWT.
+- `/app/*`.
+- `/admin/*`.
+- publish nội dung.
+- chỉnh CV.
+- quản lý workspace.
 
-## Verification flow
+### Non-admin test user
 
-1. Anonymous opens `/` and cannot open `/admin/preview`.
-2. User signs in through `/login`, can open `/app/dashboard`, and is redirected to `/unauthorized` from `/admin/preview`.
-3. Admin signs in, edits content under `/admin`, opens `/admin/preview`, publishes it, then confirms the result in an anonymous window.
+Chỉ tạo khi cần test authorization denial:
 
-Do not put passwords, tokens, database URLs or screenshots containing personal information in Git.
+```env
+E2E_USER_EMAIL="development-user@example.test"
+E2E_USER_PASSWORD=""
+```
+
+Đây không phải guest account và không xuất hiện trong production UX.
+
+## Browser test matrix
+
+1. Anonymous mở `/` và xem toàn bộ CV đã publish.
+2. Anonymous mở project/post detail đã publish.
+3. Anonymous mở `/app/dashboard` → `/login`.
+4. Anonymous mở `/admin` → `/login`.
+5. Owner đăng nhập → `/app/dashboard`.
+6. Owner mở toàn bộ app routes.
+7. Owner mở `/admin`, chỉnh và publish CV.
+8. Anonymous thấy thay đổi đã publish.
+9. Non-admin test user không vào `/admin`.
+10. Logout owner → `/`.
+
+Không commit password hoặc credential thật.

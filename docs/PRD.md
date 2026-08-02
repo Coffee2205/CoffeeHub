@@ -14,7 +14,7 @@ Sản phẩm được xây dựng với hai mục tiêu song song:
 Sau khi hoàn thành phiên bản đầu, CoffeeHub phải:
 
 - Hoạt động trên Internet với domain và HTTPS.
-- Có public landing page và private application.
+- Có website CV/portfolio công khai và workspace owner được bảo vệ.
 - Có đăng nhập và bảo vệ dữ liệu cá nhân.
 - Hiển thị tốt trên desktop, tablet và mobile.
 - Cho phép quản lý Goal, Roadmap, Task, Event, Note và Checklist.
@@ -23,6 +23,21 @@ Sau khi hoàn thành phiên bản đầu, CoffeeHub phải:
 - Có khả năng khôi phục draft khi mất mạng.
 - Có PWA manifest, icon và trải nghiệm cài đặt.
 - Có nền tảng notification và AI để mở rộng.
+
+## 2.1. Nguyên tắc phát hành tăng dần
+
+CoffeeHub phải luôn có một phiên bản có thể mở và sử dụng trong quá trình phát triển, không chờ đến gần cuối roadmap mới thấy giao diện sản phẩm.
+
+Sau mỗi task feature:
+
+- có ít nhất một route thể hiện thành quả;
+- luồng chính hoạt động end-to-end;
+- dữ liệu được đọc/ghi qua hệ thống thật hoặc fixture development được ghi nhãn;
+- có loading, empty và error state;
+- được kiểm tra desktop/mobile;
+- báo cáo nêu rõ URL và cách dùng.
+
+Public website phải xuất hiện sớm. CMS không được xem là hoàn tất chỉ vì đã có schema và form quản trị; nội dung đã publish phải được render tại public page hoặc preview page trong cùng task.
 
 ## 3. Đối tượng sử dụng
 
@@ -36,35 +51,40 @@ Sau khi hoàn thành phiên bản đầu, CoffeeHub phải:
 - Xem tiến độ tuần.
 - Nhờ AI phân tích hoặc đề xuất kế hoạch.
 
-### Người xem portfolio
+### Nhà tuyển dụng, đồng nghiệp và người xem CV
 
-- Xem giới thiệu sản phẩm.
-- Xem ảnh hoặc demo giao diện.
-- Xem stack và các quyết định kỹ thuật.
-- Không được xem dữ liệu cá nhân trong workspace.
+- Xem thông tin cá nhân mà chủ sở hữu đã publish.
+- Xem kinh nghiệm, kỹ năng, học vấn và dự án.
+- Xem GitHub, live demo, CV và cách liên hệ.
+- Không cần account hoặc đăng nhập.
+- Không được xem Goal, Task, Note, Calendar, settings, AI history hoặc dữ liệu workspace riêng tư.
 
 ## 4. Phạm vi chức năng
 
-### Website công khai
+### Website CV/portfolio công khai
 
-- Trang chủ.
-- Giới thiệu CoffeeHub.
-- Vấn đề sản phẩm giải quyết.
-- Tính năng chính.
-- Demo hoặc screenshot giao diện.
-- Trình bày PWA và khả năng đồng bộ.
-- Trình bày AI Assistant.
-- Công nghệ sử dụng.
-- Thông tin dự án và liên kết portfolio.
+- Trang chủ CV tổng hợp.
+- Hồ sơ, headline, bio, avatar và thông tin liên hệ đã publish.
+- Kinh nghiệm.
+- Kỹ năng.
+- Học vấn.
+- Danh sách và chi tiết dự án.
+- Bài viết nếu có.
+- GitHub, LinkedIn, live URL và CV/resume.
+- Nội dung chỉ xuất hiện khi đã publish.
+- Không yêu cầu guest account hoặc đăng nhập để xem.
 
-### Authentication
+### Authentication và access control
 
-- Đăng nhập.
-- Đăng xuất.
-- Session.
-- Protected routes.
+- Chỉ owner đăng nhập vào workspace.
+- Không public registration và không có guest account trong production.
+- Đăng nhập thành công chuyển đến `/app/dashboard`.
+- Owner truy cập toàn bộ app routes.
+- Owner/admin truy cập CMS routes.
+- Session và protected routes.
 - Kiểm tra ownership theo `userId`.
 - Trang lỗi unauthorized.
+- Anonymous luôn xem được public CV đã publish.
 
 ### Dashboard
 
@@ -168,6 +188,19 @@ Sau khi hoàn thành phiên bản đầu, CoffeeHub phải:
 - Truy vấn dữ liệu CoffeeHub theo context được cho phép.
 - Preview và confirm trước khi lưu thay đổi quan trọng.
 - Audit log và Undo khi phù hợp.
+
+## 4.1. Access model
+
+| Persona | Public CV | Workspace | Admin/CMS |
+|---|---:|---:|---:|
+| Khách anonymous | Có | Không | Không |
+| Owner đã đăng nhập | Có hoặc redirect vào app | Có toàn bộ | Có |
+| Account test không phải admin | Có | Chỉ dùng test nếu cần | Không |
+
+- Public CV là trang thật, không phải demo bị khóa sau login.
+- Guest account không tồn tại trong production UX.
+- Dữ liệu CV và dữ liệu workspace phải tách bằng publish status, ownership và RLS/authorization.
+- Đăng nhập không phải điều kiện để xem thêm thông tin nghề nghiệp đã publish.
 
 ## 5. Ngoài phạm vi phiên bản đầu
 

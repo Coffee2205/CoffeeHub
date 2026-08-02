@@ -168,3 +168,33 @@ Không trả raw database error hoặc stack trace cho client.
 - Refactor lớn phải có task riêng.
 - Không đổi naming toàn dự án trong cùng phiên với feature mới nếu không cần thiết.
 - Giữ migration path rõ ràng khi thay đổi domain model.
+
+
+## CV-first access architecture
+
+CoffeeHub dùng mô hình single-owner:
+
+```text
+Anonymous public reader
+→ published CV repositories
+→ public routes
+
+Authenticated owner
+→ private workspace repositories
+→ /app/*
+
+Authenticated owner/admin
+→ content-management repositories
+→ /admin/*
+```
+
+Quy tắc:
+
+- Không tạo guest-auth layer để đọc public CV.
+- Public query chỉ đọc published content qua repository riêng.
+- Private app query luôn scope owner.
+- Admin mutation xác minh owner/admin trên server.
+- Public và private có thể dùng cùng PostgreSQL nhưng phải tách policy, query và DTO.
+- Không serialize private fields vào public Server Component hoặc metadata.
+- Public route không phụ thuộc session để render nội dung.
+- Login thành công redirect vào workspace; login không mở khóa thêm nội dung CV.

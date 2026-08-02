@@ -37,6 +37,17 @@ Có thể rút gọn cho thao tác nhỏ, nhưng business logic phức tạp kh�
 - Có keyboard navigation, contrast và touch target hợp lý.
 - Tuân thủ `docs/DESIGN_RULES.md`.
 
+## Thành quả hiển thị và có thể sử dụng
+
+- Mỗi task feature phải tạo hoặc cải thiện ít nhất một route mà người dùng có thể mở.
+- Báo cáo cuối task phải ghi URL, trạng thái đăng nhập cần thiết và các bước sử dụng.
+- Phải kiểm tra bằng browser ở ít nhất một desktop viewport và một mobile viewport.
+- Không dùng trang placeholder, JSON raw, Prisma Studio, SQL Editor hoặc test log làm thành quả cho người dùng.
+- Empty state phải giải thích người dùng cần làm gì tiếp theo và có CTA khi phù hợp.
+- Khi cần dữ liệu để xem UI, dùng dữ liệu development rõ nhãn hoặc hướng dẫn tạo dữ liệu qua chính UI; không dùng dữ liệu cá nhân giả trong production.
+- Task backend-only không được đứng riêng trong roadmap sản phẩm trừ khi có diagnostic UI an toàn; ưu tiên gộp backend vào feature vertical slice.
+- Một subtask CMS chỉ hoàn thành khi nội dung vừa chỉnh được trong Admin vừa xuất hiện đúng ở trang tiêu thụ hoặc preview tương ứng.
+
 ## Content-first và Admin/CMS
 
 Nội dung có khả năng thay đổi sau bàn giao không được hard-code.
@@ -177,4 +188,15 @@ Sau mỗi phiên cập nhật:
 - `CHANGELOG.md`;
 - file log chuyên biệt khi có quyết định, issue, limitation hoặc technical debt.
 
-Không đánh dấu `Completed` khi acceptance criteria chưa đạt.
+Không đánh dấu `Completed` khi acceptance criteria chưa đạt, route thành quả chưa mở được hoặc chưa có browser/manual verification.
+
+
+## CV-first public access
+
+- Public website là CV thật của owner, không phải landing page bị khóa.
+- Published profile, experience, skills, education, projects và posts phải xem được anonymous.
+- Không yêu cầu guest account hoặc public signup.
+- Owner login redirect vào `/app/dashboard` và truy cập toàn bộ workspace.
+- Owner/admin quản lý public content qua `/admin`.
+- Public output không được chứa private workspace data.
+- Khi task liên quan Auth/Public/CMS, browser verification phải gồm anonymous public, owner app và owner admin flows.

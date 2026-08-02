@@ -78,11 +78,14 @@ Không triển khai hai khái niệm giống nhau chỉ khác tên.
 - Không gọi đồng thời nhiều provider cho cùng một action commit.
 - Không tạo proposal mới nếu provider đầu đã trả output hợp lệ.
 
-## Public data
+## Public CV data
 
-- Không dùng dữ liệu cá nhân thật trên public routes.
-- Demo data phải được đánh dấu hoặc tách khỏi production user data.
-- Public portfolio không được truy cập database private nếu không cần.
+- Public routes được phép hiển thị dữ liệu cá nhân thật khi owner đã chủ động publish.
+- Khách không cần account để xem thông tin nghề nghiệp đã publish.
+- Draft, hidden, deleted và private workspace data không được public.
+- Public repository/query chỉ chọn cột cần thiết và không đọc private domain tables.
+- Demo data phải tách khỏi production content.
+- Public contact email có thể khác email dùng để đăng nhập.
 # Trạng thái nội dung và quyền truy cập
 
 - Public chỉ đọc nội dung `published`; draft/hidden chỉ admin có quyền mới đọc và sửa.

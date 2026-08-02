@@ -1,24 +1,29 @@
 # Next Steps
 
-## Task hiện tại
+## Active Epic
 
-`tasks/10-ROADMAPS.md`
+`tasks/epics/01-public-cv-cms/EPIC.md`
 
-## Subtask bắt buộc tiếp theo
+## Active Feature
 
-Task 10 — Roadmaps
+`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`
 
-## Lý do
+## Active Task
 
-Task 09 đã hoàn thành luồng Goal CRUD và archive mềm. Task 10 là task pending đầu tiên có dependency đã hoàn thành.
+`tasks/epics/01-public-cv-cms/features/01-admin-content-management/tasks/01-delivery.md`
 
-## Definition of Done cho phiên tiếp theo
+## Required next work
 
-- Người dùng có luồng Roadmap/Stage khả dụng theo acceptance criteria của Task 10.
-- Dữ liệu Roadmap được scope theo current user, có validation và thứ tự ổn định.
-- Browser desktop/mobile và các kiểm tra liên quan đạt.
-- Không bắt đầu Task 11 trong cùng phiên.
+Tiếp tục đúng một subtask đang chờ: 07C4 — Profile avatar media management.
 
-## Điều kiện bắt đầu
+Access-model alignment đã đạt ngày 2026-08-02: public CV không cần guest account, signup công khai đã khóa, owner login về `/app/dashboard`, và owner/admin có thể giữ `next=/admin` an toàn.
 
-Người dùng gửi yêu cầu mới để bắt đầu Task 10. Không tự bắt đầu sau khi push Task 09.
+## Session instruction
+
+Người dùng chỉ cần gửi:
+
+```text
+Đọc `agent/CONTINUE.md` và tiếp tục task hiện tại.
+```
+
+Agent thực hiện đúng một Task hoặc Subtask, commit, push `origin/dev`, báo cáo và dừng.

@@ -269,3 +269,76 @@ Supabase Auth → cookie session → server verification
 - Storage bắt đầu với bucket tối thiểu theo feature. Có thể tách `avatars`, `projects`, `posts`, `site-assets` khi task thực sự cần; không tạo tất cả ở bootstrap.
 - Public media chỉ dùng public bucket khi nội dung đã xuất bản. Draft/private dùng private bucket và signed URL hoặc server delivery. Delete phải xử lý cả record tham chiếu lẫn object theo thứ tự có rollback/cleanup.
 - Không bật Realtime mặc định. Chỉ thêm khi task riêng chứng minh polling/refetch không đủ và đã đánh giá quota.
+
+## 17. Delivery architecture: visible vertical slices
+
+Mỗi feature được triển khai theo luồng hoàn chỉnh:
+
+```text
+Route/page
+→ UI states
+→ action/API
+→ validation và authorization
+→ service/repository
+→ database/storage
+→ render lại kết quả
+```
+
+Không chia milestone theo từng tầng backend/frontend độc lập nếu điều đó khiến branch build được nhưng người dùng không có gì để xem. Các foundation kỹ thuật chỉ được xem là milestone khi chúng hỗ trợ ngay một trang diagnostic hoặc một feature route đang dùng được.
+
+Mỗi pull/commit kết thúc task phải ghi:
+
+- route đã thêm hoặc thay đổi;
+- persona có quyền truy cập;
+- dữ liệu cần chuẩn bị;
+- thao tác kiểm thử;
+- desktop/mobile viewport đã kiểm tra.
+
+
+## Public CV và owner workspace routing
+
+### Anonymous request
+
+```text
+GET public route
+→ no auth requirement
+→ public content service
+→ published-only repository
+→ Supabase PostgreSQL/RLS
+→ public DTO
+→ render CV
+```
+
+### Owner login
+
+```text
+POST login
+→ Supabase Auth
+→ cookie session
+→ validate safe next path
+→ /app/dashboard
+```
+
+### Protected request
+
+```text
+GET /app/*
+→ proxy refresh
+→ server requireOwner
+→ private service/repository
+→ owner-scoped data
+```
+
+### CMS request
+
+```text
+GET/POST /admin/*
+→ requireOwnerAdmin
+→ content validation
+→ CMS service/repository
+→ draft/publish workflow
+```
+
+Production không có public signup hoặc guest login. Nếu signup route cần cho bootstrap, phải bị tắt/ẩn trước production release.
+
+Public DTO không được chứa auth email, internal IDs không cần thiết, ownership metadata, draft fields hoặc private app data.

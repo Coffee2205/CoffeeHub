@@ -1,11 +1,33 @@
 # Sitemap — CoffeeHub
 
-## Website công khai
+## Nguyên tắc điều hướng
+
+```text
+Khách truy cập
+→ CV/portfolio công khai
+→ không cần account
+
+Chủ sở hữu đã đăng nhập
+→ /app/dashboard
+→ toàn bộ workspace cá nhân
+→ /admin để chỉnh nội dung CV
+```
+
+Không có guest-account flow.
+
+## Website CV/portfolio công khai
 
 ```text
 /
-├── /features
 ├── /about
+├── /projects
+│   └── /projects/[slug]
+├── /experience
+├── /skills
+├── /education
+├── /posts
+│   └── /posts/[slug]
+├── /contact
 ├── /privacy
 ├── /terms
 └── /login
@@ -13,54 +35,52 @@
 
 ### `/`
 
-- Hero.
-- Vấn đề CoffeeHub giải quyết.
-- Tính năng chính.
-- Demo Dashboard.
-- Goal và Roadmap.
-- Cross-device/PWA.
-- AI Assistant.
-- Tech stack.
-- CTA đăng nhập hoặc xem dự án.
+Trang CV tổng hợp:
 
-### `/features`
+- Hero: tên, headline, giới thiệu ngắn, avatar.
+- CTA liên hệ, tải/xem CV, GitHub, LinkedIn và website.
+- Kinh nghiệm nổi bật.
+- Kỹ năng.
+- Học vấn.
+- Dự án nổi bật.
+- Bài viết gần đây nếu có.
+- Footer và social links.
 
-- Dashboard.
-- Goals.
-- Roadmaps.
-- Tasks.
-- Calendar.
-- Notes.
-- Notifications.
-- AI Assistant.
+Chỉ hiển thị dữ liệu đã publish.
 
 ### `/about`
 
-- Mục tiêu dự án.
-- Câu chuyện xây dựng.
-- Công nghệ.
-- Vai trò người phát triển.
-- Liên kết repository hoặc portfolio nếu được phép.
+- Giới thiệu đầy đủ.
+- Định hướng nghề nghiệp.
+- Kinh nghiệm.
+- Học vấn.
+- Kỹ năng.
+- CV/resume link nếu đã publish.
 
-### `/privacy`
+### `/projects` và `/projects/[slug]`
 
-- Dữ liệu được lưu.
-- Dữ liệu gửi đến AI.
-- Quyền kiểm soát AI.
-- Cookies/session.
+- Danh sách dự án đã publish.
+- Case study, vai trò, công nghệ, trách nhiệm, GitHub và live URL.
+- Không yêu cầu đăng nhập để xem chi tiết.
 
-### `/terms`
+### `/experience`, `/skills`, `/education`
 
-- Điều khoản sử dụng demo.
-- Giới hạn trách nhiệm.
+Có thể là route độc lập hoặc section trên `/about`; sitemap cuối cùng phải nhất quán với UI thực tế.
+
+### `/posts`
+
+Nội dung công khai đã publish.
 
 ### `/login`
 
-- Form đăng nhập.
-- Thông báo lỗi.
-- Chuyển hướng về workspace sau khi đăng nhập.
+Chỉ dành cho chủ sở hữu:
 
-## Ứng dụng cá nhân
+- Email/password.
+- Không có guest login.
+- Không có public signup trong production.
+- Đăng nhập thành công chuyển đến `/app/dashboard`.
+
+## Workspace cá nhân của owner
 
 ```text
 /app
@@ -87,66 +107,67 @@
     └── /app/settings/data
 ```
 
-## Route protection
+Mọi route dưới `/app` yêu cầu session owner hợp lệ.
 
-- Mọi route dưới `/app` yêu cầu session hợp lệ.
-- Server phải kiểm tra quyền truy cập dữ liệu theo `userId`.
-- Không chỉ ẩn navigation ở client.
-- ID hợp lệ nhưng không thuộc user hiện tại phải trả về not found hoặc forbidden theo quy tắc đã chốt.
-
-## Navigation desktop
-
-```text
-Overview
-- Dashboard
-
-Workspace
-- Goals
-- Tasks
-- Calendar
-- Notes
-- Roadmaps
-
-Intelligence
-- AI Assistant
-
-Account
-- Profile
-- Settings
-```
-
-## Navigation mobile
-
-Bottom navigation ưu tiên:
-
-```text
-Home
-Goals
-Tasks
-Planner
-More
-```
-
-`More` mở các mục Notes, Roadmaps, AI Assistant, Profile và Settings.
-
-
-## Khu vực quản trị nội dung
-
-Các route yêu cầu đăng nhập và quyền quản trị:
+## Quản trị CV/CMS
 
 ```text
 /admin
-/admin/profile
-/admin/projects
-/admin/experiences
-/admin/skills
-/admin/education
-/admin/posts
-/admin/pages
-/admin/navigation
-/admin/media
-/admin/seo
-/admin/settings
+├── /admin/profile
+├── /admin/projects
+├── /admin/experiences
+├── /admin/skills
+├── /admin/education
+├── /admin/posts
+├── /admin/pages
+├── /admin/navigation
+├── /admin/media
+├── /admin/seo
+├── /admin/settings
+└── /admin/preview
 ```
 
-Có thể hợp nhất một số route nếu giao diện dùng tabs, nhưng chức năng phải đầy đủ.
+Owner/admin dùng các route này để chỉnh thông tin hiển thị công khai mà không sửa code hoặc database thủ công.
+
+## Access matrix
+
+| Trạng thái | Public CV | `/app/*` | `/admin/*` |
+|---|---:|---:|---:|
+| Anonymous | Có | Không | Không |
+| Owner đã đăng nhập | Có hoặc redirect về app | Có toàn bộ | Có |
+| Account test không phải owner/admin | Có | Chỉ khi policy cho phép test | Không |
+
+Production không cung cấp account khách.
+
+## Navigation
+
+### Public
+
+```text
+Home
+About
+Projects
+Experience
+Skills
+Posts
+Contact
+Owner Login
+```
+
+### Owner workspace
+
+```text
+Dashboard
+Profile
+Goals
+Roadmaps
+Tasks
+Calendar
+Notes
+AI Assistant
+Settings
+Manage CV
+Logout
+```
+
+Mobile dùng bottom navigation cho workspace; public CV dùng header/menu responsive.

@@ -3,7 +3,7 @@
 ## Nguyên tắc chung
 
 - Nội dung ngắn gọn, rõ ràng và tập trung vào hành động.
-- Không dùng dữ liệu cá nhân thật trong landing page, seed public hoặc screenshot công khai.
+- Chỉ hiển thị dữ liệu cá nhân mà chủ sở hữu đã chủ động đánh dấu `published`; không public dữ liệu workspace, secret, địa chỉ nhạy cảm hoặc dữ liệu chưa được chấp thuận.
 - Không tạo thành tích, số liệu sử dụng hoặc testimonial giả.
 - Không khẳng định tính năng đã hoạt động nếu mới là mockup.
 - Thuật ngữ phải thống nhất giữa UI, database và tài liệu.
@@ -30,27 +30,29 @@ AI Action
 
 Không dùng đồng thời nhiều tên cho cùng một khái niệm nếu chưa có lý do.
 
-## Landing page
+## Public CV/portfolio
 
-Cần chuẩn bị:
+Khách xem không cần account. Nội dung công khai cần chuẩn bị:
 
-- Headline.
-- Subheadline.
-- Mô tả ngắn sản phẩm.
-- Danh sách tính năng.
-- Nội dung section PWA.
-- Nội dung section AI.
-- Tech stack.
-- CTA.
+- Tên hiển thị.
+- Headline nghề nghiệp.
+- Bio ngắn và bio đầy đủ.
+- Avatar.
+- Email hoặc kênh liên hệ được phép public.
+- Địa điểm ở mức thành phố/quốc gia nếu muốn.
+- Kinh nghiệm.
+- Kỹ năng.
+- Học vấn.
+- Dự án và case study.
+- GitHub, LinkedIn, website và live demo.
+- CV/resume.
+- Bài viết nếu có.
+- CTA liên hệ.
 - Privacy note.
 
-Headline đề xuất:
+Headline và subheadline phải mô tả chính chủ sở hữu như một CV, không chỉ mô tả sản phẩm CoffeeHub. Nội dung cụ thể được chỉnh từ CMS.
 
-> Build your goals. Organize your work. Understand your progress.
-
-Subheadline đề xuất:
-
-> CoffeeHub is a personal productivity workspace for goals, tasks, plans, notes and intelligent assistance across your devices.
+CoffeeHub có thể xuất hiện như một dự án nổi bật trong portfolio, không phải toàn bộ danh tính của website public.
 
 ## Dashboard
 
@@ -147,3 +149,31 @@ Mọi nội dung thay đổi sau bàn giao phải sửa được trong giao di�
 - draft/published/hidden, thứ tự hiển thị, preview, publish/unpublish và soft delete.
 
 Media phải có alt text, fallback, MIME/kích thước và metadata tham chiếu. Binary nằm trong Supabase Storage; PostgreSQL chỉ lưu bucket/path/URL/metadata.
+
+
+## Ranh giới public/private
+
+### Có thể public khi owner publish
+
+- Tên và avatar.
+- Headline, bio và thông tin nghề nghiệp.
+- Email liên hệ công việc.
+- Thành phố/quốc gia ở mức owner chấp thuận.
+- Kinh nghiệm, kỹ năng, học vấn.
+- Dự án, GitHub, live demo.
+- Bài viết.
+- CV/resume.
+- Social links.
+
+### Không được public
+
+- Auth email nếu khác public contact email.
+- Password, token, secret hoặc connection string.
+- Goal cá nhân chưa publish.
+- Task, Note, Calendar, Checklist.
+- Notification preferences.
+- AI conversations, prompts, memories và usage.
+- Dữ liệu draft/hidden/deleted.
+- Địa chỉ chi tiết hoặc thông tin nhạy cảm không được owner chọn public.
+
+Public visibility phải được điều khiển bằng status/visibility rõ ràng, không dựa vào việc khách có account.

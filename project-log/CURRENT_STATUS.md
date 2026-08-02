@@ -1,49 +1,28 @@
 # Current Status
 
-## Task 09 Goals — 2026-08-02
+## Access-model alignment — 2026-08-02
 
-Completed Task 09: authenticated users can list, create, inspect, edit and soft-archive owned Goals through `/app/goals`. Goal status, priority, deadline and success criteria persist; progress is derived from related non-deleted/non-cancelled Tasks. Live create/refresh/update/archive passed at desktop and mobile viewports.
-
-## Task 08 Workspace Profile — 2026-08-02
-
-Completed Task 08: authenticated users can view `/app/profile`, save a private workspace name and timezone preference, inspect verified account/public visibility information, and follow explicit public/Admin CMS links. The additive development migration is applied; 34 tests, Prisma validation/generation, lint, typecheck, build and live save flow passed.
-
-## Task 07E Profile avatar media — 2026-08-01
-
-Completed subtask 07E and Task 07: Admin can upload, replace and delete a validated profile avatar through `/admin/profile`; published profiles render the private Storage object through signed URLs on `/` and `/about`, with alt text and safe fallbacks. Live upload/render/delete E2E passed at desktop and mobile viewports. Task 08 has not started.
-
-## Task 07D3 Admin preview and live E2E — 2026-07-29
-
-Completed subtask 07D3: `/admin/preview` safely displays non-deleted Draft, Published and Hidden CMS content only after server-side Admin verification. Live Supabase E2E passed for anonymous, regular user and Admin, including Admin publish through UI and immediate anonymous rendering on `/` and `/about`, at desktop and mobile viewports. Task 07 remains `In Progress`; only 07E profile avatar remains, and no Task 08 work has started.
-
-
-## Task 07D2 Public content routes — 2026-07-28
-
-Completed subtask 07D2: public About, Projects list/detail and Posts list/detail routes now read only published CMS content, share responsive navigation/footer, provide dynamic metadata and handle empty, unavailable and not-found states. Desktop/mobile browser checks and all route HTTP smoke tests passed using the missing-environment fallback. Task 07 remains `In Progress`; 07D3 Admin preview and live anonymous/user/admin E2E is next, before avatar work or Task 08.
-
-## Task 07D1 Public home — 2026-07-28
-
-Completed subtask 07D1: route `/` is now a complete responsive public CoffeeHub home backed by published CMS Site Settings, home sections, profile, projects, FAQ and links, with CMS metadata and resilient empty/error states. Browser verification passed at desktop and mobile sizes; the workspace had no Supabase runtime environment, so live-record E2E remains for 07D3. Task 07 remains `In Progress`; 07D2 public content routes are next, before avatar work or Task 08.
+Completed the required access-model alignment inside the active Admin and Content Management Task: anonymous visitors use the published public CV without accounts, public signup is removed from the application and disabled in Supabase Auth, owner redirects support `/app` and `/admin`, and successful logout returns to `/`. Validation passed with 41 tests, lint, typecheck, production build, and anonymous desktop/mobile browser checks. The Task remains In Progress; 07C4 is next.
 
 ## Task 07C3b Site settings CMS — 2026-07-27
 
-Completed subtask 07C3b: navigation/footer/social links, FAQ, site identity, privacy text and SEO metadata now have protected Admin management, validation, publishing controls and public-published/owner/admin RLS. Task 07 remains In Progress; profile avatar media is next in 07C4 and public rendering/preview remains 07D.
+Completed subtask 07C3b: navigation/footer/social links, FAQ, site identity, privacy text and SEO metadata now have protected Admin management, validation, publishing controls and public-published/owner/admin RLS. Feature Admin and Content Management remains In Progress (`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`); profile avatar media is next in 07C4 and public rendering/preview remains 07D.
 
 ## Task 07C3a Posts and Page Sections CMS — 2026-07-27
 
-Completed subtask 07C3a: Posts and page sections now have separate schemas and protected Admin CRUD with ordering, CTA and publishing controls. Task 07 remains In Progress; no 07C3b or 07D work was started.
+Completed subtask 07C3a: Posts and page sections now have separate schemas and protected Admin CRUD with ordering, CTA and publishing controls. Feature Admin and Content Management remains In Progress (`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`); no 07C3b or 07D work was started.
 
 ## Task 07C2 Resume content CMS — 2026-07-27
 
-Completed subtask 07C2: Experience, Skills and Education now have separate schemas and protected Admin CRUD with ordering and publishing controls. Task 07 remains In Progress; no 07C3 or 07D work was started.
+Completed subtask 07C2: Experience, Skills and Education now have separate schemas and protected Admin CRUD with ordering and publishing controls. Feature Admin and Content Management remains In Progress (`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`); no 07C3 or 07D work was started.
 
 ## Task 07C1 Profile/About CMS — 2026-07-27
 
-Completed subtask 07C1: Admin can edit Profile/About text and publishing state. The development database has additive profile status fields and public-published/owner/admin RLS. Task 07 remains In Progress; no Experience, Skills, Education or later content work was started.
+Completed subtask 07C1: Admin can edit Profile/About text and publishing state. The development database has additive profile status fields and public-published/owner/admin RLS. Feature Admin and Content Management remains In Progress (`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`); no Experience, Skills, Education or later content work was started.
 
 ## Task 07B Project media — 2026-07-27
 
-Completed: private project media Storage, metadata/reference schema, cover/gallery Admin upload, alt text, validation, RLS and cleanup are ready. Task 07 remains In Progress; no 07C work was started.
+Completed: private project media Storage, metadata/reference schema, cover/gallery Admin upload, alt text, validation, RLS and cleanup are ready. Feature Admin and Content Management remains In Progress (`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`); no 07C work was started.
 
 ## Task 00 maintenance — 2026-07-27
 
@@ -51,7 +30,7 @@ Completed: Prisma foundation is patched to 7.9.1, unused privileged-key configur
 
 ## Task 07A Admin Projects — 2026-07-27
 
-Completed subtask 07A: protected Admin foundation and Projects CRUD without media. Task 07 remains In Progress; no next subtask was started.
+Completed subtask 07A: protected Admin foundation and Projects CRUD without media. Feature Admin and Content Management remains In Progress (`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`); no next subtask was started.
 
 ## Task 06 Dashboard — 2026-07-27
 
@@ -83,7 +62,7 @@ Development
 
 ## Active task
 
-Task 09 is Completed; no task is currently executing.
+Feature Admin and Content Management remains In Progress (`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`) after completing the required access-model alignment; no subtask is currently executing.
 
 ## Repository state
 
@@ -103,17 +82,14 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 - Task 04 Database Foundation đã hoàn thành.
 - Task 05 Authentication đã hoàn thành.
 - Task 06 Dashboard đã hoàn thành.
-- Task 07 Admin and Content Management đã hoàn thành.
-- Task 08 Profile đã hoàn thành.
-- Task 09 Goals đã hoàn thành.
 
 ## In progress
 
-- Không có task đang thực hiện.
+- Feature Admin and Content Management (`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`); access-model alignment is complete and 07C4 is next.
 
 ## Blockers
 
-- Không có blocker đã biết cho Task 09. Dependency advisories cần tiếp tục theo dõi.
+- Không có blocker đã biết cho Task 07. Dependency advisories cần tiếp tục theo dõi.
 
 ## Validation status
 
@@ -134,3 +110,15 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 - Database Task 04: Prisma validate/generate, lint, typecheck, build, Supabase advisors và RLS role tests đạt; migration additive đã áp dụng, dữ liệu test đã rollback.
 - Authentication Task 05: 3 unit tests, Prisma validate/generate, lint, typecheck, build, HTTP anonymous redirect và Auth mapping transaction đạt.
 - Dashboard Task 06: 6 unit tests, lint, typecheck, build, Supabase transaction query và React quality review đạt.
+
+
+## Epic migration
+
+Roadmap đã chuyển sang Epic → Feature → Task → Subtask.
+
+Active hierarchy:
+
+- Epic: Public CV and Content Management
+- Feature: `tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`
+- Task: `tasks/epics/01-public-cv-cms/features/01-admin-content-management/tasks/01-delivery.md`
+- Next subtask: 07C4 — Profile avatar media management.

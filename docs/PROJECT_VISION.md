@@ -31,17 +31,20 @@ Thông điệp sản phẩm:
 
 CoffeeHub gồm hai khu vực:
 
-### Website công khai
+### Website CV/portfolio công khai
 
-- Giới thiệu sản phẩm.
-- Trình bày tính năng và công nghệ.
-- Dùng làm portfolio cá nhân.
-- Không hiển thị dữ liệu riêng tư thật.
+- Là CV online chính thức của chủ sở hữu.
+- Hiển thị thông tin cá nhân được chủ sở hữu chủ động publish.
+- Hiển thị giới thiệu, kinh nghiệm, kỹ năng, học vấn, dự án, bài viết và liên kết liên hệ.
+- Khách xem không cần đăng nhập hoặc sử dụng account khách.
+- Không hiển thị dữ liệu workspace riêng tư như Goal, Task, Note, Calendar hoặc AI history.
 
-### Ứng dụng cá nhân
+### Workspace cá nhân của chủ sở hữu
 
-- Chỉ truy cập sau khi đăng nhập.
-- Chứa Dashboard, Profile, Goals, Roadmaps, Tasks, Calendar, Notes, Checklists, Notifications, Settings và AI Assistant.
+- Chỉ truy cập sau khi owner đăng nhập.
+- Đăng nhập thành công tự động vào `/app/dashboard`.
+- Owner truy cập toàn bộ Dashboard, Profile, Goals, Roadmaps, Tasks, Calendar, Notes, Checklists, Notifications, Settings và AI Assistant.
+- Owner có thêm khu vực Admin/CMS để quản lý nội dung CV công khai.
 - Dữ liệu được đồng bộ qua backend chung.
 
 ## Nhóm người dùng
@@ -55,14 +58,16 @@ Giai đoạn đầu, CoffeeHub được tối ưu cho một người dùng cá n
 - Quản lý nhiều mục tiêu song song.
 - Muốn AI hỗ trợ nhưng không muốn phụ thuộc vào một nhà cung cấp duy nhất.
 
-### Người xem portfolio
+### Người xem CV/portfolio
 
-Cần thấy:
+Cần thấy mà không đăng nhập:
 
-- Mục tiêu sản phẩm rõ ràng.
+- Tên, headline, giới thiệu và thông tin liên hệ được publish.
+- Kinh nghiệm, kỹ năng và học vấn.
+- Dự án và case study.
+- Bài viết hoặc nội dung chuyên môn nếu có.
 - Giao diện hoàn chỉnh và chuyên nghiệp.
-- Năng lực fullstack, PWA, database và AI integration.
-- Không được truy cập dữ liệu cá nhân trong ứng dụng.
+- Không được truy cập dữ liệu workspace riêng tư.
 
 ## Nguyên tắc dài hạn
 

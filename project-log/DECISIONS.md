@@ -31,3 +31,30 @@ Thông tin và danh sách nội dung thường xuyên thay đổi phải chỉnh
 ## D-008 — Design foundation typography
 
 CoffeeHub dùng Geist Sans cho giao diện và Geist Mono cho dữ liệu kỹ thuật. Font được self-host qua package `geist`; UI primitives nền tảng dùng React và Tailwind/CSS thuần, chưa phụ thuộc component library lớn.
+
+## D-009 — Visible vertical slices
+
+Mỗi task feature phải kết thúc bằng một route có thể mở và một luồng có thể sử dụng. Backend/schema/test không đủ để đánh dấu hoàn thành nếu UI chưa tiêu thụ kết quả. CMS chỉ hoàn tất khi nội dung đã publish xuất hiện trên public page hoặc preview tương ứng.
+
+## D-010 — Public site early
+
+Public website cơ bản phải được hoàn thiện trong Task 07 cùng CMS. Task 17 chỉ polish, SEO, storytelling và performance; không trì hoãn lần đầu nhìn thấy website đến Task 17.
+
+
+## CV-first public access
+
+- Website public là CV/portfolio chính thức của chủ sở hữu.
+- Khách anonymous xem toàn bộ thông tin nghề nghiệp đã `published` mà không cần account.
+- Production không có guest login hoặc public signup.
+- Owner đăng nhập được chuyển đến `/app/dashboard` và truy cập toàn bộ workspace.
+- Owner/admin quản lý CV qua `/admin`.
+- Login không phải cơ chế mở khóa thêm thông tin CV; publish status quyết định dữ liệu công khai.
+
+
+## Epic-based planning
+
+Roadmap dùng Epic → Feature → Task → Subtask. Feature mới được thêm vào Epic phù hợp; task mới được thêm trong Feature mà không đánh lại số toàn dự án.
+
+## Permanent continue prompt
+
+Các phiên sau dùng `agent/CONTINUE.md`. Người dùng không cần viết lại mục tiêu phiên; agent đọc trạng thái và task hiện tại.

@@ -1,45 +1,14 @@
 # Changelog
 
-## 2026-08-02 — Task 09 Goals
+## 2026-08-02 — Access-model alignment
 
-- Added protected Goal list, create and detail/edit routes with status, priority, deadline and success criteria.
-- Added owner-scoped server actions/repository queries, Task-derived progress, useful empty/loading/success/error states and confirmed soft archive without cascade deletion.
-- Validation: 37 tests, Prisma generate, lint, typecheck and production build pass.
-- Browser E2E: create → detail → refresh persistence → update → archive passed at 1440×1000 and 390×844 without overflow or error overlays.
+- Summary: Removed public signup, constrained owner redirects to `/app` and `/admin`, returned logout to the public CV, and disabled signup in Supabase Auth.
+- Files: Login action/form/page, auth redirect helper/tests, ESLint generated-output ignore, active Task and project-log.
+- Database impact: No schema or data change; Supabase Auth configuration now has `disable_signup: true`.
+- Validation: 41 tests, lint, typecheck, Prisma generate + Next.js production build, anonymous desktop/mobile browser rendering, and protected-route redirects passed.
+- Known issues: Authenticated browser input through the temporary CLI timed out and is not claimed as a pass; 07C4 and 07D remain.
 
-## 2026-08-02 — Task 08 Workspace Profile
-
-- Added protected `/app/profile` with editable workspace name/timezone, verified account details, public visibility summary and public/Admin navigation.
-- Added owner-scoped server persistence, validation tests and an additive `profiles.workspace_name`/`profiles.timezone` migration applied to development.
-- Validation: 34 tests, Prisma validate/generate, lint, typecheck and production build pass; live Admin save returned `?saved=1` with confirmation.
-- Known issue: Dashboard continues to calculate date boundaries in UTC until a later task consumes the stored timezone preference.
-
-## 2026-08-01 — Task 07E Profile avatar media
-
-- Added protected avatar upload, replacement and confirmed deletion on `/admin/profile`, backed by a private Supabase Storage bucket and complete profile media metadata.
-- Added controlled owner paths, MIME/5 MB validation, public-published/owner/Admin Storage RLS, signed URL delivery, orphan cleanup and safe fallback states.
-- Rendered published avatars with alt text on `/` and `/about`; live Admin upload → anonymous render → Admin delete passed at 1440×1000 and 390×844 with no overflow or error overlay.
-- Validation: 32 tests, Prisma validate/generate, lint, typecheck and production build pass. Task 07 is complete; Task 08 was not started.
-
-## 2026-07-29 — Task 07D3 Admin preview and live E2E
-
-- Added the protected `/admin/preview` route with Draft/Published/Hidden status labels, editor links and safe empty/error states.
-- Verified a real Admin UI publish appears immediately on anonymous `/` and `/about`; public repositories remain published-only.
-- Verified anonymous redirects to login, regular user redirects to unauthorized, and Admin preview access at 1440×1000 and 390×844 without overflow or error overlays.
-- Added secret-free development account guidance and confirmed 31 tests, lint, typecheck and production build pass.
-
-## 2026-07-28 — Task 07D2 Public content routes
-
-- Added responsive public About, Projects list/detail and Posts list/detail routes with shared navigation/footer and metadata.
-- Extended the public repository with published-only Profile, Experience, Skill, Education, Project and Post queries; hidden, draft and soft-deleted content is excluded.
-- Added useful empty/unavailable states and a public 404 page; desktop/mobile browser checks and HTTP smoke tests passed without overflow or error overlays.
-- Live published-record verification remains for 07D3 because this workspace has no Supabase runtime environment or development account.
-
-## 2026-07-28 — Task 07D1 Public home rendering
-
-- Replaced the `/` design preview with a responsive public CoffeeHub website driven by published CMS data.
-- Added published-only queries for Site Settings, home sections, profile, projects, FAQ and navigation/footer/social links, plus CMS metadata and safe empty/error states.
-- Verified the anonymous fallback at 1440×1000 and 390×844 with no error overlay or horizontal overflow; live CMS records require the missing local Supabase runtime environment.
+---
 
 ## 2026-07-27 — Task 07C3b Site settings CMS
 

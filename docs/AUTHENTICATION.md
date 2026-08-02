@@ -1,40 +1,163 @@
-# Authentication foundation
+# Authentication và access model
 
-## Luồng chuẩn
+## Mô hình sử dụng
+
+CoffeeHub là website CV/portfolio công khai kết hợp với một workspace cá nhân dành cho chủ sở hữu.
+
+Có hai trạng thái sử dụng chính:
+
+```text
+Anonymous visitor
+→ xem CV/portfolio công khai
+→ không cần account
+→ không đăng nhập bằng account khách
+
+Owner
+→ đăng nhập bằng tài khoản chủ sở hữu
+→ tự động vào /app/dashboard
+→ truy cập toàn bộ workspace và khu vực quản trị nội dung
+```
+
+Giai đoạn hiện tại không cung cấp public registration cho khách truy cập. Không tạo guest account để mở khóa thêm thông tin CV.
+
+## Route groups
+
+### Public CV routes
+
+Không yêu cầu đăng nhập:
+
+```text
+/
+/about
+/projects
+/projects/[slug]
+/experience
+/skills
+/education
+/posts
+/posts/[slug]
+/contact
+/privacy
+/terms
+/login
+```
+
+Các route này chỉ đọc nội dung đã `published` và không bị xóa mềm.
+
+### Owner workspace routes
+
+Yêu cầu session chủ sở hữu hợp lệ:
+
+```text
+/app/*
+```
+
+Sau khi đăng nhập, owner được sử dụng toàn bộ chức năng workspace:
+
+- Dashboard.
+- Profile riêng tư.
+- Goals.
+- Roadmaps.
+- Tasks.
+- Calendar.
+- Notes.
+- Checklists.
+- Notifications.
+- AI Assistant.
+- Settings.
+
+### Owner content-management routes
+
+Yêu cầu session owner và quyền `admin`/`owner` đáng tin cậy:
+
+```text
+/admin/*
+```
+
+Các route này quản lý nội dung CV công khai, media, SEO và site settings.
+
+## Luồng đăng nhập
+
+```text
+/login
+→ Supabase Auth email/password
+→ HttpOnly cookie session qua @supabase/ssr
+→ server xác minh claims
+→ chuyển đến next hợp lệ hoặc /app/dashboard
+```
+
+Quy tắc redirect:
+
+- Anonymous mở `/` → hiển thị CV công khai.
+- Anonymous mở `/app/*` → `/login?next=<safe-app-path>`.
+- Anonymous mở `/admin/*` → `/login?next=<safe-admin-path>`.
+- Owner đăng nhập thành công → `next` hợp lệ hoặc `/app/dashboard`.
+- Owner mở `/login` → `/app/dashboard`.
+- Owner mở `/` → có thể chuyển thẳng `/app/dashboard`; public CV vẫn xem được qua `/admin/preview` hoặc cửa sổ anonymous.
+- Logout → `/`.
+
+Không tạo redirect loop giữa `/`, `/login`, `/app/dashboard` và `/admin`.
+
+## Supabase implementation
 
 ```text
 email/password
 → Supabase Auth
 → HttpOnly cookie session managed by @supabase/ssr
-→ src/proxy.ts refreshes and forwards cookies
+→ src/proxy.ts refreshes/forwards cookies
 → Server Component/Action verifies getClaims()
-→ ownership or app_metadata.role authorization
+→ ownership hoặc app_metadata.role authorization
 ```
 
-Proxy chỉ làm refresh và redirect sớm. `/app` gọi lại `requireUser()` trong server layout; `/admin` gọi `requireAdmin()`. Mutation phải tiếp tục gọi guard phù hợp, không tin `userId` hay role do client gửi.
+Proxy chỉ refresh session và redirect sớm. `/app` gọi lại `requireUser()` hoặc `requireOwner()` trong server layout; `/admin` gọi `requireAdmin()`/`requireOwnerAdmin()`. Mutation vẫn phải gọi guard phù hợp, không tin `userId` hoặc role từ client.
 
-Role quản trị chỉ lấy từ `app_metadata.role`. `user_metadata` có thể dùng cho dữ liệu hồ sơ không nhạy cảm nhưng không được dùng để phân quyền.
+Role tin cậy lấy từ `app_metadata.role`. `user_metadata` không dùng để phân quyền.
 
-## Supabase configuration
+## Tài khoản
 
-- Dùng `NEXT_PUBLIC_SUPABASE_URL` và `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`; publishable key được phép ở browser, secret/service-role key thì không.
-- Đặt Site URL theo `NEXT_PUBLIC_APP_URL` của từng môi trường.
-- Allow redirect URL `/auth/confirm` cho development, preview và production trước khi kiểm thử email confirmation ở môi trường đó.
-- Free Plan mới dùng email template mặc định; Task 05 không bật custom SMTP, add-on hoặc billing.
+### Production
 
-`private.handle_new_auth_user()` là trigger function `SECURITY DEFINER` bắt buộc để đồng bộ từ schema `auth`; function nằm ngoài exposed schema, có `search_path` rỗng và bị revoke khỏi `PUBLIC`, `anon`, `authenticated`. Trigger tạo idempotently một `public.users` và một `public.profiles` cho mỗi Auth user mới.
+- Chỉ cần một tài khoản owner/admin do chủ sở hữu quản lý.
+- Không public trang đăng ký.
+- Không tạo tài khoản khách.
+- Khách xem toàn bộ thông tin CV đã publish mà không đăng nhập.
+
+### Development/test
+
+Có thể dùng account thường tạm thời để test authorization denial, nhưng account này không phải một phần UX production và không mở khóa thông tin portfolio.
+
+## Auth-to-profile mapping
+
+`private.handle_new_auth_user()` đồng bộ Auth user sang `public.users` và `public.profiles`.
+
+Function phải:
+
+- là `SECURITY DEFINER`;
+- nằm ngoài exposed schema;
+- có `search_path` an toàn;
+- revoke khỏi `PUBLIC`, `anon`, `authenticated`;
+- tạo mapping idempotently.
+
+Nếu production chỉ có một owner, việc tạo thêm user mới phải bị hạn chế bởi cấu hình hoặc quy trình quản trị.
 
 ## Trạng thái lỗi và session
 
-- Credential sai trả lỗi chung, không tiết lộ email có tồn tại hay không.
-- Session thiếu, hết hạn hoặc không xác minh được chuyển về `/login` và giữ đường dẫn `/app` dự định.
-- Proxy gọi `getClaims()` ngay sau khi tạo server client để refresh token/cookie khi cần.
-- Logout chờ `signOut()` rồi chuyển về login; private cache dành cho feature sau phải được xóa cùng logout.
-- Confirmation token/code lỗi chuyển về trạng thái `confirmation-failed`.
+- Credential sai trả lỗi chung.
+- Session thiếu/hết hạn ở protected route → `/login`.
+- Logout chờ `signOut()` và xóa private cache phù hợp.
+- Owner không có role quản trị nhưng mở `/admin/*` → `/unauthorized` hoặc `/app/dashboard`.
+- Không hiển thị raw auth/database error.
 
-## Kiểm thử
+## Acceptance criteria
 
-- Unit test xác minh anonymous claim, user thường, admin và việc không tin `user_metadata`.
-- HTTP smoke-test xác minh `/login` render, `/app/*` anonymous trả redirect 307 có `next`, `/unauthorized` render.
-- Migration mapping được kiểm thử bằng Auth user tạm trong transaction và rollback; không để lại account hoặc dữ liệu test.
-- Kiểm thử đăng nhập/refresh/logout end-to-end với account thật cần redirect URL và email nhận confirmation của môi trường triển khai; không tạo credential ngoài phạm vi Task 05.
+- Anonymous xem được CV, dự án, kinh nghiệm, kỹ năng và học vấn đã publish.
+- Anonymous không cần và không được yêu cầu account khách.
+- Anonymous không truy cập được `/app/*` hoặc `/admin/*`.
+- Owner đăng nhập và được chuyển vào `/app/dashboard`.
+- Owner truy cập toàn bộ app routes.
+- Owner/admin quản lý được nội dung public qua `/admin`.
+- `/login` không hiển thị registration CTA trong production.
+- Refresh protected route giữ session hợp lệ.
+- Logout về `/`.
+- Không có redirect loop.
+- Server Action/API kiểm tra auth/authz độc lập với middleware.
