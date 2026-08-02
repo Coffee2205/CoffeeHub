@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint .",
     "test": "tsx --test tests/**/*.test.ts",
@@ -40,6 +40,6 @@
     "typescript": "^6.0.3"
   },
   "engines": {
-    "node": ">=20.19.0 <21"
+    "node": "24.x"
   }
 }
