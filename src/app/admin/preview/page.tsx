@@ -54,8 +54,21 @@ export default async function AdminPreviewPage() {
 }
 
 function PreviewContent({ data }: { data: AdminPreviewData }) {
-  const total = data.settings.length + data.profiles.length + data.sections.length + data.projects.length + data.posts.length + data.faqs.length + data.links.length;
-  const draftCount = [...data.settings, ...data.profiles, ...data.sections, ...data.projects, ...data.posts, ...data.faqs, ...data.links].filter((item) => item.status === "DRAFT").length;
+  const allItems = [
+    ...data.settings,
+    ...data.profiles,
+    ...data.experiences,
+    ...data.skills,
+    ...data.education,
+    ...data.sections,
+    ...data.projects,
+    ...data.posts,
+    ...data.faqs,
+    ...data.links,
+  ];
+  const total = allItems.length;
+  const draftCount = allItems.filter((item) => item.status === "DRAFT").length;
+  const hiddenCount = allItems.filter((item) => item.status === "HIDDEN").length;
 
   if (total === 0) {
     return (
@@ -72,12 +85,15 @@ function PreviewContent({ data }: { data: AdminPreviewData }) {
       <section className="mt-8 grid gap-4 sm:grid-cols-3">
         <Metric label="Tổng nội dung" value={total} />
         <Metric label="Draft đang xem trước" value={draftCount} />
-        <Metric label="Published" value={total - draftCount - [...data.settings, ...data.profiles, ...data.sections, ...data.projects, ...data.posts, ...data.faqs, ...data.links].filter((item) => item.status === "HIDDEN").length} />
+        <Metric label="Published" value={total - draftCount - hiddenCount} />
       </section>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         <PreviewGroup title="Cài đặt website" editHref="/admin/settings" items={data.settings.map((item) => ({ id: item.id, title: item.siteName ?? "CoffeeHub", detail: item.tagline ?? item.seoDescription, status: item.status }))} />
         <PreviewGroup title="Hồ sơ" editHref="/admin/profile" items={data.profiles.map((item) => ({ id: item.id, title: item.displayName || "Hồ sơ chưa đặt tên", detail: item.headline ?? item.bio, status: item.status }))} />
+        <PreviewGroup title="Kinh nghiệm" editHref="/admin/resume" items={data.experiences.map((item) => ({ id: item.id, title: item.role, detail: `${item.organization} · thứ tự ${item.displayOrder}`, status: item.status }))} />
+        <PreviewGroup title="Kỹ năng" editHref="/admin/resume" items={data.skills.map((item) => ({ id: item.id, title: item.name, detail: `${item.category} · ${item.proficiency}`, status: item.status }))} />
+        <PreviewGroup title="Học vấn" editHref="/admin/resume" items={data.education.map((item) => ({ id: item.id, title: item.degree, detail: `${item.institution}${item.fieldOfStudy ? ` · ${item.fieldOfStudy}` : ""}`, status: item.status }))} />
         <PreviewGroup title="Sections" editHref="/admin/site-content" items={data.sections.map((item) => ({ id: item.id, title: item.heading, detail: `${item.pageKey} · thứ tự ${item.displayOrder}`, status: item.status }))} />
         <PreviewGroup title="Dự án" editHref="/admin/projects" items={data.projects.map((item) => ({ id: item.id, title: item.title, detail: item.summary, status: item.status }))} />
         <PreviewGroup title="Bài viết" editHref="/admin/site-content" items={data.posts.map((item) => ({ id: item.id, title: item.title, detail: item.excerpt ?? item.slug, status: item.status }))} />

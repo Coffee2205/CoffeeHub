@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-08-02 — Task 07D final public/preview/access delivery
+
+- Summary: Added Experience, Skill and Education to Admin Preview and completed final public, owner and Admin access verification.
+- Files: Admin preview repository/page, active Epic/Feature/Task and project-log.
+- Database impact: None; read-only queries use existing content models.
+- Validation: 41 tests, lint, typecheck, Prisma generate + Next.js production build; anonymous public desktop/mobile, protected Admin redirect, owner dashboard and Admin Preview desktop/mobile passed without overflow or browser errors.
+- Known issues: Supabase leaked-password protection remains tracked separately in I-003; deeper public CV polish belongs to Feature 02.
+
+---
+
 ## 2026-08-02 — Task 07C4 avatar media reconciliation
 
 - Summary: Reconciled the existing avatar media implementation from `2d831cb` with the active Epic Task and verified its current code and live Supabase state.

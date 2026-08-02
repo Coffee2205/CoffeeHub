@@ -6,7 +6,7 @@ Xây dựng CV/portfolio công khai và giao diện Admin/CMS để owner quản
 
 ## Features
 
-1. [Admin and Content Management](features/01-admin-content-management/FEATURE.md) — `In Progress`
+1. [Admin and Content Management](features/01-admin-content-management/FEATURE.md) — `Completed`
 2. [Public CV Experience and Polish](features/02-public-cv-experience/FEATURE.md) — `Pending`
 
 ## Completion criteria

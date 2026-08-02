@@ -9,7 +9,7 @@
 
 ## Trạng thái
 
-In Progress
+Completed
 
 ## Subtask progress
 
@@ -21,7 +21,7 @@ In Progress
 - [x] 07C3b — Navigation, Footer, Social, FAQ, SEO and Site Settings CMS.
 - [x] Access-model alignment — public CV without guest accounts; owner-only login for `/app` and `/admin`.
 - [x] 07C4 — Profile avatar media management.
-- [ ] 07D — Public rendering, preview and final access verification.
+- [x] 07D — Public rendering, preview and final access verification.
 
 07A result (2026-07-27): added Prisma schema and additive migrations, optimized RLS, runtime validation, repository, Server Actions, protected Admin UI, list/create/edit, ordering, status and confirmed soft delete. Prisma validate/generate, 8 tests, lint, typecheck, build and Supabase advisors passed. Task remains In Progress because media, preview, remaining entities and public rendering are pending.
 
@@ -38,6 +38,8 @@ In Progress
 Access-model alignment result (2026-08-02): removed public signup from the server action and login UI, restricted post-login redirects to exact `/app` and `/admin` route trees, redirected successful logout to the public CV, and disabled new-user signup in Supabase Auth. Anonymous public rendering and protected-route redirects passed desktop/mobile browser checks; 41 tests, lint, typecheck and production build pass. Task remains In Progress; 07C4 is next.
 
 07C4 reconciliation result (2026-08-02): verified the existing implementation from commit `2d831cb` rather than duplicating it. Admin Profile supports validated JPEG/PNG/WebP upload, replacement through unique object paths, alt text, confirmation before delete, cleanup/rollback, and rendering on Home/About. The live private `profile-avatars` bucket has a 5 MB limit and SELECT/INSERT/UPDATE/DELETE policies; profile avatar columns are present. 41 tests, lint, typecheck and production build pass. Browser automation timed out in the CLI orchestration layer and is not claimed as a fresh pass; no test profile metadata or Storage object remained. Task stays In Progress for 07D.
+
+07D result (2026-08-02): completed final public/preview/access verification and closed a preview coverage gap by adding Experience, Skill and Education to the Admin-only preview repository, status metrics and UI groups. Anonymous Home desktop and About mobile render published CMS data without overflow or error; anonymous Admin access redirects to login; an authenticated admin reaches `/app/dashboard` and `/admin/preview`, where all resume groups render on desktop and mobile without overflow or console errors. 41 tests, lint, typecheck and production build pass. Task and Feature are Completed.
 
 ## Mục tiêu
 
@@ -59,51 +61,51 @@ Xây dựng giao diện Admin/CMS để người dùng tự cập nhật thông 
 
 ## Subtasks
 
-- [ ] CRUD từ Admin UI cho profile/about/avatar; project (title, slug, summary, description, role, tech stack, GitHub/live URL, status, dates, cover/gallery); experience, skills, education; posts; banner/sections/menu/footer/social/FAQ/SEO/site settings.
-- [ ] Có draft/published/hidden, ordering, preview, publish/unpublish, soft delete và xác nhận xóa.
-- [ ] Mỗi entity có Prisma schema/migration, runtime validation, service, repository, Auth/AuthZ, UI states và test access.
-- [ ] Upload qua Supabase Storage với MIME/size/name/path/overwrite validation, alt, fallback và orphan cleanup; database chỉ lưu bucket/path/URL/metadata.
-- [ ] Private object chỉ qua server hoặc signed URL; service role key không xuống client.
-- [ ] RLS phân biệt public-published, admin draft, owner-private và admin.
+- [x] CRUD từ Admin UI cho profile/about/avatar; project (title, slug, summary, description, role, tech stack, GitHub/live URL, status, dates, cover/gallery); experience, skills, education; posts; banner/sections/menu/footer/social/FAQ/SEO/site settings.
+- [x] Có draft/published/hidden, ordering, preview, publish/unpublish, soft delete và xác nhận xóa.
+- [x] Mỗi entity có Prisma schema/migration, runtime validation, service, repository, Auth/AuthZ, UI states và test access.
+- [x] Upload qua Supabase Storage với MIME/size/name/path/overwrite validation, alt, fallback và orphan cleanup; database chỉ lưu bucket/path/URL/metadata.
+- [x] Private object chỉ qua server hoặc signed URL; service role key không xuống client.
+- [x] RLS phân biệt public-published, admin draft, owner-private và admin.
 
 ### Nền tảng Admin
 
-- [ ] Tạo layout và navigation `/admin`.
-- [ ] Bảo vệ toàn bộ admin routes bằng authentication và authorization.
-- [ ] Tạo dashboard quản trị với shortcut và trạng thái nội dung.
-- [ ] Có loading, empty, error và permission-denied state.
+- [x] Tạo layout và navigation `/admin`.
+- [x] Bảo vệ toàn bộ admin routes bằng authentication và authorization.
+- [x] Tạo dashboard quản trị với shortcut và trạng thái nội dung.
+- [x] Có loading, empty, error và permission-denied state.
 
 ### Content model
 
-- [ ] Profile.
-- [ ] Projects.
-- [ ] Experiences.
-- [ ] Skills.
-- [ ] Education.
-- [ ] Posts.
-- [ ] Pages/sections.
-- [ ] Navigation và footer links.
-- [ ] FAQ.
-- [ ] Site settings.
-- [ ] SEO metadata.
-- [ ] Media assets hoặc media references.
+- [x] Profile.
+- [x] Projects.
+- [x] Experiences.
+- [x] Skills.
+- [x] Education.
+- [x] Posts.
+- [x] Pages/sections.
+- [x] Navigation và footer links.
+- [x] FAQ.
+- [x] Site settings.
+- [x] SEO metadata.
+- [x] Media assets hoặc media references.
 
 ### CRUD và biên tập
 
-- [ ] Tạo mới, xem, sửa và xóa mềm/ẩn khi phù hợp.
-- [ ] Draft, published, hidden.
-- [ ] Sắp xếp `displayOrder`.
-- [ ] Upload hoặc chọn ảnh.
-- [ ] Preview trước khi publish khi phù hợp.
-- [ ] Inline validation và thông báo lưu thành công/thất bại.
-- [ ] Xác nhận trước hành động phá hủy.
+- [x] Tạo mới, xem, sửa và xóa mềm/ẩn khi phù hợp.
+- [x] Draft, published, hidden.
+- [x] Sắp xếp `displayOrder`.
+- [x] Upload hoặc chọn ảnh.
+- [x] Preview trước khi publish khi phù hợp.
+- [x] Inline validation và thông báo lưu thành công/thất bại.
+- [x] Xác nhận trước hành động phá hủy.
 
 ### Kết nối hiển thị
 
-- [ ] Website công khai đọc nội dung từ database.
-- [ ] App đọc site settings cần thiết từ database.
-- [ ] Có fallback an toàn khi chưa có nội dung.
-- [ ] Không giữ bản sao hard-code có thể gây lệch dữ liệu.
+- [x] Website công khai đọc nội dung từ database.
+- [x] App đọc site settings cần thiết từ database.
+- [x] Có fallback an toàn khi chưa có nội dung.
+- [x] Không giữ bản sao hard-code có thể gây lệch dữ liệu.
 
 ## Không thực hiện
 
@@ -168,7 +170,7 @@ Các entity phải có trường ownership hoặc quyền quản trị phù hợ
 
 ### Vấn đề còn lại
 
-- 07D public rendering, preview and final access verification remains.
+- Không còn hạng mục nào trong Task 01; polish sâu hơn thuộc Feature 02.
 
 ### Kiểm tra
 
@@ -176,6 +178,6 @@ Các entity phải có trường ownership hoặc quyền quản trị phù hợ
 - Typecheck: Đạt (`npm run typecheck`).
 - Test: Đạt (41/41).
 - Build: Đạt (`npm run build`, Prisma generate + Next.js Turbopack).
-- Manual test: Access-model browser checks remain passed; fresh 07C4 authenticated browser automation timed out in the CLI layer and is not counted as a pass. Live database cleanup was verified.
+- Manual test: Đạt anonymous public desktop/mobile, anonymous Admin denial, owner dashboard và Admin preview desktop/mobile; không overflow, overlay hoặc browser error.
 - Commit: Chưa tạo.
 - Push `origin/dev`: Chưa thực hiện.

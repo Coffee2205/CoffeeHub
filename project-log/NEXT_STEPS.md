@@ -4,19 +4,19 @@
 
 `tasks/epics/01-public-cv-cms/EPIC.md`
 
-## Active Feature
+## Next Feature
 
-`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`
+`tasks/epics/01-public-cv-cms/features/02-public-cv-experience/FEATURE.md`
 
-## Active Task
+## Next Task
 
-`tasks/epics/01-public-cv-cms/features/01-admin-content-management/tasks/01-delivery.md`
+`tasks/epics/01-public-cv-cms/features/02-public-cv-experience/tasks/01-delivery.md`
 
 ## Required next work
 
-Tiếp tục đúng một subtask đang chờ: 07D — Public rendering, preview and final access verification.
+Chọn Task đầu tiên sẵn sàng trong Feature Public CV Experience and Polish sau khi đọc đầy đủ acceptance criteria và dependency.
 
-07C4 đã được đối chiếu với code, commit gốc và Supabase live ngày 2026-08-02. Không triển khai lại avatar media trong phiên sau.
+Admin and Content Management đã Completed ngày 2026-08-02. Không triển khai lại Task 07 trong phiên sau.
 
 ## Session instruction
 

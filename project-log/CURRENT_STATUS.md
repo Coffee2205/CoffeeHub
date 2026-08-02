@@ -1,5 +1,9 @@
 # Current Status
 
+## Task 07D Public rendering, preview and access verification — 2026-08-02
+
+Completed the final Admin and Content Management delivery. Admin Preview now includes Experience, Skill and Education in its query, status metrics and visible groups. Anonymous Home/About desktop/mobile, anonymous Admin denial, authenticated owner dashboard, and authenticated Admin Preview desktop/mobile all passed without overflow, error overlay or browser errors. Tests 41/41, lint, typecheck and production build pass. Feature Admin and Content Management is Completed; Public CV Experience and Polish is next.
+
 ## Task 07C4 Profile avatar media reconciliation — 2026-08-02
 
 Verified and reconciled the existing 07C4 implementation from commit `2d831cb`: protected Admin avatar upload/replace/delete, unique controlled object paths, alt text, public Home/About rendering, private Storage and live RLS are present. The live bucket/columns/policies match the migration; 41 tests, lint, typecheck and production build pass. Fresh browser orchestration timed out and is not claimed as a pass, while post-run database checks confirmed zero E2E avatar metadata and zero bucket objects. Feature Admin and Content Management remains In Progress; 07D is next.
@@ -66,7 +70,7 @@ Development
 
 ## Active task
 
-Feature Admin and Content Management remains In Progress (`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`) after completing 07C4; no subtask is currently executing.
+Feature Admin and Content Management is Completed (`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`); no task is currently executing.
 
 ## Repository state
 
@@ -89,7 +93,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 
 ## In progress
 
-- Feature Admin and Content Management (`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`); 07C4 is reconciled and 07D is next.
+- No feature is currently In Progress. Feature Public CV Experience and Polish is the next Pending feature.
 
 ## Blockers
 
@@ -125,4 +129,4 @@ Active hierarchy:
 - Epic: Public CV and Content Management
 - Feature: `tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`
 - Task: `tasks/epics/01-public-cv-cms/features/01-admin-content-management/tasks/01-delivery.md`
-- Next subtask: 07D — Public rendering, preview and final access verification.
+- Next feature: Public CV Experience and Polish.
