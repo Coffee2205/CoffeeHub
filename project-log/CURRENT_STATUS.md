@@ -1,5 +1,9 @@
 # Current Status
 
+## Task 07C4 Profile avatar media reconciliation — 2026-08-02
+
+Verified and reconciled the existing 07C4 implementation from commit `2d831cb`: protected Admin avatar upload/replace/delete, unique controlled object paths, alt text, public Home/About rendering, private Storage and live RLS are present. The live bucket/columns/policies match the migration; 41 tests, lint, typecheck and production build pass. Fresh browser orchestration timed out and is not claimed as a pass, while post-run database checks confirmed zero E2E avatar metadata and zero bucket objects. Feature Admin and Content Management remains In Progress; 07D is next.
+
 ## Access-model alignment — 2026-08-02
 
 Completed the required access-model alignment inside the active Admin and Content Management Task: anonymous visitors use the published public CV without accounts, public signup is removed from the application and disabled in Supabase Auth, owner redirects support `/app` and `/admin`, and successful logout returns to `/`. Validation passed with 41 tests, lint, typecheck, production build, and anonymous desktop/mobile browser checks. The Task remains In Progress; 07C4 is next.
@@ -62,7 +66,7 @@ Development
 
 ## Active task
 
-Feature Admin and Content Management remains In Progress (`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`) after completing the required access-model alignment; no subtask is currently executing.
+Feature Admin and Content Management remains In Progress (`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`) after completing 07C4; no subtask is currently executing.
 
 ## Repository state
 
@@ -85,7 +89,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 
 ## In progress
 
-- Feature Admin and Content Management (`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`); access-model alignment is complete and 07C4 is next.
+- Feature Admin and Content Management (`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`); 07C4 is reconciled and 07D is next.
 
 ## Blockers
 
@@ -121,4 +125,4 @@ Active hierarchy:
 - Epic: Public CV and Content Management
 - Feature: `tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`
 - Task: `tasks/epics/01-public-cv-cms/features/01-admin-content-management/tasks/01-delivery.md`
-- Next subtask: 07C4 — Profile avatar media management.
+- Next subtask: 07D — Public rendering, preview and final access verification.

@@ -20,7 +20,7 @@ In Progress
 - [x] 07C3a — Posts and Page/Section CMS.
 - [x] 07C3b — Navigation, Footer, Social, FAQ, SEO and Site Settings CMS.
 - [x] Access-model alignment — public CV without guest accounts; owner-only login for `/app` and `/admin`.
-- [ ] 07C4 — Profile avatar media management.
+- [x] 07C4 — Profile avatar media management.
 - [ ] 07D — Public rendering, preview and final access verification.
 
 07A result (2026-07-27): added Prisma schema and additive migrations, optimized RLS, runtime validation, repository, Server Actions, protected Admin UI, list/create/edit, ordering, status and confirmed soft delete. Prisma validate/generate, 8 tests, lint, typecheck, build and Supabase advisors passed. Task remains In Progress because media, preview, remaining entities and public rendering are pending.
@@ -36,6 +36,8 @@ In Progress
 07C3b result (2026-07-27): added SiteLink, Faq and singleton SiteSetting models with protected Admin create/list/edit/soft-delete or upsert flows for navigation/footer/social links, FAQs, identity, privacy and SEO metadata. Runtime URL/length validation, ordering and publishing controls are covered by tests. The additive Supabase migration uses explicit grants and public-published/owner/admin RLS; rollback role checks passed, Security Advisor is clean, and Prisma checks, 31 tests, lint, typecheck and build pass. Profile avatar remains 07C4; public rendering/preview remains 07D.
 
 Access-model alignment result (2026-08-02): removed public signup from the server action and login UI, restricted post-login redirects to exact `/app` and `/admin` route trees, redirected successful logout to the public CV, and disabled new-user signup in Supabase Auth. Anonymous public rendering and protected-route redirects passed desktop/mobile browser checks; 41 tests, lint, typecheck and production build pass. Task remains In Progress; 07C4 is next.
+
+07C4 reconciliation result (2026-08-02): verified the existing implementation from commit `2d831cb` rather than duplicating it. Admin Profile supports validated JPEG/PNG/WebP upload, replacement through unique object paths, alt text, confirmation before delete, cleanup/rollback, and rendering on Home/About. The live private `profile-avatars` bucket has a 5 MB limit and SELECT/INSERT/UPDATE/DELETE policies; profile avatar columns are present. 41 tests, lint, typecheck and production build pass. Browser automation timed out in the CLI orchestration layer and is not claimed as a fresh pass; no test profile metadata or Storage object remained. Task stays In Progress for 07D.
 
 ## Mục tiêu
 
@@ -166,7 +168,7 @@ Các entity phải có trường ownership hoặc quyền quản trị phù hợ
 
 ### Vấn đề còn lại
 
-- 07C4 profile avatar media management and 07D public rendering/preview remain.
+- 07D public rendering, preview and final access verification remains.
 
 ### Kiểm tra
 
@@ -174,6 +176,6 @@ Các entity phải có trường ownership hoặc quyền quản trị phù hợ
 - Typecheck: Đạt (`npm run typecheck`).
 - Test: Đạt (41/41).
 - Build: Đạt (`npm run build`, Prisma generate + Next.js Turbopack).
-- Manual test: Đạt cho anonymous public/login/protected redirects ở desktop và mobile; authenticated CLI entry bị treo nên không được tính là pass.
+- Manual test: Access-model browser checks remain passed; fresh 07C4 authenticated browser automation timed out in the CLI layer and is not counted as a pass. Live database cleanup was verified.
 - Commit: Chưa tạo.
 - Push `origin/dev`: Chưa thực hiện.

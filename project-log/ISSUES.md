@@ -1,5 +1,11 @@
 # Issues
 
+## I-003 — Supabase leaked-password protection disabled
+
+- Trạng thái: Open; không chặn Development hoặc Task 07C4, cần xử lý trước Release.
+- Supabase Security Advisor ngày 2026-08-02 báo Auth chưa bật kiểm tra mật khẩu bị rò rỉ qua HaveIBeenPwned.
+- Remediation: https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection
+
 ## I-002 — Next.js transitive dependency advisories
 
 - Trạng thái: Open; không chặn development hiện tại, cần đánh giá lại trước release.

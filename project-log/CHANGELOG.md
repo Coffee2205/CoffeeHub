@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-08-02 — Task 07C4 avatar media reconciliation
+
+- Summary: Reconciled the existing avatar media implementation from `2d831cb` with the active Epic Task and verified its current code and live Supabase state.
+- Files: Active Task and project-log only; implementation code was already committed and remained unchanged.
+- Database impact: No mutation. Verified avatar columns, private `profile-avatars` bucket (5 MB; JPEG/PNG/WebP), and four Storage RLS policies. Post-E2E checks found no test metadata or objects.
+- Validation: 41 tests, lint, typecheck, Prisma generate + Next.js production build passed. Fresh authenticated browser automation timed out in its CLI orchestration layer and is not claimed as a pass.
+- Known issues: Supabase Security Advisor reports leaked-password protection disabled at project level; this is unrelated to 07C4. 07D remains.
+
+---
+
 ## 2026-08-02 — Access-model alignment
 
 - Summary: Removed public signup, constrained owner redirects to `/app` and `/admin`, returned logout to the public CV, and disabled signup in Supabase Auth.

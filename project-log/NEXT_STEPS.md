@@ -14,9 +14,9 @@
 
 ## Required next work
 
-Tiếp tục đúng một subtask đang chờ: 07C4 — Profile avatar media management.
+Tiếp tục đúng một subtask đang chờ: 07D — Public rendering, preview and final access verification.
 
-Access-model alignment đã đạt ngày 2026-08-02: public CV không cần guest account, signup công khai đã khóa, owner login về `/app/dashboard`, và owner/admin có thể giữ `next=/admin` an toàn.
+07C4 đã được đối chiếu với code, commit gốc và Supabase live ngày 2026-08-02. Không triển khai lại avatar media trong phiên sau.
 
 ## Session instruction
 
