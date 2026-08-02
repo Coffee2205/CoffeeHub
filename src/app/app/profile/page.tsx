@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { Badge, Button, Card, CardDescription, CardHeader, CardTitle, Input } from "@/components/ui";
 import { saveWorkspaceProfileAction } from "@/features/profile/workspace-profile.actions";
-import { getWorkspaceProfile } from "@/features/profile/workspace-profile.repository";
+import { getWorkspaceProfileSnapshot } from "@/features/profile/workspace-profile.repository";
 import { WORKSPACE_TIMEZONES } from "@/features/profile/workspace-profile.schema";
 import { requireUser } from "@/lib/supabase/auth";
 
@@ -10,7 +10,7 @@ type SearchParams = { error?: string; saved?: string };
 
 export default async function WorkspaceProfilePage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const user = await requireUser();
-  const [profile, query] = await Promise.all([getWorkspaceProfile(user.id), searchParams]);
+  const [{ profile, counts }, query] = await Promise.all([getWorkspaceProfileSnapshot(user.id), searchParams]);
   const isPublished = profile?.status === "PUBLISHED";
 
   return (
@@ -52,6 +52,39 @@ export default async function WorkspaceProfilePage({ searchParams }: { searchPar
           </Card>
         </div>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Nội dung hồ sơ</CardTitle>
+          <CardDescription>Tổng quan dữ liệu thuộc tài khoản hiện tại. Trạng thái Draft, Published hoặc Hidden được quản lý trong Admin.</CardDescription>
+        </CardHeader>
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <ProfileArea title="Kinh nghiệm" summary={counts.experiences} href="/admin/resume" canManage={user.isAdmin} />
+          <ProfileArea title="Kỹ năng" summary={counts.skills} href="/admin/resume" canManage={user.isAdmin} />
+          <ProfileArea title="Học vấn" summary={counts.education} href="/admin/resume" canManage={user.isAdmin} />
+          <ProfileArea title="Dự án" summary={counts.projects} href="/admin/projects" canManage={user.isAdmin} />
+        </div>
+        {user.isAdmin ? (
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link href="/admin/profile" className="inline-flex min-h-11 items-center rounded-sm bg-primary-control px-4 text-sm font-semibold text-white hover:bg-primary-hover">Sửa hồ sơ cơ bản</Link>
+            <Link href="/admin/resume" className="inline-flex min-h-11 items-center rounded-sm border border-border-strong px-4 text-sm font-semibold hover:border-primary-hover">Quản lý CV</Link>
+            <Link href="/admin/projects" className="inline-flex min-h-11 items-center rounded-sm border border-border-strong px-4 text-sm font-semibold hover:border-primary-hover">Quản lý dự án</Link>
+          </div>
+        ) : (
+          <p className="mt-5 text-sm text-muted">Bạn có thể xem tổng quan, nhưng cần quyền Admin để chỉnh nội dung công khai.</p>
+        )}
+      </Card>
+    </div>
+  );
+}
+
+function ProfileArea({ title, summary, href, canManage }: { title: string; summary: { total: number; published: number }; href: string; canManage: boolean }) {
+  return (
+    <div className="rounded-md border border-border bg-surface-subtle p-4">
+      <p className="text-sm text-muted">{title}</p>
+      <p className="mt-2 text-2xl font-semibold">{summary.total}</p>
+      <p className="mt-1 text-xs text-muted">{summary.published} đang công khai</p>
+      {canManage ? <Link href={href} className="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-primary-hover hover:text-blue-200">Mở quản lý →</Link> : null}
     </div>
   );
 }

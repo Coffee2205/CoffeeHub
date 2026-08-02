@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-08-02 — Workspace Profile delivery
+
+- Summary: Completed `/app/profile` with an owner-scoped portfolio snapshot, published counts and Admin-only links to existing Profile, Resume and Project CRUD.
+- Files: Workspace Profile page/repository, active Feature/Task and project-log.
+- Database impact: None; existing Profile and CMS content models are reused.
+- Validation: 41 tests, lint, typecheck, Prisma generate + Next.js production build; authenticated desktop/mobile browser verification passed without overflow, overlay or browser errors.
+- Known issues: Public CV Experience and Polish remains dependency-blocked by PWA/Offline; Supabase leaked-password protection remains tracked in I-003.
+
+---
+
 ## 2026-08-02 — Task 07D final public/preview/access delivery
 
 - Summary: Added Experience, Skill and Education to Admin Preview and completed final public, owner and Admin access verification.

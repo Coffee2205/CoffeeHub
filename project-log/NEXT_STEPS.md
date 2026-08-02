@@ -2,21 +2,21 @@
 
 ## Active Epic
 
-`tasks/epics/01-public-cv-cms/EPIC.md`
+`tasks/epics/02-owner-workspace/EPIC.md`
 
 ## Next Feature
 
-`tasks/epics/01-public-cv-cms/features/02-public-cv-experience/FEATURE.md`
+`tasks/epics/02-owner-workspace/features/03-goals/FEATURE.md`
 
 ## Next Task
 
-`tasks/epics/01-public-cv-cms/features/02-public-cv-experience/tasks/01-delivery.md`
+`tasks/epics/02-owner-workspace/features/03-goals/tasks/01-delivery.md`
 
 ## Required next work
 
-Chọn Task đầu tiên sẵn sàng trong Feature Public CV Experience and Polish sau khi đọc đầy đủ acceptance criteria và dependency.
+Triển khai Task Goals delivery. Dependency Workspace Profile đã Completed.
 
-Admin and Content Management đã Completed ngày 2026-08-02. Không triển khai lại Task 07 trong phiên sau.
+Workspace Profile đã Completed ngày 2026-08-02. Public CV Experience and Polish chưa sẵn sàng vì còn phụ thuộc PWA/Offline.
 
 ## Session instruction
 

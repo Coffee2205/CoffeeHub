@@ -1,5 +1,9 @@
 # Current Status
 
+## Workspace Profile delivery — 2026-08-02
+
+Completed the owner Workspace Profile at `/app/profile`. The page now combines the existing owner preference form with an owner-scoped snapshot of Experience, Skills, Education and Projects, including published counts and Admin-only management links. Existing Admin/CMS CRUD remains the single edit path. Tests 41/41, lint, typecheck, production build and authenticated desktop/mobile browser verification pass without overflow or browser errors. Workspace Profile is Completed; Goals is next.
+
 ## Task 07D Public rendering, preview and access verification — 2026-08-02
 
 Completed the final Admin and Content Management delivery. Admin Preview now includes Experience, Skill and Education in its query, status metrics and visible groups. Anonymous Home/About desktop/mobile, anonymous Admin denial, authenticated owner dashboard, and authenticated Admin Preview desktop/mobile all passed without overflow, error overlay or browser errors. Tests 41/41, lint, typecheck and production build pass. Feature Admin and Content Management is Completed; Public CV Experience and Polish is next.
@@ -70,7 +74,7 @@ Development
 
 ## Active task
 
-Feature Admin and Content Management is Completed (`tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`); no task is currently executing.
+Feature Workspace Profile is Completed (`tasks/epics/02-owner-workspace/features/02-profile/FEATURE.md`); no task is currently executing.
 
 ## Repository state
 
@@ -93,7 +97,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 
 ## In progress
 
-- No feature is currently In Progress. Feature Public CV Experience and Polish is the next Pending feature.
+- No feature is currently In Progress. Feature Goals is the next ready Pending feature; Public CV Experience and Polish remains blocked by PWA/Offline.
 
 ## Blockers
 
@@ -126,7 +130,7 @@ Roadmap đã chuyển sang Epic → Feature → Task → Subtask.
 
 Active hierarchy:
 
-- Epic: Public CV and Content Management
-- Feature: `tasks/epics/01-public-cv-cms/features/01-admin-content-management/FEATURE.md`
-- Task: `tasks/epics/01-public-cv-cms/features/01-admin-content-management/tasks/01-delivery.md`
-- Next feature: Public CV Experience and Polish.
+- Epic: Owner Workspace
+- Feature: `tasks/epics/02-owner-workspace/features/02-profile/FEATURE.md`
+- Task: `tasks/epics/02-owner-workspace/features/02-profile/tasks/01-delivery.md`
+- Next feature: Goals.
