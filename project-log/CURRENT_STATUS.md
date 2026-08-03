@@ -1,5 +1,9 @@
 # Current Status
 
+## Tasks delivery in progress — 2026-08-03
+
+Implemented protected Task list/search/filter, create/edit/detail/archive, status/priority/deadline, owner-safe Goal/Roadmap/Stage relations and optimistic completion rollback at `/app/tasks`. Typecheck, lint, 51/51 tests and production build pass. Browser desktop/mobile remains blocked because Supabase Auth rejects the configured E2E password even though the configured email exists and has the admin app role; Tasks remains In Progress.
+
 ## Roadmaps delivery completed — 2026-08-03
 
 Roadmaps delivery is Completed at `/app/goals/[goalId]/roadmap`: owner-scoped roadmap creation, milestone create/edit/archive, transactional reorder, Task-derived milestone status/progress, loading/empty/error/success states and responsive UI are verified. Tests 48/48, Prisma validate, lint, typecheck and production build pass. Direct development transaction verifies stable reorder and clean rollback. Authenticated Chrome desktop/mobile E2E passes create Goal/Roadmap, create/edit/reorder/archive Stage, progress, responsive layout and cleanup with zero test residue. Tasks is next.
@@ -82,7 +86,7 @@ Development
 
 ## Active task
 
-Feature Roadmaps is Completed (`tasks/epics/02-owner-workspace/features/04-roadmaps/FEATURE.md`); no task is currently executing.
+Feature Tasks is In Progress (`tasks/epics/02-owner-workspace/features/05-tasks/FEATURE.md`), Task `01-delivery.md`.
 
 ## Repository state
 
@@ -105,7 +109,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 
 ## In progress
 
-- No feature is currently In Progress. Feature Tasks is the next ready Pending feature.
+- Feature Tasks is In Progress; implementation and automated validation pass, authenticated browser verification remains.
 
 ## Blockers
 

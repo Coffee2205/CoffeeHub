@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-03 — Tasks implementation (browser verification pending)
+
+- Added owner-protected Task list, search/filter, create/edit/detail/archive and loading/empty states at `/app/tasks`.
+- Added status, priority, deadline, Goal/Roadmap/Stage relations with transactional owner/chain validation, plus optimistic completion with rollback.
+- Passed typecheck, lint, 51/51 tests and production build.
+- Authenticated desktop/mobile browser verification remains blocked because Supabase Auth rejects the configured E2E password; Feature remains In Progress.
+
 ## 2026-08-03 — Roadmaps delivery completed
 
 - Completed authenticated owner verification for Goal Roadmaps on desktop 1440×1000 and mobile 390×844.

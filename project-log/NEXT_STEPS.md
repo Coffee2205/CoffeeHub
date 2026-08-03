@@ -14,7 +14,7 @@
 
 ## Required next work
 
-Triển khai Task Tasks delivery. Dependency Roadmaps đã Completed.
+Tiếp tục Task Tasks delivery: sửa `E2E_ADMIN_PASSWORD` trong `.env.local`, xác minh đăng nhập thật, rồi chạy CRUD/toggle/archive trên browser desktop 1440×1000 và mobile 390×844. Chỉ đánh dấu Completed sau khi browser pass và cleanup dữ liệu E2E.
 
 Roadmaps đã Completed ngày 2026-08-03 với tests, lint, typecheck, Prisma validate, production build, transaction rollback và owner browser E2E desktop/mobile đạt; dữ liệu E2E đã cleanup sạch.
 
