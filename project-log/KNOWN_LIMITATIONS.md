@@ -1,10 +1,12 @@
 # Known Limitations
 
-- Admin/CMS, public Home/About/Projects/Posts rendering, Admin draft preview and profile avatar media are complete with live anonymous/user/Admin browser E2E.
+- Public CV content is live from the development database. Avatar and social links remain intentionally empty until the owner supplies and publishes them through Admin; private auth email, phone, date of birth and gender are not public fallbacks.
+
+- Admin/CMS covers Projects with private cover/gallery media, Profile/About text, Experience, Skills, Education, Posts, Page Sections, Navigation/Footer/Social links, FAQ, SEO and Site Settings with publishing state. Profile avatar editing, preview and public rendering are deferred to later Task 07 subtasks; authenticated browser E2E needs a development admin account.
 
 - Database và authentication foundation đã có; CMS và feature application vẫn thuộc các task sau.
-- Public Home, About, Projects list/detail and Posts list/detail routes are implemented and verified against live development CMS records.
-- Dashboard hiện vẫn tính ngày/tuần theo UTC dù Profile đã lưu timezone preference; việc tiêu thụ preference chưa thuộc Task 08.
+- Route `/` hiện là trang preview design foundation, chưa phải landing page hoặc application shell hoàn chỉnh.
+- Dashboard hiện tính ngày/tuần theo UTC vì Profile chưa có timezone preference.
 # Supabase đã khởi tạo database foundation
 
-Supabase CoffeeHub development project đã có domain schema, migrations, RLS, Auth flow và các Storage bucket phục vụ Project/Profile media nhưng chưa có lịch backup/export vận hành. Email confirmation/refresh/logout E2E cần redirect URL và email của môi trường triển khai.
+Supabase CoffeeHub development project đã có domain schema, migrations, RLS và Auth flow nhưng chưa có account thật, Storage bucket hoặc lịch backup/export vận hành. Email confirmation/refresh/logout E2E cần redirect URL và email của môi trường triển khai.

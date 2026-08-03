@@ -1,8 +1,12 @@
 # Current Status
 
-## Tasks delivery in progress — 2026-08-03
+## Public CV Experience and Polish completed — 2026-08-04
 
-Implemented protected Task list/search/filter, create/edit/detail/archive, status/priority/deadline, owner-safe Goal/Roadmap/Stage relations and optimistic completion rollback at `/app/tasks`. Typecheck, lint, 51/51 tests and production build pass. Browser desktop/mobile remains blocked because Supabase Auth rejects the configured E2E password even though the configured email exists and has the admin app role; Tasks remains In Progress.
+`/` is now the anonymous CV/portfolio for `Tran Nguyen Ngoc Hung`, sourced only from published database content. The development dataset contains the reference Profile, grouped Skills, two Experiences, two Projects, Education, Certifications, Activities, Contact, Privacy and Terms. Owner sessions remain on `/` with Dashboard/Manage CV actions. Auth email is not used as display identity. No schema or migration changed. Typecheck, lint, 51 tests, production build and desktop/mobile browser verification pass.
+
+## Requirement alignment — 2026-08-03
+
+Yêu cầu mới nhất đã chốt: `/` là public CV thật tại `https://coffeehub.id.vn/`; display name lấy từ Profile/database và không dùng auth email. CV PDF đã được chuyển thành content/mapping reference trong `docs/PUBLIC_CV_CONTENT_REFERENCE.md`. AI đích là chatbot nhiều lượt kết hợp structured action proposal; mọi create/update Goal/Roadmap/Task/Checklist/Event/Note phải có preview + owner confirmation rồi mới qua Feature Service, không cho model truy cập database trực tiếp. Public CV Experience and Polish là next task và không còn phụ thuộc PWA.
 
 ## Roadmaps delivery completed — 2026-08-03
 
@@ -86,7 +90,7 @@ Development
 
 ## Active task
 
-Feature Tasks is In Progress (`tasks/epics/02-owner-workspace/features/05-tasks/FEATURE.md`), Task `01-delivery.md`.
+Public CV Experience and Polish is Completed (`tasks/epics/01-public-cv-cms/features/02-public-cv-experience/FEATURE.md`); no task is currently executing.
 
 ## Repository state
 
@@ -109,7 +113,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 
 ## In progress
 
-- Feature Tasks is In Progress; implementation and automated validation pass, authenticated browser verification remains.
+- No feature is currently In Progress. Feature Tasks is the next ready Pending feature.
 
 ## Blockers
 

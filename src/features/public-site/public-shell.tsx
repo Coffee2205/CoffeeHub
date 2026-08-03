@@ -11,7 +11,7 @@ export async function PublicShell({ children }: { children: ReactNode }) {
     console.error("Unable to load public site chrome", error);
   }
 
-  const siteName = chrome?.settings?.siteName ?? "CoffeeHub";
+  const siteName = chrome?.profile?.displayName ?? chrome?.settings?.siteName ?? "Portfolio";
   const links = chrome?.links ?? [];
   const navigation = links.filter((link) => link.kind === "NAVIGATION");
   const footerLinks = links.filter((link) => link.kind !== "NAVIGATION");

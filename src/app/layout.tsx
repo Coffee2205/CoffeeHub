@@ -4,8 +4,8 @@ import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "CoffeeHub",
-  description: "A focused workspace for personal growth and planning.",
+  title: "Portfolio",
+  description: "CV và portfolio công khai được quản lý từ nội dung đã xuất bản.",
 };
 
 export default function RootLayout({

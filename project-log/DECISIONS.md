@@ -1,5 +1,13 @@
 # Decisions
 
+## D-013 — AI is chat-first with confirmed structured actions
+
+AI Assistant phải hoạt động như chatbot nhiều lượt bình thường. Khi người dùng yêu cầu lên kế hoạch hoặc thay đổi CoffeeHub, model chỉ tạo structured proposal cho Goal/Roadmap/Task/Event/Note/Checklist. Owner xem/sửa và xác nhận proposal hiện tại; server mới re-validate và gọi Feature Service để commit bằng ownership, transaction, idempotency và audit. Model không truy cập database trực tiếp. Delete, role/permission, CMS publish và migration bị cấm trong chatbot v1.
+
+## D-012 — Database-backed display identity
+
+Tên xuất hiện trên `https://coffeehub.id.vn/`, public CV và workspace lấy từ Profile do owner cấu hình trong database. Auth email/Gmail chỉ phục vụ đăng nhập và không được dùng hoặc suy ra làm tên hiển thị. Route `/` luôn là public CV, kể cả khi owner đang có session.
+
 ## D-011 — AI proposal-only foundation
 
 AI providers only create runtime-validated proposals. They cannot import Prisma/repositories or commit data. Future create/update actions map proposals into existing forms/services and require owner confirmation; destructive/privileged actions are forbidden. AI Foundation uses a network-free Mock Provider and keeps OpenAI/Groq/Gemini as stubs until dedicated integration tasks.

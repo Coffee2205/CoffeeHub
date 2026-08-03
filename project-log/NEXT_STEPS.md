@@ -14,20 +14,20 @@
 
 ## Required next work
 
-Tiếp tục Task Tasks delivery: sửa `E2E_ADMIN_PASSWORD` trong `.env.local`, xác minh đăng nhập thật, rồi chạy CRUD/toggle/archive trên browser desktop 1440×1000 và mobile 390×844. Chỉ đánh dấu Completed sau khi browser pass và cleanup dữ liệu E2E.
+Public CV Experience and Polish đã Completed ngày 2026-08-04. Task canonical tiếp theo là Tasks delivery; không bắt đầu trong phiên Public CV này.
 
 Roadmaps đã Completed ngày 2026-08-03 với tests, lint, typecheck, Prisma validate, production build, transaction rollback và owner browser E2E desktop/mobile đạt; dữ liệu E2E đã cleanup sạch.
 
 AI Foundation đã Completed theo yêu cầu trực tiếp ngày 2026-08-02. Không tích hợp lại provider thật hoặc persistence khi chưa có Task riêng và cấu hình/approval phù hợp.
 
-Workspace Profile đã Completed ngày 2026-08-02. Public CV Experience and Polish chưa sẵn sàng vì còn phụ thuộc PWA/Offline.
+Workspace Profile đã Completed ngày 2026-08-02. Sau Public CV, tiếp tục Tasks → Calendar → Notes để chuẩn bị Feature Services cho AI actions; AI Goal Assistant và AI Personal Assistant thực hiện sau các dependency domain cần thiết.
 
 ## Session instruction
 
 Người dùng chỉ cần gửi:
 
 ```text
-Đọc `agent/CONTINUE.md` và tiếp tục task hiện tại.
+Đọc `agent/CONTINUE.md` và tiếp tục đúng task hiện tại. Tuân thủ D-012/D-013 và `docs/PUBLIC_CV_CONTENT_REFERENCE.md`.
 ```
 
 Agent thực hiện đúng một Task hoặc Subtask, commit, push `origin/dev`, báo cáo và dừng.

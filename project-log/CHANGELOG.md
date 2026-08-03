@@ -1,11 +1,21 @@
 # Changelog
 
-## 2026-08-03 — Tasks implementation (browser verification pending)
+## 2026-08-04 — Public CV Experience and Polish completed
 
-- Added owner-protected Task list, search/filter, create/edit/detail/archive and loading/empty states at `/app/tasks`.
-- Added status, priority, deadline, Goal/Roadmap/Stage relations with transactional owner/chain validation, plus optimistic completion with rollback.
-- Passed typecheck, lint, 51/51 tests and production build.
-- Authenticated desktop/mobile browser verification remains blocked because Supabase Auth rejects the configured E2E password; Feature remains In Progress.
+- Replaced the CoffeeHub marketing-style home with the owner's database-backed CV and neutral unpublished states.
+- Added published Profile, Objective, grouped Skills, Experience, Projects, Education, Certifications, Activities and Contact rendering plus dynamic Privacy/Terms pages.
+- Kept `/` public for anonymous and authenticated owner sessions; owner receives Dashboard/Manage CV actions without redirect.
+- Removed Gmail/auth-email name inference from workspace header, sidebar, profile and Dashboard fallbacks.
+- Reused the existing schema and RLS; no migration or SQL write. Reference content was entered and published through Admin/CMS in the development database.
+- Passed typecheck, lint, 51/51 tests, production build, diff check, anonymous desktop/mobile and authenticated owner browser verification.
+
+## 2026-08-03 — Public CV and AI requirements alignment
+
+- Reframed `/` as the owner's database-backed public CV instead of a CoffeeHub marketing landing page.
+- Added a structured content reference from the supplied CV, including privacy defaults for phone, birth date, gender and auth email.
+- Defined multi-turn chatbot behavior and confirmed structured actions for Goal/Roadmap/Task/Checklist/Event/Note through existing Feature Services.
+- Updated canonical tasks, decisions, technical/security rules, next-step priority and the reusable continuation prompt.
+- Documentation-only kit update; no application code, database, deployment, Git commit or push was performed in this review package.
 
 ## 2026-08-03 — Roadmaps delivery completed
 
