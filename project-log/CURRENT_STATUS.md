@@ -1,5 +1,9 @@
 # Current Status
 
+## Tasks delivery completed — 2026-08-04
+
+Owner Task management is complete at `/app/tasks`: list, create/edit/detail, status/priority/deadline, owner-scoped Goal/Roadmap/Stage relations, search/filter, optimistic completion with rollback, and archive. A browser-discovered pending-state defect was fixed by settling the mutation before refreshing the Server Component. Typecheck, lint, 51 tests, production build and authenticated desktop/mobile verification pass; the E2E Task was archived through the UI.
+
 ## Public CV Experience and Polish completed — 2026-08-04
 
 `/` is now the anonymous CV/portfolio for `Tran Nguyen Ngoc Hung`, sourced only from published database content. The development dataset contains the reference Profile, grouped Skills, two Experiences, two Projects, Education, Certifications, Activities, Contact, Privacy and Terms. Owner sessions remain on `/` with Dashboard/Manage CV actions. Auth email is not used as display identity. No schema or migration changed. Typecheck, lint, 51 tests, production build and desktop/mobile browser verification pass.
@@ -90,7 +94,7 @@ Development
 
 ## Active task
 
-Public CV Experience and Polish is Completed (`tasks/epics/01-public-cv-cms/features/02-public-cv-experience/FEATURE.md`); no task is currently executing.
+Tasks is Completed (`tasks/epics/02-owner-workspace/features/05-tasks/FEATURE.md`); no task is currently executing.
 
 ## Repository state
 

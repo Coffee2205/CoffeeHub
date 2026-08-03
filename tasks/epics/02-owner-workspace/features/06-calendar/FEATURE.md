@@ -1,4 +1,4 @@
-# Feature 05 — Tasks
+# Feature 06 — Calendar
 
 ## Epic
 
@@ -6,11 +6,11 @@
 
 ## Status
 
-Completed
+Pending
 
 ## Goal
 
-Hoàn thiện Task CRUD và thao tác nhanh
+Tạo Event và giao diện lịch
 
 ## Tasks
 

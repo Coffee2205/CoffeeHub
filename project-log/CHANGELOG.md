@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-04 — Tasks delivery completed
+
+- Completed the protected `/app/tasks` list, create/edit/detail, status, priority, deadline, owner-scoped Goal/Roadmap/Stage relations, search/filter and archive flow.
+- Fixed the quick-complete interaction so the optimistic state settles and the Server Component badge/filter refreshes after a successful mutation; error paths still roll back the local state.
+- Reused the existing Task schema, composite ownership constraints, indexes and RLS; no migration was required.
+- Passed typecheck, lint, 51/51 tests, production build and authenticated browser verification at desktop 1440×1000 and mobile 390×844 with no overflow or browser errors.
+- Created, edited, toggled and archived the exact E2E Task through the UI; no active E2E Task remains.
+
 ## 2026-08-04 — Public CV Experience and Polish completed
 
 - Replaced the CoffeeHub marketing-style home with the owner's database-backed CV and neutral unpublished states.

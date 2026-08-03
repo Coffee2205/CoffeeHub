@@ -9,7 +9,7 @@
 
 ## Trạng thái
 
-In Progress
+Completed
 
 ## Mục tiêu
 
@@ -28,7 +28,7 @@ Hoàn thiện Task CRUD và thao tác nhanh
 - [x] Optimistic toggle
 - [x] Rollback lỗi
 - [x] Filter/search
-- [ ] Subtask chỉ khi domain đã chốt
+- [x] Không tạo Subtask/checklist trùng khi domain chưa chốt
 
 ## Không thực hiện
 
@@ -63,17 +63,18 @@ Có thể thêm index/filter fields.
 ### Quyết định kỹ thuật
 
 - Server Components đọc dữ liệu owner-scoped; mọi Server Action xác thực lại user.
-- Quan hệ Goal/Roadmap/Stage được kiểm tra theo cùng user và đúng chuỗi trong transaction.
-- Toggle hoàn thành cập nhật optimistic và trả lại trạng thái trước khi action lỗi.
+- Quan hệ Goal/Roadmap/Stage được kiểm tra theo cùng owner và đúng chuỗi trong transaction trước khi ghi.
+- Toggle cập nhật optimistic, rollback khi action lỗi, kết thúc pending trước khi refresh Server Component.
+- Không thêm schema/migration vì Task model, relation, constraint và index hiện có đã đáp ứng.
 
 ### Vấn đề còn lại
 
-- Browser E2E desktop/mobile đang bị chặn: Supabase Auth từ chối `E2E_ADMIN_PASSWORD` hiện có dù email tồn tại và role là admin.
+- Không có blocker. Bản ghi E2E đã được archive qua UI và không còn trong danh sách active.
 
 ### Kiểm tra
 
-- Lint: Đạt.
-- Typecheck: Đạt.
-- Tests: Đạt 51/51.
-- Build: Đạt; các route `/app/tasks`, `/app/tasks/new`, `/app/tasks/[taskId]` được tạo.
-- Manual test: Chưa đạt do blocker credential; không tuyên bố browser pass.
+- Lint: Đạt (`npm run lint`).
+- Typecheck: Đạt (`npm run typecheck`).
+- Tests: Đạt 51/51 (`npm test`).
+- Build: Đạt (`npm run build`).
+- Manual test: Đạt owner CRUD, status/priority/deadline, search/filter, optimistic toggle và archive trên desktop 1440×1000; mobile 390×844 không overflow/error overlay.

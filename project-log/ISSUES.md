@@ -1,11 +1,5 @@
 # Issues
 
-## I-004 — Tasks browser verification credential rejected
-
-- Trạng thái: Open; chặn việc hoàn thành Tasks delivery nhưng không chặn build.
-- Supabase database xác nhận `E2E_ADMIN_EMAIL` tồn tại và có `raw_app_meta_data.role = admin`, nhưng Supabase Auth trả về sai email/mật khẩu với `E2E_ADMIN_PASSWORD` hiện có trong `.env.local`.
-- Khắc phục: đặt lại mật khẩu cho đúng tài khoản trong Supabase Auth, cập nhật chính xác `E2E_ADMIN_PASSWORD` (không thêm dấu nháy/khoảng trắng), rồi chạy lại authenticated browser E2E.
-
 ## I-003 — Supabase leaked-password protection disabled
 
 - Trạng thái: Open; không chặn Development hoặc Task 07C4, cần xử lý trước Release.

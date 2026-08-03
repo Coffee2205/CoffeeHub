@@ -6,15 +6,15 @@
 
 ## Next Feature
 
-`tasks/epics/02-owner-workspace/features/05-tasks/FEATURE.md`
+`tasks/epics/02-owner-workspace/features/06-calendar/FEATURE.md`
 
 ## Next Task
 
-`tasks/epics/02-owner-workspace/features/05-tasks/tasks/01-delivery.md`
+`tasks/epics/02-owner-workspace/features/06-calendar/tasks/01-delivery.md`
 
 ## Required next work
 
-Public CV Experience and Polish đã Completed ngày 2026-08-04. Task canonical tiếp theo là Tasks delivery; không bắt đầu trong phiên Public CV này.
+Tasks delivery đã Completed ngày 2026-08-04. Task canonical tiếp theo là Calendar delivery; không bắt đầu trong phiên Tasks này.
 
 Roadmaps đã Completed ngày 2026-08-03 với tests, lint, typecheck, Prisma validate, production build, transaction rollback và owner browser E2E desktop/mobile đạt; dữ liệu E2E đã cleanup sạch.
 

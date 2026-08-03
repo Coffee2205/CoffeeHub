@@ -17,4 +17,4 @@ export async function updateTaskAction(id: string, form: FormData) {
   revalidatePath("/app/tasks"); redirect(`/app/tasks/${id}?saved=updated`);
 }
 export async function archiveTaskAction(id: string) { const user = await requireUser(); const result = await archiveTask(user.id, id); if (!result.count) invalid(`/app/tasks/${id}`, "Task không tồn tại."); revalidatePath("/app/tasks"); redirect("/app/tasks?archived=1"); }
-export async function setTaskCompletedAction(id: string, completed: boolean) { const user = await requireUser(); const result = await setTaskCompleted(user.id, id, completed); if (!result.count) return { ok: false, error: "Không thể cập nhật Task." }; revalidatePath("/app/tasks"); return { ok: true } as const; }
+export async function setTaskCompletedAction(id: string, completed: boolean) { const user = await requireUser(); const result = await setTaskCompleted(user.id, id, completed); if (!result.count) return { ok: false, error: "Không thể cập nhật Task." }; return { ok: true } as const; }
