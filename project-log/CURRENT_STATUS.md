@@ -2,7 +2,7 @@
 
 ## Roadmaps delivery implementation — 2026-08-03
 
-Roadmaps delivery is implemented at `/app/goals/[goalId]/roadmap`: owner-scoped roadmap creation, milestone create/edit/archive, transactional reorder, Task-derived milestone status/progress, loading/empty/error/success states and responsive UI are present. The repository now binds mutations across the full owner/Goal/Roadmap/Stage chain. Tests 48/48, Prisma validate, lint, typecheck and production build pass; `/login` returns HTTP 200. The Task remains In Progress because browser desktop/mobile verification was blocked by a failed CDP channel and the direct Supabase development transaction check did not return.
+Roadmaps delivery is implemented at `/app/goals/[goalId]/roadmap`: owner-scoped roadmap creation, milestone create/edit/archive, transactional reorder, Task-derived milestone status/progress, loading/empty/error/success states and responsive UI are present. Tests 48/48, Prisma validate, lint, typecheck and production build pass. A direct development transaction now verifies Roadmap/Stage creation, stable reorder and clean rollback. Chrome CDP is operational, but browser desktop/mobile verification remains blocked because Supabase Auth rejects the configured E2E owner credential; the Task remains In Progress.
 
 ## AI Foundation delivery — 2026-08-02
 
@@ -105,7 +105,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 
 ## In progress
 
-- Feature Roadmaps is In Progress; implementation is ready but browser and development-database verification remain blocked.
+- Feature Roadmaps is In Progress; implementation and database verification pass, while authenticated desktop/mobile verification is blocked by the development owner credential.
 
 ## Blockers
 

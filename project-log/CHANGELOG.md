@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-03 — Roadmaps verification follow-up
+
+- Verified Roadmap creation, two Stage inserts, stable transactional reorder and zero-residue rollback against Supabase development via the direct connection.
+- Replaced the failed browser CLI path with working Chrome CDP automation and confirmed the real login form can be rendered and submitted.
+- Supabase Auth rejected the configured E2E owner credential, so authenticated desktop/mobile Roadmap verification remains pending and the Task stays In Progress.
+
 ## 2026-08-03 — Roadmaps implementation (verification pending)
 
 - Added the protected Goal Roadmap route with roadmap creation, milestone CRUD, transactional reorder and Task-derived progress.

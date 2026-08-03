@@ -71,9 +71,9 @@ Có thể điều chỉnh relation/order constraint.
 
 ### Vấn đề còn lại
 
-- Browser CLI mở trang đăng nhập lần đầu nhưng kênh CDP bị đóng/treo sau submit; các session mới tiếp tục lỗi `CDP response channel closed`.
-- Kiểm tra transaction trực tiếp trên Supabase development bị treo sau khi được cấp network access và đã được dừng; không có kết quả create/reorder database được tuyên bố.
-- Task chưa được đánh dấu Completed cho đến khi browser desktop/mobile và persistence flow được xác minh.
+- Chrome DevTools Protocol trực tiếp đã mở và tương tác được với production server, nhưng Supabase Auth từ chối credential E2E owner hiện có.
+- Transaction rollback qua direct connection đã xác minh create Roadmap, create/reorder Stage và cleanup sạch.
+- Task chưa được đánh dấu Completed cho đến khi browser desktop/mobile được xác minh bằng owner session hợp lệ.
 
 ### Kiểm tra
 
@@ -83,6 +83,7 @@ Có thể điều chỉnh relation/order constraint.
 - Typecheck: Đạt.
 - Build: Đạt; `/app/goals/[goalId]/roadmap` có trong production build.
 - HTTP smoke: Đạt, `/login` trả HTTP 200 từ production server tại port 3135.
-- Browser desktop: Blocked bởi lỗi CDP của browser CLI.
-- Browser mobile: Blocked bởi lỗi CDP của browser CLI.
-- Manual persistence: Blocked do transaction verification tới Supabase development không phản hồi.
+- Browser runtime: Đạt; Chrome CDP mở `/login`, đọc DOM và submit form thật.
+- Browser desktop: Blocked vì Supabase Auth từ chối `E2E_ADMIN_EMAIL`/`E2E_ADMIN_PASSWORD` hiện có.
+- Browser mobile: Blocked vì không tạo được owner session bằng credential hiện có.
+- Manual persistence: Đạt; development transaction tạo Goal/Roadmap/hai Stage, reorder ổn định và rollback sạch, không để lại dữ liệu test.

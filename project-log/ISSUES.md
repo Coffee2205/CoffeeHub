@@ -1,11 +1,12 @@
 # Issues
 
-## I-004 — Roadmaps verification environment unavailable
+## I-004 — Roadmaps browser credential unavailable
 
-- Trạng thái: Open; chặn việc đánh dấu Roadmaps delivery là Completed, không chặn commit implementation.
-- Browser CLI mở được `/login` một lần nhưng sau submit mất kênh CDP; các session tiếp theo treo hoặc trả `CDP response channel closed` dù production server trả HTTP 200.
-- Transaction rollback kiểm tra Supabase development đã được cấp network access nhưng không phản hồi và được dừng để tránh treo phiên.
-- Remediation: khởi động lại browser automation runtime, xác minh desktop/mobile và chạy lại create/reorder transaction hoặc luồng UI với database development.
+- Trạng thái: Open; chặn việc đánh dấu Roadmaps delivery là Completed.
+- Chrome CDP hiện mở/đọc/tương tác được với production server; blocker CDP cũ đã được loại trừ.
+- Supabase Auth từ chối cặp credential E2E owner trong `.env.local`, nên không thể mở route private để chạy desktop/mobile flow.
+- Direct development transaction đã đạt create Roadmap, create/reorder Stage và rollback sạch.
+- Remediation: cung cấp/cập nhật credential của owner development hợp lệ, sau đó chạy browser create → edit → reorder → archive trên desktop/mobile.
 
 ## I-003 — Supabase leaked-password protection disabled
 
