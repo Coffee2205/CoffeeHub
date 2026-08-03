@@ -6,17 +6,17 @@
 
 ## Next Feature
 
-`tasks/epics/02-owner-workspace/features/04-roadmaps/FEATURE.md`
+`tasks/epics/02-owner-workspace/features/05-tasks/FEATURE.md`
 
 ## Next Task
 
-`tasks/epics/02-owner-workspace/features/04-roadmaps/tasks/01-delivery.md`
+`tasks/epics/02-owner-workspace/features/05-tasks/tasks/01-delivery.md`
 
 ## Required next work
 
-Hoàn tất verification cho Task Roadmaps delivery: cập nhật credential owner development hợp lệ, rồi chạy browser desktop/mobile trên `/app/goals/[goalId]/roadmap` qua create → stage create/edit/reorder/archive trước khi đánh dấu Completed.
+Triển khai Task Tasks delivery. Dependency Roadmaps đã Completed.
 
-Implementation, tests, lint, typecheck, Prisma validate, production build và transaction rollback database đã đạt ngày 2026-08-03. Không bắt đầu Task Tasks trước khi Roadmaps được xác minh và hoàn tất.
+Roadmaps đã Completed ngày 2026-08-03 với tests, lint, typecheck, Prisma validate, production build, transaction rollback và owner browser E2E desktop/mobile đạt; dữ liệu E2E đã cleanup sạch.
 
 AI Foundation đã Completed theo yêu cầu trực tiếp ngày 2026-08-02. Không tích hợp lại provider thật hoặc persistence khi chưa có Task riêng và cấu hình/approval phù hợp.
 

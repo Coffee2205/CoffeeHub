@@ -9,7 +9,7 @@
 
 ## Trạng thái
 
-In Progress
+Completed
 
 ## Mục tiêu
 
@@ -28,7 +28,7 @@ Tạo Roadmap và Stage gắn với Goal
 - [x] Task relation placeholder hoặc thật
 - [x] Progress calculation
 - [x] Mobile layout implementation
-- [ ] Browser verification desktop/mobile
+- [x] Browser verification desktop/mobile
 
 ## Không thực hiện
 
@@ -71,9 +71,7 @@ Có thể điều chỉnh relation/order constraint.
 
 ### Vấn đề còn lại
 
-- Chrome DevTools Protocol trực tiếp đã mở và tương tác được với production server, nhưng Supabase Auth từ chối credential E2E owner hiện có.
-- Transaction rollback qua direct connection đã xác minh create Roadmap, create/reorder Stage và cleanup sạch.
-- Task chưa được đánh dấu Completed cho đến khi browser desktop/mobile được xác minh bằng owner session hợp lệ.
+- Không còn blocker trong phạm vi Task. Dữ liệu E2E đã được xóa sạch sau verification.
 
 ### Kiểm tra
 
@@ -83,7 +81,11 @@ Có thể điều chỉnh relation/order constraint.
 - Typecheck: Đạt.
 - Build: Đạt; `/app/goals/[goalId]/roadmap` có trong production build.
 - HTTP smoke: Đạt, `/login` trả HTTP 200 từ production server tại port 3135.
-- Browser runtime: Đạt; Chrome CDP mở `/login`, đọc DOM và submit form thật.
-- Browser desktop: Blocked vì Supabase Auth từ chối `E2E_ADMIN_EMAIL`/`E2E_ADMIN_PASSWORD` hiện có.
-- Browser mobile: Blocked vì không tạo được owner session bằng credential hiện có.
+- Browser runtime: Đạt; Chrome CDP đăng nhập owner thật và chạy interaction end-to-end.
+- Browser desktop: Đạt ở 1440×1000; create Goal/Roadmap, create/edit/reorder/archive Stage, progress, success state, không overflow hoặc error overlay.
+- Browser mobile: Đạt ở 390×844; nội dung và milestone responsive, không overflow hoặc error overlay.
 - Manual persistence: Đạt; development transaction tạo Goal/Roadmap/hai Stage, reorder ổn định và rollback sạch, không để lại dữ liệu test.
+- Browser cleanup: Đạt; Goal E2E được archive qua UI, sau đó xóa đúng cây test đã biết; zero residue.
+- Visible result URL: `/app/goals/[goalId]/roadmap`.
+- Access: Owner đăng nhập.
+- How to use: Mở một Goal, chọn “Mở Roadmap”, tạo Roadmap, thêm milestone, chỉnh sửa hoặc dùng nút lên/xuống để reorder; milestone không có Task có thể lưu trữ.

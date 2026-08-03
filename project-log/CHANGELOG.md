@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-03 — Roadmaps delivery completed
+
+- Completed authenticated owner verification for Goal Roadmaps on desktop 1440×1000 and mobile 390×844.
+- Passed create Roadmap, create/edit/reorder/archive milestone, progress rendering, responsive layout, no overflow and no framework error overlay.
+- Verified database transaction rollback separately; archived the browser Goal through UI and deleted the exact E2E tree afterward with zero residue.
+- Feature and Task are Completed; Tasks is the next ready Feature.
+
 ## 2026-08-03 — Roadmaps verification follow-up
 
 - Verified Roadmap creation, two Stage inserts, stable transactional reorder and zero-residue rollback against Supabase development via the direct connection.

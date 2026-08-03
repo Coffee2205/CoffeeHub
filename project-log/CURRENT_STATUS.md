@@ -1,8 +1,8 @@
 # Current Status
 
-## Roadmaps delivery implementation — 2026-08-03
+## Roadmaps delivery completed — 2026-08-03
 
-Roadmaps delivery is implemented at `/app/goals/[goalId]/roadmap`: owner-scoped roadmap creation, milestone create/edit/archive, transactional reorder, Task-derived milestone status/progress, loading/empty/error/success states and responsive UI are present. Tests 48/48, Prisma validate, lint, typecheck and production build pass. A direct development transaction now verifies Roadmap/Stage creation, stable reorder and clean rollback. Chrome CDP is operational, but browser desktop/mobile verification remains blocked because Supabase Auth rejects the configured E2E owner credential; the Task remains In Progress.
+Roadmaps delivery is Completed at `/app/goals/[goalId]/roadmap`: owner-scoped roadmap creation, milestone create/edit/archive, transactional reorder, Task-derived milestone status/progress, loading/empty/error/success states and responsive UI are verified. Tests 48/48, Prisma validate, lint, typecheck and production build pass. Direct development transaction verifies stable reorder and clean rollback. Authenticated Chrome desktop/mobile E2E passes create Goal/Roadmap, create/edit/reorder/archive Stage, progress, responsive layout and cleanup with zero test residue. Tasks is next.
 
 ## AI Foundation delivery — 2026-08-02
 
@@ -82,7 +82,7 @@ Development
 
 ## Active task
 
-Feature Roadmaps is In Progress (`tasks/epics/02-owner-workspace/features/04-roadmaps/FEATURE.md`).
+Feature Roadmaps is Completed (`tasks/epics/02-owner-workspace/features/04-roadmaps/FEATURE.md`); no task is currently executing.
 
 ## Repository state
 
@@ -105,7 +105,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 
 ## In progress
 
-- Feature Roadmaps is In Progress; implementation and database verification pass, while authenticated desktop/mobile verification is blocked by the development owner credential.
+- No feature is currently In Progress. Feature Tasks is the next ready Pending feature.
 
 ## Blockers
 
