@@ -12,4 +12,8 @@ test("normalizes escaped line breaks in multiline CMS content", () => {
     normalizeMultilineText("First activity.\\n\\nSecond activity."),
     "First activity.\n\nSecond activity.",
   );
+  assert.equal(
+    normalizeMultilineText("First activity.`n`nSecond activity."),
+    "First activity.\n\nSecond activity.",
+  );
 });

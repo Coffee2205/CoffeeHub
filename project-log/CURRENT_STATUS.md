@@ -2,7 +2,7 @@
 
 ## Public Activities formatting — 2026-08-04
 
-The public CV Activities section now renders legacy escaped line breaks as real multiline content. CMS writes normalize escaped line breaks to prevent the visible `\\n` regression on future edits. No schema or migration changed.
+The public CV Activities section now renders legacy backslash and PowerShell-style escaped line breaks as real multiline content. CMS writes normalize both forms to prevent the visible escape regression on future edits. No schema or migration changed.
 
 ## Ongoing projects — 2026-08-04
 

@@ -2,7 +2,7 @@
 
 ## 2026-08-04 — Public Activities line-break fix
 
-- Normalized escaped `\\n` and `\\r\\n` sequences before CMS content is persisted.
+- Normalized escaped `\\n`/`\\r\\n` and PowerShell-style `` `n ``/`` `r`n `` sequences before CMS content is persisted.
 - Applied the same normalization while rendering Activities so existing published content displays correctly without a database migration.
 - Added regression coverage for escaped multiline content.
 
