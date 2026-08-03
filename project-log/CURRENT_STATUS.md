@@ -1,5 +1,9 @@
 # Current Status
 
+## Ongoing projects — 2026-08-04
+
+Admin Project create/edit supports `Đang thực hiện`. The existing date model is reused: `started_at` is required and `ended_at` remains null while ongoing. Public project cards/details and Admin lists expose the state without a schema or migration change. The temporary published E2E project was removed through the Admin soft-delete flow.
+
 ## Tasks delivery completed — 2026-08-04
 
 Owner Task management is complete at `/app/tasks`: list, create/edit/detail, status/priority/deadline, owner-scoped Goal/Roadmap/Stage relations, search/filter, optimistic completion with rollback, and archive. A browser-discovered pending-state defect was fixed by settling the mutation before refreshing the Server Component. Typecheck, lint, 51 tests, production build and authenticated desktop/mobile verification pass; the E2E Task was archived through the UI.

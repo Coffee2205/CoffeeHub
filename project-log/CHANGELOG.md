@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-04 — Ongoing project option
+
+- Added an Admin checkbox for projects that are still in progress; enabling it requires a start date, disables the end-date input and persists the existing `ended_at = null` representation.
+- Added server validation so a forged/stale end date is ignored while the ongoing option is active.
+- Public project cards and detail pages, plus the Admin project list, now display `Đang thực hiện` for ongoing projects.
+- Reused the existing Project model without a migration. Typecheck, lint, 54 tests, production build and Admin/public desktop/mobile browser verification pass; the temporary E2E project was soft-deleted through Admin.
+
 ## 2026-08-04 — Tasks delivery completed
 
 - Completed the protected `/app/tasks` list, create/edit/detail, status, priority, deadline, owner-scoped Goal/Roadmap/Stage relations, search/filter and archive flow.
