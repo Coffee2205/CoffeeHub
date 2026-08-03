@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-04 — Public Activities line-break fix
+
+- Normalized escaped `\\n` and `\\r\\n` sequences before CMS content is persisted.
+- Applied the same normalization while rendering Activities so existing published content displays correctly without a database migration.
+- Added regression coverage for escaped multiline content.
+
 ## 2026-08-04 — Ongoing project option
 
 - Added an Admin checkbox for projects that are still in progress; enabling it requires a start date, disables the end-date input and persists the existing `ended_at = null` representation.
