@@ -1,5 +1,12 @@
 # Issues
 
+## I-004 — Roadmaps verification environment unavailable
+
+- Trạng thái: Open; chặn việc đánh dấu Roadmaps delivery là Completed, không chặn commit implementation.
+- Browser CLI mở được `/login` một lần nhưng sau submit mất kênh CDP; các session tiếp theo treo hoặc trả `CDP response channel closed` dù production server trả HTTP 200.
+- Transaction rollback kiểm tra Supabase development đã được cấp network access nhưng không phản hồi và được dừng để tránh treo phiên.
+- Remediation: khởi động lại browser automation runtime, xác minh desktop/mobile và chạy lại create/reorder transaction hoặc luồng UI với database development.
+
 ## I-003 — Supabase leaked-password protection disabled
 
 - Trạng thái: Open; không chặn Development hoặc Task 07C4, cần xử lý trước Release.

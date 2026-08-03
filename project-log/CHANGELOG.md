@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-03 — Roadmaps implementation (verification pending)
+
+- Added the protected Goal Roadmap route with roadmap creation, milestone CRUD, transactional reorder and Task-derived progress.
+- Bound every milestone mutation to the verified owner and its Goal/Roadmap chain; added validation/progress regression tests.
+- Verified 48/48 tests, Prisma schema, lint, typecheck, production build and HTTP 200 smoke test.
+- Browser desktop/mobile and live persistence verification remain blocked by the automation/database environment, so the Task stays In Progress.
+
 ## 2026-08-02 — AI Foundation architecture and mock flow
 
 - Summary: Added proposal-only AI architecture and an authenticated `/app/ai` Mock Provider workflow with runtime validation, editable preview and disabled persistence.

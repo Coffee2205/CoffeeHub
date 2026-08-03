@@ -1,5 +1,9 @@
 # Current Status
 
+## Roadmaps delivery implementation — 2026-08-03
+
+Roadmaps delivery is implemented at `/app/goals/[goalId]/roadmap`: owner-scoped roadmap creation, milestone create/edit/archive, transactional reorder, Task-derived milestone status/progress, loading/empty/error/success states and responsive UI are present. The repository now binds mutations across the full owner/Goal/Roadmap/Stage chain. Tests 48/48, Prisma validate, lint, typecheck and production build pass; `/login` returns HTTP 200. The Task remains In Progress because browser desktop/mobile verification was blocked by a failed CDP channel and the direct Supabase development transaction check did not return.
+
 ## AI Foundation delivery — 2026-08-02
 
 Completed the proposal-only AI architecture and protected `/app/ai` mock flow. CoffeeHub now has typed actions/config/policies, provider registry with OpenAI/Groq/Gemini stubs plus working Mock Provider, runtime proposal schemas, context/prompt/mapping layers, normalized errors, usage metadata and future persistence contracts. No provider SDK/network, API key, migration or database write was added. Tests 46/46, lint, typecheck, production build and owner desktop/mobile browser verification pass. Goals remains the next ready product task.
@@ -78,7 +82,7 @@ Development
 
 ## Active task
 
-Feature AI Foundation is Completed (`tasks/epics/03-pwa-ai/features/02-ai-foundation/FEATURE.md`); no task is currently executing.
+Feature Roadmaps is In Progress (`tasks/epics/02-owner-workspace/features/04-roadmaps/FEATURE.md`).
 
 ## Repository state
 
@@ -101,7 +105,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 
 ## In progress
 
-- No feature is currently In Progress. Feature Goals is the next ready Pending feature; Public CV Experience and Polish remains blocked by PWA/Offline.
+- Feature Roadmaps is In Progress; implementation is ready but browser and development-database verification remain blocked.
 
 ## Blockers
 
