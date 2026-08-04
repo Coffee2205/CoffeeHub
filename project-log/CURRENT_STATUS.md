@@ -1,5 +1,9 @@
 # Current Status
 
+## Production profile avatar — 2026-08-04
+
+The published Profile now references `DSC_0011 (1).jpg` in the existing private `profile-avatars` folder. Database metadata and public rendering were verified, and the previous Storage object was permanently deleted through the Storage API. No schema or code change was required.
+
 ## Mobile owner login — 2026-08-04
 
 The mobile header now shows `Đăng nhập` in the former `Contact` position for anonymous visitors, while authenticated owners still see `Dashboard`. Production Supabase Auth and the login Server Action were independently verified with a mobile User-Agent; successful login redirects to `/app/dashboard` and sets the session cookie.

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-08-04 — Production profile avatar replacement
+
+- Repointed the published Profile avatar to the newly uploaded `DSC_0011 (1).jpg` object in the existing private `profile-avatars` owner folder.
+- Verified the replacement is a complete 555,122-byte JPEG and renders on `coffeehub.id.vn`, then permanently removed the superseded avatar through the Supabase Storage API.
+- No schema, migration or application code changed.
+
 ## 2026-08-04 — Mobile owner login access
 
 - Replaced the mobile header `Contact` CTA with `Đăng nhập`, keeping one clear owner-login entry point without adding a secondary row.
