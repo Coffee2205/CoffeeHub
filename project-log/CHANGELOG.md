@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-08-04 — Mobile owner login access
+
+- Added an anonymous mobile-only `Đăng nhập` CTA at the top of the public CV so owner login is reachable without manually entering `/login`.
+- Verified Supabase Production password auth returns tokens and the native mobile Server Action responds `303` to `/app/dashboard` with an auth cookie.
+
 ## 2026-08-04 — Public Activities line-break fix
 
 - Normalized escaped `\\n`/`\\r\\n` and PowerShell-style `` `n ``/`` `r`n `` sequences before CMS content is persisted.

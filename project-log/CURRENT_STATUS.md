@@ -1,5 +1,9 @@
 # Current Status
 
+## Mobile owner login — 2026-08-04
+
+Anonymous mobile visitors now have a visible `Đăng nhập` CTA on `/`. Production Supabase Auth and the login Server Action were independently verified with a mobile User-Agent; successful login redirects to `/app/dashboard` and sets the session cookie.
+
 ## Public Activities formatting — 2026-08-04
 
 The public CV Activities section now renders legacy backslash and PowerShell-style escaped line breaks as real multiline content. CMS writes normalize both forms to prevent the visible escape regression on future edits. No schema or migration changed.
