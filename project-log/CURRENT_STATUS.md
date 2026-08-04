@@ -2,7 +2,7 @@
 
 ## Mobile owner login — 2026-08-04
 
-Anonymous mobile visitors now have a visible `Đăng nhập` CTA on `/`. Production Supabase Auth and the login Server Action were independently verified with a mobile User-Agent; successful login redirects to `/app/dashboard` and sets the session cookie.
+The mobile header now shows `Đăng nhập` in the former `Contact` position for anonymous visitors, while authenticated owners still see `Dashboard`. Production Supabase Auth and the login Server Action were independently verified with a mobile User-Agent; successful login redirects to `/app/dashboard` and sets the session cookie.
 
 ## Public Activities formatting — 2026-08-04
 

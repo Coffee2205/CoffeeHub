@@ -2,7 +2,7 @@
 
 ## 2026-08-04 — Mobile owner login access
 
-- Added an anonymous mobile-only `Đăng nhập` CTA at the top of the public CV so owner login is reachable without manually entering `/login`.
+- Replaced the mobile header `Contact` CTA with `Đăng nhập`, keeping one clear owner-login entry point without adding a secondary row.
 - Verified Supabase Production password auth returns tokens and the native mobile Server Action responds `303` to `/app/dashboard` with an auth cookie.
 
 ## 2026-08-04 — Public Activities line-break fix
