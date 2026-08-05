@@ -8,6 +8,7 @@ Dùng file này cho mọi phiên sau khi project đã được khởi tạo.
 2. Đọc toàn bộ `project-log/`.
 3. Đọc `tasks/README.md`.
 4. Mở Feature và Task được chỉ định trong `project-log/NEXT_STEPS.md`.
+   - Đọc và tuân thủ `docs/CODE_FORMATTING.md` cho mọi code mới hoặc code vừa sửa.
    - Với public CV, đọc `docs/PUBLIC_CV_CONTENT_REFERENCE.md` và quyết định D-012.
    - Với AI, đọc quyết định D-013 cùng `docs/AI_ACTIONS.md`, `docs/AI_ARCHITECTURE.md` và `docs/AI_SECURITY.md`.
 5. Nếu có Task `In Progress`, tiếp tục đúng Task đó.
@@ -20,6 +21,7 @@ Dùng file này cho mọi phiên sau khi project đã được khởi tạo.
    - dữ liệu thật hoặc empty state hợp lý;
    - browser test desktop và mobile khi có UI.
 10. Sau khi hoàn thành:
+    - chạy Prettier write/check đúng các file thuộc task và ESLint theo cấu hình dự án;
     - chạy validation;
     - cập nhật Feature/Task và project-log;
     - commit;

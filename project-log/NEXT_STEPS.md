@@ -6,15 +6,17 @@
 
 ## Next Feature
 
-`tasks/epics/02-owner-workspace/features/06-calendar/FEATURE.md`
+`tasks/epics/02-owner-workspace/features/07-notes-autosave/FEATURE.md`
 
 ## Next Task
 
-`tasks/epics/02-owner-workspace/features/06-calendar/tasks/01-delivery.md`
+`tasks/epics/02-owner-workspace/features/07-notes-autosave/tasks/01-delivery.md`
 
 ## Required next work
 
-Tasks delivery đã Completed ngày 2026-08-04. Task canonical tiếp theo là Calendar delivery; không bắt đầu trong phiên Tasks này.
+Calendar delivery đã Completed ngày 2026-08-05. Task canonical tiếp theo là Notes and Autosave delivery; không bắt đầu trong phiên Calendar này.
+
+Calendar có agenda theo tháng, Event CRUD, timezone IANA, recurrence cơ bản và owner-scoped Goal/Task relation. Migration additive đã áp dụng và xác minh trên Supabase development; browser desktop/mobile và cleanup E2E đạt.
 
 Roadmaps đã Completed ngày 2026-08-03 với tests, lint, typecheck, Prisma validate, production build, transaction rollback và owner browser E2E desktop/mobile đạt; dữ liệu E2E đã cleanup sạch.
 

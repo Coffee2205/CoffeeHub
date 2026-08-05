@@ -6,7 +6,7 @@
 
 ## Status
 
-Pending
+Completed
 
 ## Goal
 

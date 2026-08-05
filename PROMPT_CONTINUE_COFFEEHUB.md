@@ -18,6 +18,7 @@ Tiếp tục dự án CoffeeHub theo bộ tài liệu hiện tại.
    - `docs/AI_CONTEXT.md`
    - `docs/AI_SECURITY.md`
    - `docs/TECHNICAL_DESIGN.md`
+   - `docs/CODE_FORMATTING.md`
 3. Audit repository, schema Prisma/migrations, Supabase policies và code hiện tại trước khi sửa. Tái sử dụng model/service/field hiện có; không tạo cấu trúc trùng.
 4. Thực hiện đúng một Task/Subtask theo ưu tiên trong `NEXT_STEPS.md`. Yêu cầu sản phẩm bắt buộc:
    - `https://coffeehub.id.vn/` và route `/` phải là CV/portfolio thật của tôi, xem được anonymous, không phải landing page quảng cáo CoffeeHub.
@@ -29,11 +30,12 @@ Tiếp tục dự án CoffeeHub theo bộ tài liệu hiện tại.
    - Chatbot v1 không được delete dữ liệu, đổi role/quyền, publish CMS, chạy migration theo lời model hoặc thực hiện thao tác đặc quyền.
 5. Mỗi feature phải có kết quả mở và sử dụng được, loading/empty/error/success state, dữ liệu thật hoặc empty state đúng, browser verification desktop và mobile. Không đánh dấu Completed nếu mới có schema/mock/test mà UI chưa dùng được.
 6. Không tự chạy production migration/deploy, không bật dịch vụ trả phí và không đưa secret vào code/log. Nếu cần credential hoặc quyết định có rủi ro, ghi blocker và dừng theo `agent/STOP_CONDITIONS.md`.
-7. Sau khi hoàn thành đúng một Task/Subtask: chạy validation phù hợp, cập nhật task/Feature/project-log, kiểm tra diff, commit tập trung, pull --rebase `origin/dev` khi an toàn, push duy nhất `origin/dev`, báo cáo URL/cách dùng/database changes/test/commit/push và dừng hoàn toàn. Không tự bắt đầu task tiếp theo.
+7. Mọi code mới hoặc code vừa sửa phải được format bằng Prettier trên đúng danh sách file thuộc task, sau đó chạy Prettier check và ESLint theo cấu hình repository. Không chạy formatter toàn repository khi có file dirty ngoài phạm vi; không format generated output, lockfile, `.env*` hoặc secret. Tuân thủ đầy đủ `docs/CODE_FORMATTING.md`.
+8. Sau khi hoàn thành đúng một Task/Subtask: chạy validation phù hợp, cập nhật task/Feature/project-log, chạy `git diff --check`, kiểm tra diff, commit tập trung, pull --rebase `origin/dev` khi an toàn, push duy nhất `origin/dev`, báo cáo URL/cách dùng/database changes/format check/lint/type-check/test/build/commit/push và dừng hoàn toàn. Không tự bắt đầu task tiếp theo.
 ```
 
 Sau phiên đầu, nếu agent đã đọc bộ tài liệu mới và project-log đã cập nhật, các phiên sau có thể dùng prompt ngắn:
 
 ```text
-Đọc `agent/CONTINUE.md` và tiếp tục đúng task hiện tại. Tuân thủ các quyết định D-012/D-013 và `docs/PUBLIC_CV_CONTENT_REFERENCE.md`; hoàn thành một Task/Subtask, kiểm tra, commit, push `origin/dev`, báo cáo và dừng.
+Đọc `agent/CONTINUE.md` và tiếp tục đúng task hiện tại. Tuân thủ các quyết định D-012/D-013, `docs/PUBLIC_CV_CONTENT_REFERENCE.md` và `docs/CODE_FORMATTING.md`; format/check code mới, hoàn thành một Task/Subtask, kiểm tra, commit, push `origin/dev`, báo cáo và dừng.
 ```

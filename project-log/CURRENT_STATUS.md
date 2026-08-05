@@ -1,5 +1,9 @@
 # Current Status
 
+## Calendar delivery completed — 2026-08-05
+
+Owner Calendar is complete at `/app/calendar`: monthly calendar, agenda, Event create/edit/archive, strict start/end validation, IANA timezone conversion, basic recurrence and optional Goal/Task relations. The additive development migration preserves owner RLS and adds composite ownership foreign keys. Prisma validation, lint, typecheck, 58 tests, production build and authenticated desktop/mobile browser verification pass; the exact E2E Event was removed with zero residue.
+
 ## Production profile avatar — 2026-08-04
 
 The published Profile now references `DSC_0011 (1).jpg` in the existing private `profile-avatars` folder. Database metadata and public rendering were verified, and the previous Storage object was permanently deleted through the Storage API. No schema or code change was required.
@@ -110,7 +114,7 @@ Development
 
 ## Active task
 
-Tasks is Completed (`tasks/epics/02-owner-workspace/features/05-tasks/FEATURE.md`); no task is currently executing.
+Calendar is Completed (`tasks/epics/02-owner-workspace/features/06-calendar/FEATURE.md`); no task is currently executing.
 
 ## Repository state
 

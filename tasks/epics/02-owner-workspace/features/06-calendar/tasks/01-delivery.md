@@ -9,7 +9,7 @@
 
 ## Trạng thái
 
-Pending
+Completed
 
 ## Mục tiêu
 
@@ -21,13 +21,13 @@ Tạo Event và giao diện lịch
 
 ## Subtasks
 
-- [ ] Calendar/agenda view
-- [ ] Event CRUD
-- [ ] Start/end validation
-- [ ] Timezone
-- [ ] Recurrence cơ bản
-- [ ] Goal/Task relation
-- [ ] Responsive
+- [x] Calendar/agenda view
+- [x] Event CRUD
+- [x] Start/end validation
+- [x] Timezone
+- [x] Recurrence cơ bản
+- [x] Goal/Task relation
+- [x] Responsive
 
 ## Không thực hiện
 
@@ -55,19 +55,29 @@ Có thể thêm Event và recurrence fields.
 
 ### File đã tạo hoặc sửa
 
-- Chưa cập nhật.
+- Thêm `/app/calendar`, `/app/calendar/new`, `/app/calendar/[eventId]` và loading state.
+- Thêm Event schema/repository/actions/form cùng regression test timezone/range.
+- Mở rộng Prisma Event bằng recurrence và optional Goal/Task composite relations.
+- Thêm `docs/CODE_FORMATTING.md` và nối quy trình format vào continuation prompt theo yêu cầu trực tiếp.
 
 ### Quyết định kỹ thuật
 
-- Chưa cập nhật.
+- Tái sử dụng bảng `events`, timezone Profile và luồng auth/repository hiện có.
+- Lưu instant dạng `timestamptz`; form chuyển wall time theo IANA timezone trước khi ghi.
+- Recurrence v1 giới hạn ở NONE/DAILY/WEEKLY/MONTHLY; không thêm notification hoặc external calendar sync.
+- Goal/Task relation dùng composite foreign key cùng `user_id`; action vẫn kiểm tra ownership trước mutation.
 
 ### Vấn đề còn lại
 
-- Chưa cập nhật.
+- Supabase leaked-password protection I-003 vẫn mở và không thuộc phạm vi Calendar.
+- Performance advisor báo index mới chưa được dùng vì bảng Event chưa có dữ liệu thật; đây là trạng thái dự kiến.
 
 ### Kiểm tra
 
-- Lint: Chưa chạy.
-- Typecheck: Chưa chạy.
-- Build: Chưa chạy.
-- Manual test: Chưa chạy.
+- Format: Prettier write/check đạt trên toàn bộ TS/TSX/MD thuộc task.
+- Prisma: generate và validate đạt; migration development áp dụng thành công, RLS/FK/cột đã xác minh.
+- Lint: Đạt.
+- Typecheck: Đạt.
+- Test: 58/58 đạt.
+- Build: Đạt; Next.js nhận `/app/calendar`, `/app/calendar/new`, `/app/calendar/[eventId]`.
+- Manual test: owner create/edit/archive Event đạt; desktop và mobile 390×844 không overflow, overlay hoặc browser error; dữ liệu E2E đã cleanup về 0.

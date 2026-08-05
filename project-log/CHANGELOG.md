@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-08-05 — Calendar delivery completed
+
+- Added protected monthly Calendar and agenda routes with Event create/edit/archive, loading/empty/error/success states and responsive navigation.
+- Added strict start/end validation, IANA timezone conversion, basic recurrence and optional owner-scoped Goal/Task relations.
+- Applied and verified the additive Event migration on Supabase development; existing Event RLS remains enabled and forced.
+- Added the reusable code-formatting workflow and made it mandatory in the continuation prompt.
+- Passed Prettier check, Prisma generate/validate, lint, typecheck, 58/58 tests, production build and authenticated desktop/mobile browser verification; removed the exact E2E Event with zero residue.
+
 ## 2026-08-04 — Production profile avatar replacement
 
 - Repointed the published Profile avatar to the newly uploaded `DSC_0011 (1).jpg` object in the existing private `profile-avatars` owner folder.
