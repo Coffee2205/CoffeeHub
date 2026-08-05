@@ -14,7 +14,9 @@
 
 ## Required next work
 
-Calendar delivery đã Completed ngày 2026-08-05. Task canonical tiếp theo là Notes and Autosave delivery; không bắt đầu trong phiên Calendar này.
+Notes and Autosave delivery đang In Progress. Subtask Note list/editor đã hoàn thành ngày 2026-08-05 cùng implementation autosave/draft/conflict; phiên kế tiếp phải xác minh authenticated desktop/mobile, offline restore/retry và conflict trước khi tick các subtask còn lại hoặc Completed Task.
+
+`agent-browser` đã tải được trang login nhưng CDP session treo khi điền credential trong phiên này. Không coi browser verification là đạt; khởi tạo session sạch và tiếp tục đúng Task hiện tại.
 
 Calendar có agenda theo tháng, Event CRUD, timezone IANA, recurrence cơ bản và owner-scoped Goal/Task relation. Migration additive đã áp dụng và xác minh trên Supabase development; browser desktop/mobile và cleanup E2E đạt.
 

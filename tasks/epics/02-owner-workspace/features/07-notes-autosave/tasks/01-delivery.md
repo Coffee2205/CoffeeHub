@@ -9,7 +9,7 @@
 
 ## Trạng thái
 
-Pending
+In Progress
 
 ## Mục tiêu
 
@@ -21,7 +21,7 @@ Tạo Note editor có autosave, local draft và conflict detection
 
 ## Subtasks
 
-- [ ] Note list/editor
+- [x] Note list/editor
 - [ ] Debounce 800–1200ms
 - [ ] Không save lần render đầu
 - [ ] Save status
@@ -57,19 +57,26 @@ Note cần version và timestamps; migration nếu thiếu.
 
 ### File đã tạo hoặc sửa
 
-- Chưa cập nhật.
+- `src/app/app/notes/*`: danh sách, tìm kiếm, tạo mới và editor được bảo vệ bởi owner session.
+- `src/features/notes/*`: validation, repository owner-scoped, Server Actions và UI editor.
+- `src/features/sync/note-draft-store.ts`: IndexedDB draft store theo Note và user.
 
 ### Quyết định kỹ thuật
 
-- Chưa cập nhật.
+- Giữ nguyên schema `notes` hiện có vì đã có version, timestamps và owner RLS.
+- Repository/service boundary không cho client hoặc AI truy cập database trực tiếp, phù hợp D-013.
+- Update dùng expected version; payload retry trùng nội dung được xem là idempotent, conflict khác nội dung không bị overwrite âm thầm.
 
 ### Vấn đề còn lại
 
-- Chưa cập nhật.
+- Browser automation tải được `/login`, nhưng session CDP treo khi điền credential; chưa xác minh authenticated desktop/mobile nên Task chưa Completed.
+- Các subtask autosave/offline/conflict đã có implementation nhưng giữ unchecked cho tới khi browser E2E hoàn tất.
 
 ### Kiểm tra
 
-- Lint: Chưa chạy.
-- Typecheck: Chưa chạy.
-- Build: Chưa chạy.
-- Manual test: Chưa chạy.
+- Lint: Đạt (`npm run lint`).
+- Typecheck: Đạt (`npm run typecheck`).
+- Test: Đạt 58/58 (`npm test`).
+- Build: Đạt (`npm run build` ngoài sandbox; lần đầu trong sandbox bị `EACCES` khi Prisma prerender `/admin`).
+- Supabase: `notes` có RLS và policy `owner_or_admin_all`; không cần migration.
+- Manual test: `/login` tải có nội dung; authenticated desktop/mobile chưa đạt do agent-browser CDP treo.

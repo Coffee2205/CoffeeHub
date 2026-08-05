@@ -12,7 +12,7 @@ Hoàn thiện workspace riêng tư của owner với các module quản lý cá 
 4. [Roadmaps](features/04-roadmaps/FEATURE.md) — `Completed`
 5. [Tasks](features/05-tasks/FEATURE.md) — `Pending`
 6. [Calendar](features/06-calendar/FEATURE.md) — `Completed`
-7. [Notes and Autosave](features/07-notes-autosave/FEATURE.md) — `Pending`
+7. [Notes and Autosave](features/07-notes-autosave/FEATURE.md) — `In Progress`
 8. [Checklists](features/08-checklists/FEATURE.md) — `Pending`
 9. [Notifications](features/09-notifications/FEATURE.md) — `Pending`
 

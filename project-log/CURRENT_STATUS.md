@@ -1,5 +1,9 @@
 # Current Status
 
+## Notes list/editor subtask completed — 2026-08-05
+
+Protected Notes routes now provide owner-scoped list, search, create and editor UI. The implementation also lays down 1-second autosave, user-bound IndexedDB drafts, retry states and optimistic version conflict handling without changing the existing database schema. Lint, typecheck, 58 tests and production build pass; live `notes` RLS is enabled with `owner_or_admin_all`. The delivery Task remains In Progress because authenticated desktop/mobile browser verification was blocked by a hanging agent-browser CDP session and is not claimed as passed.
+
 ## Calendar delivery completed — 2026-08-05
 
 Owner Calendar is complete at `/app/calendar`: monthly calendar, agenda, Event create/edit/archive, strict start/end validation, IANA timezone conversion, basic recurrence and optional Goal/Task relations. The additive development migration preserves owner RLS and adds composite ownership foreign keys. Prisma validation, lint, typecheck, 58 tests, production build and authenticated desktop/mobile browser verification pass; the exact E2E Event was removed with zero residue.
@@ -114,7 +118,7 @@ Development
 
 ## Active task
 
-Calendar is Completed (`tasks/epics/02-owner-workspace/features/06-calendar/FEATURE.md`); no task is currently executing.
+Notes and Autosave is In Progress (`tasks/epics/02-owner-workspace/features/07-notes-autosave/tasks/01-delivery.md`); Note list/editor is completed and authenticated browser verification is next.
 
 ## Repository state
 
@@ -137,7 +141,7 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 
 ## In progress
 
-- No feature is currently In Progress. Feature Tasks is the next ready Pending feature.
+- Notes and Autosave is In Progress; authenticated desktop/mobile verification and remaining subtask sign-off are next.
 
 ## Blockers
 
