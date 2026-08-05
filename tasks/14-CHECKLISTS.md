@@ -12,6 +12,12 @@ Chốt domain và triển khai Checklist không trùng Subtask
 
 - `13-NOTES-AUTOSAVE.md` phải hoàn thành.
 
+## Thành quả nhìn thấy và sử dụng được
+
+- **Route:** `/app/checklists hoặc màn hình entity chứa checklist`
+- **Luồng:** Tạo checklist/item, tick hoàn thành và thấy tiến độ cập nhật.
+- Task không hoàn thành nếu route chỉ là placeholder hoặc chưa được browser-test desktop/mobile.
+
 ## Công việc
 
 - [ ] Viết quyết định Checklist vs Subtask
@@ -62,4 +68,8 @@ Có thể thêm Checklist và ChecklistItem model.
 - Lint: Chưa chạy.
 - Typecheck: Chưa chạy.
 - Build: Chưa chạy.
+- Visible result URL: Chưa có.
+- How to use: Chưa cập nhật.
+- Browser desktop: Chưa chạy.
+- Browser mobile: Chưa chạy.
 - Manual test: Chưa chạy.

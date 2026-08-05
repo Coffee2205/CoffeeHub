@@ -12,6 +12,12 @@ Biến ứng dụng thành PWA và triển khai mutation queue an toàn
 
 - `15-NOTIFICATIONS.md` phải hoàn thành.
 
+## Thành quả nhìn thấy và sử dụng được
+
+- **Route:** `/app/dashboard và installable PWA`
+- **Luồng:** Cài PWA hoặc kiểm tra installability; mở shell/offline fallback khi mất mạng.
+- Task không hoàn thành nếu route chỉ là placeholder hoặc chưa được browser-test desktop/mobile.
+
 ## Công việc
 
 - [ ] Manifest/icons
@@ -71,4 +77,8 @@ Có thể thêm IdempotencyRecord nếu backend chưa có.
 - Lint: Chưa chạy.
 - Typecheck: Chưa chạy.
 - Build: Chưa chạy.
+- Visible result URL: Chưa có.
+- How to use: Chưa cập nhật.
+- Browser desktop: Chưa chạy.
+- Browser mobile: Chưa chạy.
 - Manual test: Chưa chạy.

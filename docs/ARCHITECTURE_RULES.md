@@ -173,7 +173,6 @@ Không trả raw database error hoặc stack trace cho client.
 - Không đổi naming toàn dự án trong cùng phiên với feature mới nếu không cần thiết.
 - Giữ migration path rõ ràng khi thay đổi domain model.
 
-
 ## CV-first access architecture
 
 CoffeeHub dùng mô hình single-owner:

@@ -5,7 +5,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Portfolio",
-  description: "CV và portfolio công khai được quản lý từ nội dung đã xuất bản.",
+  description:
+    "CV và portfolio công khai được quản lý từ nội dung đã xuất bản.",
 };
 
 export default function RootLayout({

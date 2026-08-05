@@ -18,7 +18,7 @@ Nhận yêu cầu
 
 ## Bắt đầu nhanh
 
-Đưa cho coding agent nội dung trong [`START_AGENT.md`](START_AGENT.md).
+Đưa cho coding agent nội dung trong [`PROMPT_CONTINUE_COFFEEHUB.md`](PROMPT_CONTINUE_COFFEEHUB.md). `START_AGENT.md` là entry point rút gọn.
 
 ## Chạy ứng dụng cục bộ
 
@@ -67,3 +67,22 @@ Bootstrap chỉ tạo client/helper cục bộ. Nó không tạo Supabase projec
 - Nội dung thường xuyên thay đổi phải quản trị được từ giao diện Admin/CMS, không hard-code.
 - Người dùng không cần sửa code hoặc thao tác database trực tiếp để cập nhật hồ sơ, dự án, bài viết, menu, footer, SEO và nội dung công khai.
 - Thay đổi cấu trúc dữ liệu, logic nghiệp vụ hoặc bố cục mới vẫn có thể cần một task code riêng.
+
+
+## Làm việc ở các phiên tiếp theo
+
+Sau lần khởi động đầu tiên, không cần viết lại prompt dài.
+
+Chỉ cần gửi agent:
+
+```text
+Đọc `agent/CONTINUE.md` và tiếp tục task hiện tại.
+```
+
+Roadmap được tổ chức theo:
+
+```text
+Epic → Feature → Task → Subtask
+```
+
+Điều này cho phép thêm task mới mà không phải đánh lại số toàn bộ dự án.

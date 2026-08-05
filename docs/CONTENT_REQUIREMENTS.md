@@ -52,6 +52,10 @@ Khách xem không cần account. Nội dung công khai cần chuẩn bị:
 
 Headline và subheadline phải mô tả chính chủ sở hữu như một CV, không chỉ mô tả sản phẩm CoffeeHub. Nội dung cụ thể được chỉnh từ CMS.
 
+Tên hiển thị là nội dung hồ sơ do owner nhập và lưu trong database. Không suy ra tên từ Gmail/auth email, không hiển thị phần trước dấu `@`, và không dùng auth email làm fallback trên bất kỳ public route nào.
+
+CV tham chiếu hiện có gồm các nhóm nội dung: thông tin giới thiệu, mục tiêu nghề nghiệp, học vấn, chứng chỉ, hoạt động, kỹ năng theo nhóm, dự án và kinh nghiệm làm việc. Mapping và dữ liệu tham khảo nằm trong `docs/PUBLIC_CV_CONTENT_REFERENCE.md`.
+
 CoffeeHub có thể xuất hiện như một dự án nổi bật trong portfolio, không phải toàn bộ danh tính của website public.
 
 ## Dashboard

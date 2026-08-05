@@ -5,7 +5,13 @@ const nextConfig: NextConfig = {
     remotePatterns: (() => {
       try {
         const storageUrl = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "");
-        return [{ protocol: "https" as const, hostname: storageUrl.hostname, pathname: "/storage/v1/object/sign/profile-avatars/**" }];
+        return [
+          {
+            protocol: "https" as const,
+            hostname: storageUrl.hostname,
+            pathname: "/storage/v1/object/sign/profile-avatars/**",
+          },
+        ];
       } catch {
         return [];
       }

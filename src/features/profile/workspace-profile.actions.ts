@@ -12,7 +12,9 @@ export async function saveWorkspaceProfileAction(form: FormData) {
   const parsed = parseWorkspaceProfileForm(form);
 
   if (!parsed.data) {
-    redirect(`/app/profile?error=${encodeURIComponent(parsed.errors.join(" "))}`);
+    redirect(
+      `/app/profile?error=${encodeURIComponent(parsed.errors.join(" "))}`,
+    );
   }
 
   await saveWorkspaceProfile(user.id, parsed.data);

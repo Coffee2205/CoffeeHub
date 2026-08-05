@@ -7,6 +7,7 @@
 - Database và authentication foundation đã có; CMS và feature application vẫn thuộc các task sau.
 - Route `/` hiện là trang preview design foundation, chưa phải landing page hoặc application shell hoàn chỉnh.
 - Dashboard hiện tính ngày/tuần theo UTC vì Profile chưa có timezone preference.
+
 # Supabase đã khởi tạo database foundation
 
 Supabase CoffeeHub development project đã có domain schema, migrations, RLS và Auth flow nhưng chưa có account thật, Storage bucket hoặc lịch backup/export vận hành. Email confirmation/refresh/logout E2E cần redirect URL và email của môi trường triển khai.

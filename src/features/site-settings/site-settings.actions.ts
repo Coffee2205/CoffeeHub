@@ -1,6 +1,68 @@
-"use server"; import {revalidatePath} from "next/cache"; import {notFound,redirect} from "next/navigation"; import {requireAdmin} from "@/lib/supabase/auth"; import {createManagedItem,saveSiteSetting,softDeleteManagedItem,updateManagedItem} from "./site-settings.repository"; import {MANAGED_KINDS,parseManagedForm,parseSettingForm,type ManagedKind} from "./site-settings.schema";
-const valid=(kind:string):kind is ManagedKind=>MANAGED_KINDS.some(item=>item===kind);const refresh=()=>{revalidatePath("/admin");revalidatePath("/admin/settings");};
-export async function createManagedAction(kindValue:string,form:FormData){const user=await requireAdmin();if(!valid(kindValue))notFound();const parsed=parseManagedForm(kindValue,form);if(!parsed.data)redirect(`/admin/settings/${kindValue}/new?error=${encodeURIComponent(parsed.errors.join(" "))}`);await createManagedItem(kindValue,user.id,parsed.data);refresh();redirect("/admin/settings?saved=1");}
-export async function updateManagedAction(kindValue:string,id:string,form:FormData){await requireAdmin();if(!valid(kindValue))notFound();const parsed=parseManagedForm(kindValue,form);if(!parsed.data)redirect(`/admin/settings/${kindValue}/${id}/edit?error=${encodeURIComponent(parsed.errors.join(" "))}`);await updateManagedItem(kindValue,id,parsed.data);refresh();redirect("/admin/settings?saved=1");}
-export async function deleteManagedAction(kindValue:string,id:string){await requireAdmin();if(!valid(kindValue))notFound();await softDeleteManagedItem(kindValue,id);refresh();redirect("/admin/settings?saved=1");}
-export async function saveSettingAction(form:FormData){const user=await requireAdmin();const parsed=parseSettingForm(form);if(!parsed.data)redirect(`/admin/settings?error=${encodeURIComponent(parsed.errors.join(" "))}`);await saveSiteSetting(user.id,parsed.data);refresh();redirect("/admin/settings?saved=1");}
+"use server";
+import { revalidatePath } from "next/cache";
+import { notFound, redirect } from "next/navigation";
+import { requireAdmin } from "@/lib/supabase/auth";
+import {
+  createManagedItem,
+  saveSiteSetting,
+  softDeleteManagedItem,
+  updateManagedItem,
+} from "./site-settings.repository";
+import {
+  MANAGED_KINDS,
+  parseManagedForm,
+  parseSettingForm,
+  type ManagedKind,
+} from "./site-settings.schema";
+const valid = (kind: string): kind is ManagedKind =>
+  MANAGED_KINDS.some((item) => item === kind);
+const refresh = () => {
+  revalidatePath("/admin");
+  revalidatePath("/admin/settings");
+};
+export async function createManagedAction(kindValue: string, form: FormData) {
+  const user = await requireAdmin();
+  if (!valid(kindValue)) notFound();
+  const parsed = parseManagedForm(kindValue, form);
+  if (!parsed.data)
+    redirect(
+      `/admin/settings/${kindValue}/new?error=${encodeURIComponent(parsed.errors.join(" "))}`,
+    );
+  await createManagedItem(kindValue, user.id, parsed.data);
+  refresh();
+  redirect("/admin/settings?saved=1");
+}
+export async function updateManagedAction(
+  kindValue: string,
+  id: string,
+  form: FormData,
+) {
+  await requireAdmin();
+  if (!valid(kindValue)) notFound();
+  const parsed = parseManagedForm(kindValue, form);
+  if (!parsed.data)
+    redirect(
+      `/admin/settings/${kindValue}/${id}/edit?error=${encodeURIComponent(parsed.errors.join(" "))}`,
+    );
+  await updateManagedItem(kindValue, id, parsed.data);
+  refresh();
+  redirect("/admin/settings?saved=1");
+}
+export async function deleteManagedAction(kindValue: string, id: string) {
+  await requireAdmin();
+  if (!valid(kindValue)) notFound();
+  await softDeleteManagedItem(kindValue, id);
+  refresh();
+  redirect("/admin/settings?saved=1");
+}
+export async function saveSettingAction(form: FormData) {
+  const user = await requireAdmin();
+  const parsed = parseSettingForm(form);
+  if (!parsed.data)
+    redirect(
+      `/admin/settings?error=${encodeURIComponent(parsed.errors.join(" "))}`,
+    );
+  await saveSiteSetting(user.id, parsed.data);
+  refresh();
+  redirect("/admin/settings?saved=1");
+}

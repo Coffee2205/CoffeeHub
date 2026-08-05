@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { getDashboardRanges, getGreeting } from "../src/features/dashboard/date-ranges";
+import {
+  getDashboardRanges,
+  getGreeting,
+} from "../src/features/dashboard/date-ranges";
 import { calculateProgress } from "../src/features/dashboard/metrics";
 
 test("builds Monday-based UTC dashboard ranges", () => {
@@ -13,12 +16,23 @@ test("builds Monday-based UTC dashboard ranges", () => {
 });
 
 test("calculates weekly progress without inventing data", () => {
-  assert.deepEqual(calculateProgress([]), { completed: 0, total: 0, percentage: 0 });
-  assert.deepEqual(calculateProgress(["COMPLETED", "TODO", "COMPLETED"]), { completed: 2, total: 3, percentage: 67 });
+  assert.deepEqual(calculateProgress([]), {
+    completed: 0,
+    total: 0,
+    percentage: 0,
+  });
+  assert.deepEqual(calculateProgress(["COMPLETED", "TODO", "COMPLETED"]), {
+    completed: 2,
+    total: 3,
+    percentage: 67,
+  });
 });
 
 test("selects UTC greeting by hour", () => {
   assert.equal(getGreeting(new Date("2026-07-27T08:00:00Z")), "Chào buổi sáng");
-  assert.equal(getGreeting(new Date("2026-07-27T13:00:00Z")), "Chào buổi chiều");
+  assert.equal(
+    getGreeting(new Date("2026-07-27T13:00:00Z")),
+    "Chào buổi chiều",
+  );
   assert.equal(getGreeting(new Date("2026-07-27T20:00:00Z")), "Chào buổi tối");
 });

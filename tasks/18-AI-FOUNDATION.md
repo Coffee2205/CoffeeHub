@@ -12,6 +12,12 @@ Tạo provider abstraction, fallback, structured output và AI action foundation
 
 - `17-PUBLIC-LANDING.md` phải hoàn thành.
 
+## Thành quả nhìn thấy và sử dụng được
+
+- **Route:** `/app/settings/ai hoặc /app/ai/status`
+- **Luồng:** Xem provider availability an toàn, gửi một structured test request không lộ secret và thấy fallback/error state.
+- Task không hoàn thành nếu route chỉ là placeholder hoặc chưa được browser-test desktop/mobile.
+
 ## Công việc
 
 - [ ] Provider interface
@@ -71,4 +77,8 @@ Thêm AIActionLog và model liên quan; migration bắt buộc review.
 - Lint: Chưa chạy.
 - Typecheck: Chưa chạy.
 - Build: Chưa chạy.
+- Visible result URL: Chưa có.
+- How to use: Chưa cập nhật.
+- Browser desktop: Chưa chạy.
+- Browser mobile: Chưa chạy.
 - Manual test: Chưa chạy.

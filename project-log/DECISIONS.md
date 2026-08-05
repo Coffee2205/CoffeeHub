@@ -52,7 +52,6 @@ Mỗi task feature phải kết thúc bằng một route có thể mở và mộ
 
 Public website cơ bản phải được hoàn thiện trong Task 07 cùng CMS. Task 17 chỉ polish, SEO, storytelling và performance; không trì hoãn lần đầu nhìn thấy website đến Task 17.
 
-
 ## CV-first public access
 
 - Website public là CV/portfolio chính thức của chủ sở hữu.
@@ -61,7 +60,6 @@ Public website cơ bản phải được hoàn thiện trong Task 07 cùng CMS. 
 - Owner đăng nhập được chuyển đến `/app/dashboard` và truy cập toàn bộ workspace.
 - Owner/admin quản lý CV qua `/admin`.
 - Login không phải cơ chế mở khóa thêm thông tin CV; publish status quyết định dữ liệu công khai.
-
 
 ## Epic-based planning
 

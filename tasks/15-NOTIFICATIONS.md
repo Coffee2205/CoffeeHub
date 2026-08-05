@@ -12,6 +12,12 @@ Tạo domain Reminder và nền tảng notification có giới hạn rõ
 
 - `14-CHECKLISTS.md` phải hoàn thành.
 
+## Thành quả nhìn thấy và sử dụng được
+
+- **Route:** `/app/notifications và settings liên quan`
+- **Luồng:** Tạo/cấu hình reminder và thấy notification/deep link trong luồng hỗ trợ.
+- Task không hoàn thành nếu route chỉ là placeholder hoặc chưa được browser-test desktop/mobile.
+
 ## Công việc
 
 - [ ] Reminder model
@@ -63,4 +69,8 @@ Thêm Reminder/Preference; scheduling backend tùy giải pháp được chốt.
 - Lint: Chưa chạy.
 - Typecheck: Chưa chạy.
 - Build: Chưa chạy.
+- Visible result URL: Chưa có.
+- How to use: Chưa cập nhật.
+- Browser desktop: Chưa chạy.
+- Browser mobile: Chưa chạy.
 - Manual test: Chưa chạy.

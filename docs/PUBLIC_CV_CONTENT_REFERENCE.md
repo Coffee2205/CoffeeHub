@@ -6,13 +6,13 @@ File này là nguồn nội dung ban đầu cho public CV tại `https://coffeeh
 
 ## Quy tắc quyền riêng tư
 
-| Trường từ CV | Mặc định trên website |
-|---|---|
-| Tên, chức danh, thành phố, giới thiệu nghề nghiệp | Public khi profile được publish |
-| Email liên hệ nghề nghiệp | Public chỉ khi owner bật `show_contact_email` hoặc cơ chế visibility tương đương |
-| Số điện thoại | Hidden mặc định; chỉ public khi owner chủ động bật |
-| Ngày sinh, giới tính | Không cần hiển thị trên web CV mặc định |
-| Auth email | Luôn private; không dùng làm display name hoặc public contact fallback |
+| Trường từ CV                                      | Mặc định trên website                                                            |
+| ------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Tên, chức danh, thành phố, giới thiệu nghề nghiệp | Public khi profile được publish                                                  |
+| Email liên hệ nghề nghiệp                         | Public chỉ khi owner bật `show_contact_email` hoặc cơ chế visibility tương đương |
+| Số điện thoại                                     | Hidden mặc định; chỉ public khi owner chủ động bật                               |
+| Ngày sinh, giới tính                              | Không cần hiển thị trên web CV mặc định                                          |
+| Auth email                                        | Luôn private; không dùng làm display name hoặc public contact fallback           |
 
 Không tạo field trùng nếu database đã có field tương đương. Nếu cần bổ sung visibility/configuration, dùng migration additive và giao diện Admin thay vì SQL thủ công.
 

@@ -5,7 +5,18 @@ import { getPrisma } from "@/lib/prisma";
 export async function getAdminPreviewData() {
   const db = getPrisma();
 
-  const [settings, profiles, experiences, skills, education, sections, projects, posts, faqs, links] = await Promise.all([
+  const [
+    settings,
+    profiles,
+    experiences,
+    skills,
+    education,
+    sections,
+    projects,
+    posts,
+    faqs,
+    links,
+  ] = await Promise.all([
     db.siteSetting.findMany({
       where: { deletedAt: null },
       orderBy: { updatedAt: "desc" },
@@ -28,7 +39,11 @@ export async function getAdminPreviewData() {
     }),
     db.contentSection.findMany({
       where: { deletedAt: null },
-      orderBy: [{ pageKey: "asc" }, { displayOrder: "asc" }, { updatedAt: "desc" }],
+      orderBy: [
+        { pageKey: "asc" },
+        { displayOrder: "asc" },
+        { updatedAt: "desc" },
+      ],
     }),
     db.project.findMany({
       where: { deletedAt: null },
@@ -44,11 +59,26 @@ export async function getAdminPreviewData() {
     }),
     db.siteLink.findMany({
       where: { deletedAt: null },
-      orderBy: [{ kind: "asc" }, { displayOrder: "asc" }, { updatedAt: "desc" }],
+      orderBy: [
+        { kind: "asc" },
+        { displayOrder: "asc" },
+        { updatedAt: "desc" },
+      ],
     }),
   ]);
 
-  return { settings, profiles, experiences, skills, education, sections, projects, posts, faqs, links };
+  return {
+    settings,
+    profiles,
+    experiences,
+    skills,
+    education,
+    sections,
+    projects,
+    posts,
+    faqs,
+    links,
+  };
 }
 
 export type AdminPreviewData = Awaited<ReturnType<typeof getAdminPreviewData>>;

@@ -12,6 +12,12 @@ Cho AI phân tích Goal và tạo Goal/Roadmap/Task proposal có xác nhận
 
 - `18-AI-FOUNDATION.md` phải hoàn thành.
 
+## Thành quả nhìn thấy và sử dụng được
+
+- **Route:** `/app/goals/[id]/ai`
+- **Luồng:** Tạo proposal Goal/Roadmap/Task, chỉnh sửa, xác nhận và thấy dữ liệu được tạo đúng một lần.
+- Task không hoàn thành nếu route chỉ là placeholder hoặc chưa được browser-test desktop/mobile.
+
 ## Công việc
 
 - [ ] Analyze Goal
@@ -66,4 +72,8 @@ Dùng model AI foundation; có thể thêm proposal storage nếu được chố
 - Lint: Chưa chạy.
 - Typecheck: Chưa chạy.
 - Build: Chưa chạy.
+- Visible result URL: Chưa có.
+- How to use: Chưa cập nhật.
+- Browser desktop: Chưa chạy.
+- Browser mobile: Chưa chạy.
 - Manual test: Chưa chạy.

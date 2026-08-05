@@ -67,7 +67,7 @@ Public website phải xuất hiện sớm. CMS không được xem là hoàn t�
 
 ### Website CV/portfolio công khai
 
-- Trang chủ CV tổng hợp.
+- `https://coffeehub.id.vn/` và route `/` là trang CV/portfolio chính thức của chủ sở hữu, không phải trang giới thiệu sản phẩm CoffeeHub.
 - Hồ sơ, headline, bio, avatar và thông tin liên hệ đã publish.
 - Kinh nghiệm.
 - Kỹ năng.
@@ -77,6 +77,9 @@ Public website phải xuất hiện sớm. CMS không được xem là hoàn t�
 - GitHub, LinkedIn, live URL và CV/resume.
 - Nội dung chỉ xuất hiện khi đã publish.
 - Không yêu cầu guest account hoặc đăng nhập để xem.
+- Tên hiển thị lấy từ `profiles.display_name` (hoặc field tương đương đã được audit), do owner chỉnh trong Admin/CMS và lưu trong database.
+- Không dùng username, phần trước dấu `@`, auth email hoặc Gmail làm tên hiển thị/fallback trên public CV.
+- Nội dung CV ban đầu tham khảo `docs/PUBLIC_CV_CONTENT_REFERENCE.md`, nhưng mọi mục vẫn phải chỉnh được từ database qua Admin/CMS.
 
 ### Authentication và access control
 
@@ -183,14 +186,17 @@ Public website phải xuất hiện sớm. CMS không được xem là hoàn t�
 
 - Provider abstraction.
 - Thứ tự ưu tiên mặc định: OpenAI, Groq, Gemini.
+- Chat nhiều lượt như một chatbot AI thông thường, có conversation list, message history và khả năng tạo cuộc trò chuyện mới.
 - Phân tích Goal.
 - Tạo Goal draft.
 - Tạo Roadmap draft.
 - Tạo Task draft.
+- Tạo Event/lịch và Note draft.
 - Daily plan.
 - Weekly review.
 - Truy vấn dữ liệu CoffeeHub theo context được cho phép.
-- Preview và confirm trước khi lưu thay đổi quan trọng.
+- Mọi thao tác ghi dữ liệu do AI đề xuất phải hiển thị rõ bản xem trước, các bản ghi sẽ tạo/sửa và chỉ commit sau khi owner đồng ý.
+- Sau khi owner đồng ý, AI Action Service gọi lại validation và Feature Service hiện có để ghi đúng schema; provider/model không được truy cập Prisma, SQL hoặc database trực tiếp.
 - Audit log và Undo khi phù hợp.
 
 ## 4.1. Access model
@@ -198,7 +204,7 @@ Public website phải xuất hiện sớm. CMS không được xem là hoàn t�
 | Persona | Public CV | Workspace | Admin/CMS |
 |---|---:|---:|---:|
 | Khách anonymous | Có | Không | Không |
-| Owner đã đăng nhập | Có hoặc redirect vào app | Có toàn bộ | Có |
+| Owner đã đăng nhập | Có, không tự redirect khỏi `/` | Có toàn bộ | Có |
 | Account test không phải admin | Có | Chỉ dùng test nếu cần | Không |
 
 - Public CV là trang thật, không phải demo bị khóa sau login.
@@ -260,9 +266,12 @@ Public website phải xuất hiện sớm. CMS không được xem là hoàn t�
 
 - AI provider chỉ tạo structured response hoặc proposal.
 - Structured output phải được validate trước khi dùng.
-- Goal, Roadmap, batch Task, sửa hàng loạt và xóa phải cần xác nhận.
+- Hội thoại thông thường là read-only và không được tự suy diễn rằng người dùng đã đồng ý ghi dữ liệu.
+- Tạo/sửa Goal, Roadmap, Task, Event, Note, Checklist, sửa hàng loạt và mọi thao tác ảnh hưởng database phải cần xác nhận rõ ràng theo proposal cụ thể.
+- Xóa dữ liệu, đổi role/quyền, publish CMS, migration và thao tác đặc quyền không được phép thực hiện qua chatbot trong phiên bản đầu.
 - Note, review hoặc suggestion chỉ auto-save nếu người dùng bật.
 - AI action phải có audit log.
+- Commit nhiều bản ghi phải dùng transaction, ownership scope và idempotency key để tránh ghi trùng.
 - Fallback provider chỉ xảy ra với quota, rate limit, timeout hoặc provider unavailable.
 - Không fallback khi lỗi là validation, permission hoặc yêu cầu không hợp lệ.
 

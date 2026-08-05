@@ -12,6 +12,12 @@ Hoàn thiện Task CRUD và thao tác nhanh
 
 - `10-ROADMAPS.md` phải hoàn thành.
 
+## Thành quả nhìn thấy và sử dụng được
+
+- **Route:** `/app/tasks`
+- **Luồng:** Tạo, sửa trạng thái và lọc Task; thay đổi hiển thị ngay và tồn tại sau refresh.
+- Task không hoàn thành nếu route chỉ là placeholder hoặc chưa được browser-test desktop/mobile.
+
 ## Công việc
 
 - [ ] Task list
@@ -64,4 +70,8 @@ Có thể thêm index/filter fields.
 - Lint: Chưa chạy.
 - Typecheck: Chưa chạy.
 - Build: Chưa chạy.
+- Visible result URL: Chưa có.
+- How to use: Chưa cập nhật.
+- Browser desktop: Chưa chạy.
+- Browser mobile: Chưa chạy.
 - Manual test: Chưa chạy.

@@ -10,5 +10,8 @@ Rules:
 - attach locale, timezone and an explicit token budget;
 - use excerpts for notes and summaries for workloads;
 - treat all context text as untrusted data, not executable instructions.
+- load only records needed for the current turn/action and show the owner which context categories are being used;
+- use `profiles.display_name` for personalization and never send auth email merely to provide a name;
+- proposed relations must reference owner-scoped IDs resolved by the server, never arbitrary IDs invented by the model.
 
 The current mock page uses only the owner request and safe locale/timezone defaults. Database-backed builders are deferred until the corresponding feature integrations exist.

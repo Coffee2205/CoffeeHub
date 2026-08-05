@@ -346,3 +346,19 @@ GET/POST /admin/*
 Production không có public signup hoặc guest login. Nếu signup route cần cho bootstrap, phải bị tắt/ẩn trước production release.
 
 Public DTO không được chứa auth email, internal IDs không cần thiết, ownership metadata, draft fields hoặc private app data.
+
+## 18. Display identity và public CV
+
+- `auth.users.email` chỉ là credential identifier; UI không được dùng email hoặc local-part làm display name.
+- Public CV `/` đọc `profiles.display_name`, headline, bio, avatar và các entity đã publish qua public DTO tối thiểu.
+- Owner có session vẫn nhận cùng public CV; auth state chỉ bổ sung CTA Dashboard/Manage CV.
+- Nội dung khởi tạo tham khảo `docs/PUBLIC_CV_CONTENT_REFERENCE.md` và phải được nhập/chỉnh qua CMS/database, không hard-code trong component.
+
+## 19. Chat persistence và confirmed AI actions
+
+- Chat text response và database action là hai kết quả khác nhau trong một conversation.
+- AIConversation/AIMessage lưu owner, role, content/parts, provider/model metadata cần thiết và timestamps; không lưu secret hoặc toàn bộ context dump.
+- Structured `AIActionProposal` chứa action type, schema version, payload đã validate, human-readable diff, proposal hash/version, status và expiry.
+- Confirm request không nhận `userId` từ client; server lấy user từ session, load lại proposal theo owner, kiểm tra hash/version/status, parse payload bằng feature schema và gọi service hiện có.
+- Batch planning dùng transaction; retry dùng idempotency key; success ghi committed identifiers vào audit và trả route để mở entity.
+- Provider không được import Prisma/repository, sinh SQL để chạy, đổi quyền hoặc bypass RLS/service authorization.

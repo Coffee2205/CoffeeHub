@@ -3,4 +3,74 @@ import { countProjects } from "@/features/projects/project.repository";
 import { countResumeContent } from "@/features/resume/resume.repository";
 import { countSiteContent } from "@/features/site-content/site-content.repository";
 import { countManagedContent } from "@/features/site-settings/site-settings.repository";
-export default async function AdminPage() { const [total, [experiences, skills, education], [posts, sections], [links, faqs]] = await Promise.all([countProjects(), countResumeContent(), countSiteContent(), countManagedContent()]); return <main className="mx-auto max-w-6xl px-[var(--page-gutter)] py-10"><p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary-hover">Admin</p><h1 className="mt-3 text-3xl font-semibold">Quản trị nội dung</h1><div className="mt-8 grid gap-4 md:grid-cols-2"><section className="rounded-lg border border-border bg-surface p-5"><p className="text-sm text-foreground-secondary">Projects đang hoạt động</p><p className="mt-2 text-3xl font-semibold">{total}</p><Link href="/admin/projects" className="mt-5 inline-block text-sm font-semibold text-primary-hover">Quản lý projects →</Link></section><section className="rounded-lg border border-border bg-surface p-5"><p className="text-sm text-foreground-secondary">Hồ sơ nghề nghiệp</p><p className="mt-2 text-lg font-semibold">{experiences} kinh nghiệm · {skills} kỹ năng · {education} học vấn</p><Link href="/admin/resume" className="mt-5 inline-block text-sm font-semibold text-primary-hover">Quản lý hồ sơ →</Link></section><section className="rounded-lg border border-border bg-surface p-5"><p className="text-sm text-foreground-secondary">Nội dung website</p><p className="mt-2 text-lg font-semibold">{posts} bài viết · {sections} sections</p><Link href="/admin/site-content" className="mt-5 inline-block text-sm font-semibold text-primary-hover">Quản lý website →</Link></section><section className="rounded-lg border border-border bg-surface p-5"><p className="text-sm text-foreground-secondary">Liên kết và FAQ</p><p className="mt-2 text-lg font-semibold">{links} liên kết · {faqs} FAQ</p><Link href="/admin/settings" className="mt-5 inline-block text-sm font-semibold text-primary-hover">Quản lý cài đặt →</Link></section></div></main>; }
+export default async function AdminPage() {
+  const [
+    total,
+    [experiences, skills, education],
+    [posts, sections],
+    [links, faqs],
+  ] = await Promise.all([
+    countProjects(),
+    countResumeContent(),
+    countSiteContent(),
+    countManagedContent(),
+  ]);
+  return (
+    <main className="mx-auto max-w-6xl px-[var(--page-gutter)] py-10">
+      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-primary-hover">
+        Admin
+      </p>
+      <h1 className="mt-3 text-3xl font-semibold">Quản trị nội dung</h1>
+      <div className="mt-8 grid gap-4 md:grid-cols-2">
+        <section className="rounded-lg border border-border bg-surface p-5">
+          <p className="text-sm text-foreground-secondary">
+            Projects đang hoạt động
+          </p>
+          <p className="mt-2 text-3xl font-semibold">{total}</p>
+          <Link
+            href="/admin/projects"
+            className="mt-5 inline-block text-sm font-semibold text-primary-hover"
+          >
+            Quản lý projects →
+          </Link>
+        </section>
+        <section className="rounded-lg border border-border bg-surface p-5">
+          <p className="text-sm text-foreground-secondary">Hồ sơ nghề nghiệp</p>
+          <p className="mt-2 text-lg font-semibold">
+            {experiences} kinh nghiệm · {skills} kỹ năng · {education} học vấn
+          </p>
+          <Link
+            href="/admin/resume"
+            className="mt-5 inline-block text-sm font-semibold text-primary-hover"
+          >
+            Quản lý hồ sơ →
+          </Link>
+        </section>
+        <section className="rounded-lg border border-border bg-surface p-5">
+          <p className="text-sm text-foreground-secondary">Nội dung website</p>
+          <p className="mt-2 text-lg font-semibold">
+            {posts} bài viết · {sections} sections
+          </p>
+          <Link
+            href="/admin/site-content"
+            className="mt-5 inline-block text-sm font-semibold text-primary-hover"
+          >
+            Quản lý website →
+          </Link>
+        </section>
+        <section className="rounded-lg border border-border bg-surface p-5">
+          <p className="text-sm text-foreground-secondary">Liên kết và FAQ</p>
+          <p className="mt-2 text-lg font-semibold">
+            {links} liên kết · {faqs} FAQ
+          </p>
+          <Link
+            href="/admin/settings"
+            className="mt-5 inline-block text-sm font-semibold text-primary-hover"
+          >
+            Quản lý cài đặt →
+          </Link>
+        </section>
+      </div>
+    </main>
+  );
+}

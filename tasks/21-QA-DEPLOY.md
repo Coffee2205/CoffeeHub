@@ -12,6 +12,12 @@ Kiểm tra toàn bộ sản phẩm, xử lý lỗi và deploy production
 
 - `20-AI-PERSONAL-ASSISTANT.md` phải hoàn thành.
 
+## Thành quả nhìn thấy và sử dụng được
+
+- **Route:** `Preview/production URL được xác nhận`
+- **Luồng:** Mở sản phẩm trên Internet, chạy core flows và bàn giao URL/cách đăng nhập.
+- Task không hoàn thành nếu route chỉ là placeholder hoặc chưa được browser-test desktop/mobile.
+
 ## Công việc
 
 - [ ] Kiểm thử Supabase Auth: login/logout, persistence/refresh/expiry, protected route/mutation, user/admin và role metadata.
@@ -76,4 +82,8 @@ Review và chạy production migration theo quy trình.
 - Lint: Chưa chạy.
 - Typecheck: Chưa chạy.
 - Build: Chưa chạy.
+- Visible result URL: Chưa có.
+- How to use: Chưa cập nhật.
+- Browser desktop: Chưa chạy.
+- Browser mobile: Chưa chạy.
 - Manual test: Chưa chạy.

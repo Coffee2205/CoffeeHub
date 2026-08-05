@@ -66,7 +66,12 @@ Không triển khai hai khái niệm giống nhau chỉ khác tên.
 
 - Analysis không tự động thay đổi dữ liệu.
 - Proposal chưa phải dữ liệu đã lưu.
-- Goal, Roadmap, batch Task và delete luôn cần xác nhận mặc định.
+- Chat hoạt động bình thường ngay cả khi người dùng không yêu cầu tạo dữ liệu.
+- Goal, Roadmap, Task, Event, Note, Checklist và mọi update luôn cần preview + xác nhận mặc định.
+- Xác nhận chỉ áp dụng cho proposal đang hiển thị; sửa proposal phải xác nhận lại.
+- Server phải lấy owner từ session, validate đúng schema và dùng Feature Service hiện có; AI không tạo SQL hoặc gọi database trực tiếp.
+- Batch Goal/Roadmap/Task dùng transaction và idempotency key.
+- Delete, đổi quyền/role, CMS publish, migration và thao tác đặc quyền không được thực hiện bởi chatbot trong phiên bản đầu.
 - Auto-save chỉ áp dụng cho action được bật trong Settings.
 - Mọi commit AI quan trọng có audit log.
 - Undo không được hứa nếu chưa có cơ chế thực tế.

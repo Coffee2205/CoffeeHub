@@ -1,84 +1,56 @@
-# Tasks — CoffeeHub
+# CoffeeHub Work Breakdown
 
-## Cách chọn task
+## Hierarchy
 
-Mỗi phiên chỉ thực hiện một task hoặc một subtask.
+```text
+Epic
+└── Feature
+    └── Task
+        └── Subtask
+```
 
-Agent chọn:
+- **Epic**: mục tiêu sản phẩm lớn.
+- **Feature**: một khả năng người dùng có thể nhận biết.
+- **Task**: một đơn vị delivery có thể hoàn thành trong một phiên hoặc chia nhỏ an toàn.
+- **Subtask**: checklist triển khai bên trong task.
 
-1. task `In Progress`;
-2. task người dùng chỉ định;
-3. task pending đầu tiên có dependency hoàn thành.
+## Roadmap
 
-## Roadmap mặc định
+1. [Foundation](epics/00-foundation/EPIC.md)
+2. [Public CV and Content Management](epics/01-public-cv-cms/EPIC.md)
+3. [Owner Workspace](epics/02-owner-workspace/EPIC.md)
+4. [PWA and AI](epics/03-pwa-ai/EPIC.md)
+5. [Quality and Release](epics/04-quality-release/EPIC.md)
 
-1. `00-BOOTSTRAP.md`
-2. `01-REPOSITORY-AUDIT.md`
-3. `02-DESIGN-FOUNDATION.md`
-4. `03-APP-SHELL.md`
-5. `04-DATABASE-FOUNDATION.md`
-6. `05-AUTHENTICATION.md`
-7. `06-DASHBOARD.md`
-8. `07-ADMIN-CONTENT-MANAGEMENT.md`
-9. `08-PROFILE.md`
-10. `09-GOALS.md`
-11. `10-ROADMAPS.md`
-12. `11-TASKS.md`
-13. `12-CALENDAR.md`
-14. `13-NOTES-AUTOSAVE.md`
-15. `14-CHECKLISTS.md`
-16. `15-NOTIFICATIONS.md`
-17. `16-PWA-OFFLINE.md`
-18. `17-PUBLIC-LANDING.md`
-19. `18-AI-FOUNDATION.md`
-20. `19-AI-GOAL-ASSISTANT.md`
-21. `20-AI-PERSONAL-ASSISTANT.md`
-22. `21-QA-DEPLOY.md`
+## Task selection
 
-## Trạng thái hợp lệ
+Mỗi phiên:
 
-- `Pending`
-- `In Progress`
-- `Blocked`
-- `Completed`
+1. Đọc `project-log/CURRENT_STATUS.md`.
+2. Đọc `project-log/NEXT_STEPS.md`.
+3. Mở Feature được trỏ tới.
+4. Chọn Task `In Progress`, hoặc Task pending đầu tiên đã sẵn sàng.
+5. Thực hiện đúng một Task hoặc Subtask.
+6. Kiểm tra kết quả hiển thị/sử dụng.
+7. Commit, push `origin/dev`, báo cáo và dừng.
 
-## Quy tắc dependency
+## Visible delivery
 
-- Không làm task khi dependency chưa hoàn thành.
-- Nếu task quá lớn, tạo subtasks trong chính task hoặc file task mới.
-- Sau khi push, agent dừng; không tự chuyển sang task tiếp theo.
-- `NEXT_STEPS.md` chỉ đề xuất task, không tự kích hoạt việc triển khai.
+Feature có UI không được hoàn thành chỉ bằng schema, service hoặc API.
 
-## Quy tắc Content-first
+Task phải ghi rõ:
 
-Nội dung có khả năng thay đổi sau bàn giao không được hard-code.
+- URL;
+- persona/quyền truy cập;
+- cách sử dụng;
+- browser verification desktop/mobile;
+- dữ liệu thật hoặc trạng thái rỗng;
+- ảnh hưởng database;
+- commit và push result.
 
-Task thêm loại nội dung mới phải xác định rõ:
+## Adding work
 
-- code constant;
-- site setting;
-- CMS entity;
-- feature flag.
-
-Nếu là site setting hoặc CMS entity, task phải bao gồm:
-
-- schema;
-- validation;
-- CRUD;
-- authentication/authorization;
-- giao diện quản trị;
-- trạng thái publish nếu công khai;
-- kết nối phần hiển thị;
-- migration và rollback khi có thay đổi database.
-
-## Hoàn thành task
-
-Task chỉ được đánh dấu `Completed` khi:
-
-- acceptance criteria đạt;
-- kiểm tra đã chạy hoặc giới hạn được ghi rõ;
-- task và project-log đã cập nhật;
-- commit đã tạo;
-- push lên `origin/dev` thành công.
-
-Nếu push bị chặn, task giữ `In Progress` hoặc `Blocked` tùy nguyên nhân.
+- Feature mới: thêm thư mục trong Epic phù hợp.
+- Task mới: thêm file trong `features/<feature>/tasks/`.
+- Subtask mới: thêm checklist trong Task.
+- Không đánh lại số toàn bộ roadmap khi thêm task.

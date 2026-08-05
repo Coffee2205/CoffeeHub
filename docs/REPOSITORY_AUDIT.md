@@ -143,4 +143,4 @@ tasks/20-QA-DEPLOY.md
 
 ## Task đề xuất tiếp theo
 
-`tasks/02-DESIGN-FOUNDATION.md` là task pending đầu tiên có dependency hoàn thành. Việc cleanup artifact legacy nên được thực hiện trong một task/subtask riêng có phạm vi xóa rõ ràng; không chặn Design Foundation vì roadmap canonical đã xác định được.
+`tasks/epics/00-foundation/features/02-design-foundation/FEATURE.md` là task pending đầu tiên có dependency hoàn thành. Việc cleanup artifact legacy nên được thực hiện trong một task/subtask riêng có phạm vi xóa rõ ràng; không chặn Design Foundation vì roadmap canonical đã xác định được.

@@ -199,4 +199,13 @@ Không đánh dấu `Completed` khi acceptance criteria chưa đạt, route thà
 - Owner login redirect vào `/app/dashboard` và truy cập toàn bộ workspace.
 - Owner/admin quản lý public content qua `/admin`.
 - Public output không được chứa private workspace data.
+- Tên public/dashboard lấy từ Profile trong database; không hiển thị hoặc suy ra tên từ auth email/Gmail.
 - Khi task liên quan Auth/Public/CMS, browser verification phải gồm anonymous public, owner app và owner admin flows.
+
+## AI chat and confirmed actions
+
+- `/app/ai` phải hỗ trợ hội thoại nhiều lượt như chatbot thông thường; action proposal là khả năng bổ sung, không thay thế chat.
+- Mọi create/update Goal, Roadmap, Task, Event, Note hoặc Checklist phải có editable preview và xác nhận rõ ràng của owner trước khi ghi.
+- Provider/model không import Prisma/repository, không sinh SQL để thực thi và không quyết định `userId`/role.
+- Sau xác nhận, server re-validate schema, kiểm tra ownership, gọi Feature Service hiện có, dùng transaction/idempotency khi phù hợp và ghi audit log.
+- Delete, role/permission, CMS publish, migration và privileged action bị cấm trong chatbot v1.

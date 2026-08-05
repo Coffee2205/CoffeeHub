@@ -38,12 +38,14 @@ CoffeeHub gồm hai khu vực:
 - Hiển thị giới thiệu, kinh nghiệm, kỹ năng, học vấn, dự án, bài viết và liên kết liên hệ.
 - Khách xem không cần đăng nhập hoặc sử dụng account khách.
 - Không hiển thị dữ liệu workspace riêng tư như Goal, Task, Note, Calendar hoặc AI history.
+- Route `/` là CV/portfolio của chủ sở hữu; tên và nội dung lấy từ Profile/CMS trong database, không lấy từ Gmail/auth email.
 
 ### Workspace cá nhân của chủ sở hữu
 
 - Chỉ truy cập sau khi owner đăng nhập.
 - Đăng nhập thành công tự động vào `/app/dashboard`.
 - Owner truy cập toàn bộ Dashboard, Profile, Goals, Roadmaps, Tasks, Calendar, Notes, Checklists, Notifications, Settings và AI Assistant.
+- AI Assistant vừa là chatbot nhiều lượt, vừa tạo proposal lập kế hoạch hoặc Event/Note; mọi database write phải được owner xác nhận và đi qua Feature Service.
 - Owner có thêm khu vực Admin/CMS để quản lý nội dung CV công khai.
 - Dữ liệu được đồng bộ qua backend chung.
 

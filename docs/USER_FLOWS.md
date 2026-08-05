@@ -49,11 +49,11 @@ Không cần sửa source code, Prisma Studio, SQL Editor hoặc Supabase Dashbo
 
 ```text
 Admin publish
-→ mở /admin/preview hoặc cửa sổ anonymous
+→ mở / hoặc /admin/preview
 → xác minh nội dung public
 ```
 
-Nếu owner mở `/` khi session đang hoạt động và hệ thống redirect về app, dùng `/admin/preview` hoặc cửa sổ private để xem đúng trải nghiệm khách.
+Owner mở `/` vẫn thấy CV công khai; session chỉ bổ sung CTA vào Dashboard/Manage CV, không thay tên hiển thị bằng email đăng nhập.
 
 ## 5. Tạo Goal thủ công
 
@@ -121,17 +121,21 @@ Calendar
 → schedule reminder
 ```
 
-## 10. AI phân tích hoặc tạo kế hoạch
+## 10. AI trò chuyện, phân tích hoặc tạo kế hoạch
 
 ```text
-Owner yêu cầu AI
+Owner mở /app/ai
+→ trò chuyện nhiều lượt như chatbot thông thường
+→ khi yêu cầu tạo/sửa Goal, Roadmap, Task, Event hoặc Note
 → backend lấy context được phép
 → provider
 → validate structured output
-→ preview proposal
-→ owner confirm
-→ transaction lưu
+→ hiển thị proposal có thể sửa và danh sách thay đổi
+→ owner xác nhận proposal hiện tại
+→ server re-validate + ownership check
+→ Feature Service + transaction/idempotency lưu
 → audit log
+→ trả link tới dữ liệu vừa tạo
 ```
 
 AI không tự sửa dữ liệu quan trọng trước confirm.

@@ -12,6 +12,12 @@ Tạo Roadmap và Stage gắn với Goal
 
 - `09-GOALS.md` phải hoàn thành.
 
+## Thành quả nhìn thấy và sử dụng được
+
+- **Route:** `/app/goals/[goalId]/roadmap`
+- **Luồng:** Thêm/sắp xếp milestone cho một Goal và xem tiến độ cập nhật.
+- Task không hoàn thành nếu route chỉ là placeholder hoặc chưa được browser-test desktop/mobile.
+
 ## Công việc
 
 - [ ] Create Roadmap
@@ -63,4 +69,8 @@ Có thể điều chỉnh relation/order constraint.
 - Lint: Chưa chạy.
 - Typecheck: Chưa chạy.
 - Build: Chưa chạy.
+- Visible result URL: Chưa có.
+- How to use: Chưa cập nhật.
+- Browser desktop: Chưa chạy.
+- Browser mobile: Chưa chạy.
 - Manual test: Chưa chạy.

@@ -7,7 +7,9 @@ import { archiveGoal, createGoal, updateGoal } from "./goal.repository";
 import { parseGoalForm } from "./goal.schema";
 
 function formError(errors: string[], id?: string): never {
-  redirect(`/app/goals/${id ?? "new"}?error=${encodeURIComponent(errors.join(" "))}`);
+  redirect(
+    `/app/goals/${id ?? "new"}?error=${encodeURIComponent(errors.join(" "))}`,
+  );
 }
 
 export async function createGoalAction(form: FormData) {

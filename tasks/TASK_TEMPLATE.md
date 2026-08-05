@@ -1,100 +1,58 @@
 # Task XX — Tên task
 
-## Trạng thái
+## Hierarchy
+
+- Epic:
+- Feature:
+- Task path:
+
+## Status
 
 Pending
 
-## Mục tiêu
+## Goal
 
-Một kết quả duy nhất cần đạt.
+Một kết quả delivery rõ ràng.
 
-## Dependency
+## Dependencies
 
-- Task hoặc điều kiện phải hoàn thành trước.
+- Dependency cần hoàn thành.
 
-## Tài liệu cần đọc
+## Visible result
 
-- `docs/...`
+- URL:
+- Persona:
+- User action:
+- Data required:
+- Expected result:
 
-## Phạm vi
+## Subtasks
 
-- [ ] Công việc 1.
-- [ ] Công việc 2.
+- [ ] Audit implementation hiện tại.
+- [ ] Triển khai UI/route.
+- [ ] Kết nối backend/database nếu cần.
+- [ ] Loading/empty/error state.
+- [ ] Browser test desktop.
+- [ ] Browser test mobile.
+- [ ] Cập nhật project-log.
+- [ ] Commit và push `origin/dev`.
 
-## Khả năng quản trị
+## Database impact
 
-Phân loại dữ liệu mới:
+Không có hoặc mô tả migration/rollback.
 
-- [ ] Code constant
-- [ ] Site setting
-- [ ] CMS entity
-- [ ] Feature flag
-- [ ] Không áp dụng
+## Acceptance criteria
 
-Nếu là Site setting hoặc CMS entity:
-
-- [ ] Schema
-- [ ] Validation
-- [ ] CRUD
-- [ ] Authentication/authorization
-- [ ] Admin UI
-- [ ] Publish/unpublish nếu công khai
-- [ ] Display order nếu cần
-- [ ] Media nếu cần
-- [ ] Kết nối phần hiển thị
-- [ ] Không hard-code nội dung
-
-## Không thực hiện
-
-- Hạng mục ngoài phạm vi.
-- Refactor không liên quan.
-- Thay đổi stack chưa được xác nhận.
-
-## File dự kiến
-
-- `src/...`
-
-## Ảnh hưởng database
-
-Nếu chạm Supabase, nêu tác động thực tế đến Prisma/migration, RLS, Auth, Storage, env, backup/recovery và Free Plan/quota; dẫn về tài liệu chuyên trách thay vì lặp quy tắc.
-
-Mô tả schema, migration, dữ liệu hiện có và rollback; hoặc ghi `Không có`.
-
-## Rủi ro
-
-- Rủi ro kỹ thuật, dữ liệu, bảo mật hoặc UX.
-
-## Tiêu chí hoàn thành
-
-- Luồng hoạt động đúng.
+- Kết quả có thể mở và sử dụng được.
+- Không chỉ có backend hoặc placeholder.
 - Validation và permission đúng.
-- Có loading, empty và error state nếu có UI.
-- Responsive và accessibility cơ bản.
-- Không tạo lỗi lint/type mới.
-- Test/build liên quan đạt khi môi trường cho phép.
-- Tài liệu đã cập nhật.
-- Commit và push `origin/dev` thành công.
+- Kiểm tra liên quan đạt.
+- Commit/push thành công.
 
-## Kết quả thực hiện
+## Delivery report
 
-### File đã tạo hoặc sửa
-
-- Chưa cập nhật.
-
-### Quyết định kỹ thuật
-
-- Chưa cập nhật.
-
-### Vấn đề còn lại
-
-- Chưa cập nhật.
-
-### Kiểm tra
-
-- Lint: Chưa chạy.
-- Typecheck: Chưa chạy.
-- Test: Chưa chạy.
-- Build: Chưa chạy.
-- Manual test: Chưa chạy.
-- Commit: Chưa tạo.
-- Push `origin/dev`: Chưa thực hiện.
+- URLs verified:
+- Validation:
+- Commit:
+- Push result:
+- Known issues:

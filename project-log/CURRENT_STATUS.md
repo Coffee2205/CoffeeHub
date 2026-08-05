@@ -159,7 +159,6 @@ Design foundation đã có token Midnight Blue Aurora, Geist Sans/Mono và các 
 - Authentication Task 05: 3 unit tests, Prisma validate/generate, lint, typecheck, build, HTTP anonymous redirect và Auth mapping transaction đạt.
 - Dashboard Task 06: 6 unit tests, lint, typecheck, build, Supabase transaction query và React quality review đạt.
 
-
 ## Epic migration
 
 Roadmap đã chuyển sang Epic → Feature → Task → Subtask.

@@ -19,13 +19,27 @@ export function getWorkspaceProfile(userId: string) {
 
 export async function getWorkspaceProfileSnapshot(userId: string) {
   const db = getPrisma();
-  const [profile, experiences, skills, education, projects] = await Promise.all([
-    getWorkspaceProfile(userId),
-    db.experience.findMany({ where: { userId, deletedAt: null }, select: { status: true } }),
-    db.skill.findMany({ where: { userId, deletedAt: null }, select: { status: true } }),
-    db.education.findMany({ where: { userId, deletedAt: null }, select: { status: true } }),
-    db.project.findMany({ where: { userId, deletedAt: null }, select: { status: true } }),
-  ]);
+  const [profile, experiences, skills, education, projects] = await Promise.all(
+    [
+      getWorkspaceProfile(userId),
+      db.experience.findMany({
+        where: { userId, deletedAt: null },
+        select: { status: true },
+      }),
+      db.skill.findMany({
+        where: { userId, deletedAt: null },
+        select: { status: true },
+      }),
+      db.education.findMany({
+        where: { userId, deletedAt: null },
+        select: { status: true },
+      }),
+      db.project.findMany({
+        where: { userId, deletedAt: null },
+        select: { status: true },
+      }),
+    ],
+  );
 
   const summarize = (items: Array<{ status: string }>) => ({
     total: items.length,
@@ -43,7 +57,10 @@ export async function getWorkspaceProfileSnapshot(userId: string) {
   };
 }
 
-export function saveWorkspaceProfile(userId: string, input: WorkspaceProfileInput) {
+export function saveWorkspaceProfile(
+  userId: string,
+  input: WorkspaceProfileInput,
+) {
   return getPrisma().profile.upsert({
     where: { userId },
     create: { userId, ...input },

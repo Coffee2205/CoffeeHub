@@ -26,6 +26,11 @@ export type DashboardData = {
   overdueTasks: DashboardTask[];
   activeGoals: DashboardGoal[];
   upcomingEvents: DashboardEvent[];
-  counts: { todayTasks: number; overdueTasks: number; activeGoals: number; upcomingEvents: number };
+  counts: {
+    todayTasks: number;
+    overdueTasks: number;
+    activeGoals: number;
+    upcomingEvents: number;
+  };
   weeklyProgress: { completed: number; total: number; percentage: number };
 };

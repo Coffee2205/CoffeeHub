@@ -28,13 +28,20 @@ function isSupportedTimezone(value: string) {
   }
 }
 
-export function parseWorkspaceProfileForm(form: FormData): { data?: WorkspaceProfileInput; errors: string[] } {
+export function parseWorkspaceProfileForm(form: FormData): {
+  data?: WorkspaceProfileInput;
+  errors: string[];
+} {
   const rawName = String(form.get("workspaceName") ?? "").trim();
   const timezone = String(form.get("timezone") ?? "").trim();
   const errors: string[] = [];
 
-  if (rawName.length > 120) errors.push("Tên workspace không được vượt quá 120 ký tự.");
-  if (!timezone || timezone.length > 64 || !isSupportedTimezone(timezone)) errors.push("Múi giờ không hợp lệ.");
+  if (rawName.length > 120)
+    errors.push("Tên workspace không được vượt quá 120 ký tự.");
+  if (!timezone || timezone.length > 64 || !isSupportedTimezone(timezone))
+    errors.push("Múi giờ không hợp lệ.");
 
-  return errors.length ? { errors } : { data: { workspaceName: rawName || null, timezone }, errors };
+  return errors.length
+    ? { errors }
+    : { data: { workspaceName: rawName || null, timezone }, errors };
 }

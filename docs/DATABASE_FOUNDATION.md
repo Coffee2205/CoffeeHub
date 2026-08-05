@@ -14,6 +14,8 @@ auth.users 1──1 users 1──1 profiles
                     └──* notes
 ```
 
+`auth.users.email` là định danh đăng nhập riêng tư. Danh tính hiển thị của sản phẩm nằm trong `profiles.display_name`; public query/DTO không được đọc hoặc suy ra tên từ auth email. Nếu schema hiện tại đã có `display_name`, phải tái sử dụng thay vì tạo field trùng. Nếu thiếu, chỉ thêm bằng migration additive đã review.
+
 Mọi entity private có `user_id`, timestamps, `deleted_at` và `version`. Composite foreign keys trên Goal/Roadmap/Stage/Task buộc cả cây dữ liệu có cùng owner. Index bắt đầu bằng `user_id` cho query/RLS phổ biến; foreign key columns đều có index hỗ trợ.
 
 ## RLS và quyền
@@ -23,6 +25,8 @@ Mọi entity private có `user_id`, timestamps, `deleted_at` và `version`. Comp
 - `authenticated` chỉ CRUD row có `user_id = auth.uid()`; admin dùng role tin cậy trong `app_metadata`.
 - Policy `FOR ALL` có cả `USING` và `WITH CHECK`, đồng thời bao gồm quyền SELECT cần cho UPDATE.
 - Không có view, `SECURITY DEFINER`, public-all policy hoặc service-role application path.
+
+AI provider không có quyền database. Khi owner xác nhận một proposal, server phải re-validate action payload rồi gọi Feature Service/Repository hiện có với `user_id` lấy từ session. Conversation, message, proposal/action log và idempotency record chỉ được thêm bằng migration additive, có owner-scoped RLS và không lưu secret/raw credential.
 
 ## Migration và recovery
 

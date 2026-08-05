@@ -4,7 +4,12 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getPublicSupabaseEnv } from "@/lib/env/public";
 
 function isPrivatePath(pathname: string) {
-  return pathname === "/app" || pathname.startsWith("/app/") || pathname === "/admin" || pathname.startsWith("/admin/");
+  return (
+    pathname === "/app" ||
+    pathname.startsWith("/app/") ||
+    pathname === "/admin" ||
+    pathname.startsWith("/admin/")
+  );
 }
 
 export async function updateSession(request: NextRequest) {
@@ -14,9 +19,13 @@ export async function updateSession(request: NextRequest) {
     cookies: {
       getAll: () => request.cookies.getAll(),
       setAll: (cookiesToSet) => {
-        cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+        cookiesToSet.forEach(({ name, value }) =>
+          request.cookies.set(name, value),
+        );
         response = NextResponse.next({ request });
-        cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
+        cookiesToSet.forEach(({ name, value, options }) =>
+          response.cookies.set(name, value, options),
+        );
       },
     },
   });
@@ -28,7 +37,10 @@ export async function updateSession(request: NextRequest) {
     loginUrl.pathname = "/login";
     loginUrl.search = "";
     loginUrl.searchParams.set("reason", "session-expired");
-    loginUrl.searchParams.set("next", `${request.nextUrl.pathname}${request.nextUrl.search}`);
+    loginUrl.searchParams.set(
+      "next",
+      `${request.nextUrl.pathname}${request.nextUrl.search}`,
+    );
     return NextResponse.redirect(loginUrl);
   }
 

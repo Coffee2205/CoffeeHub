@@ -16,7 +16,7 @@
    - `project-log/ISSUES.md`
    - `project-log/KNOWN_LIMITATIONS.md`
    - `project-log/TECH_DEBT.md`
-4. Đọc `tasks/README.md`.
+4. Đọc `tasks/README.md` và cấu trúc Epic → Feature → Task được `NEXT_STEPS.md` chỉ định.
 5. Chọn đúng một task:
    - task đang `In Progress`; hoặc
    - task pending đầu tiên có dependency đã hoàn thành.
@@ -79,3 +79,13 @@ Reason for stopping:
 ```
 
 Không khẳng định đã chạy kiểm tra, commit hoặc push nếu chưa thực sự thực hiện.
+
+
+## Work hierarchy
+
+- Epic xác định mục tiêu lớn.
+- Feature xác định khả năng người dùng.
+- Task là đơn vị thực hiện trong một phiên.
+- Subtask là checklist trong Task.
+
+Mỗi phiên chỉ thực hiện một Task hoặc Subtask. Các phiên thông thường phải dùng `agent/CONTINUE.md`.

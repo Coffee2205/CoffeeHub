@@ -12,6 +12,12 @@ Tạo Event và giao diện lịch
 
 - `11-TASKS.md` phải hoàn thành.
 
+## Thành quả nhìn thấy và sử dụng được
+
+- **Route:** `/app/calendar`
+- **Luồng:** Xem lịch và tạo/chỉnh một Event từ giao diện.
+- Task không hoàn thành nếu route chỉ là placeholder hoặc chưa được browser-test desktop/mobile.
+
 ## Công việc
 
 - [ ] Calendar/agenda view
@@ -63,4 +69,8 @@ Có thể thêm Event và recurrence fields.
 - Lint: Chưa chạy.
 - Typecheck: Chưa chạy.
 - Build: Chưa chạy.
+- Visible result URL: Chưa có.
+- How to use: Chưa cập nhật.
+- Browser desktop: Chưa chạy.
+- Browser mobile: Chưa chạy.
 - Manual test: Chưa chạy.

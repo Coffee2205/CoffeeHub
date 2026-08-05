@@ -26,6 +26,7 @@
 - Không yêu cầu người dùng xác định lại task nếu roadmap đã rõ.
 - Không tự tiếp tục task kế tiếp.
 - Không lặp lại quyết định đã bị từ chối.
+
 # Supabase architecture memory
 
 - Backend duy nhất là Supabase PostgreSQL/Auth/Storage; Prisma phụ trách query nghiệp vụ và migrations.
@@ -40,7 +41,6 @@
 - Always report URL, access requirement and usage steps.
 - Task 07 public rendering is higher priority than avatar media and Task 08.
 
-
 ## CV access model
 
 - Public visitors see the owner's published CV without authentication.
@@ -48,7 +48,6 @@
 - Owner login enters `/app/dashboard`.
 - Owner has full workspace access and Admin/CMS access.
 - Protect Goals, Tasks, Notes, Calendar, settings and AI history.
-
 
 ## Work breakdown memory
 

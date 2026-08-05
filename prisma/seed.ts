@@ -7,15 +7,23 @@ const userId = process.env.SEED_USER_ID;
 const databaseUrl = process.env.DATABASE_URL;
 
 if (!userId || !databaseUrl) {
-  throw new Error("SEED_USER_ID and DATABASE_URL are required; seed was not run.");
+  throw new Error(
+    "SEED_USER_ID and DATABASE_URL are required; seed was not run.",
+  );
 }
 
 const seedUserId: string = userId;
-const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: databaseUrl }) });
+const prisma = new PrismaClient({
+  adapter: new PrismaPg({ connectionString: databaseUrl }),
+});
 
 async function main() {
   await prisma.$transaction(async (tx) => {
-    await tx.user.upsert({ where: { id: seedUserId }, update: {}, create: { id: seedUserId } });
+    await tx.user.upsert({
+      where: { id: seedUserId },
+      update: {},
+      create: { id: seedUserId },
+    });
     await tx.profile.upsert({
       where: { userId: seedUserId },
       update: {},
@@ -29,7 +37,8 @@ async function main() {
         data: {
           userId: seedUserId,
           title: "Khám phá CoffeeHub",
-          description: "Dữ liệu demo tổng quát, không chứa thông tin cá nhân thật.",
+          description:
+            "Dữ liệu demo tổng quát, không chứa thông tin cá nhân thật.",
         },
       });
     }
@@ -38,7 +47,10 @@ async function main() {
 
 main()
   .catch((error: unknown) => {
-    console.error("Seed failed without printing credentials.", error instanceof Error ? error.message : "Unknown error");
+    console.error(
+      "Seed failed without printing credentials.",
+      error instanceof Error ? error.message : "Unknown error",
+    );
     process.exitCode = 1;
   })
   .finally(async () => prisma.$disconnect());

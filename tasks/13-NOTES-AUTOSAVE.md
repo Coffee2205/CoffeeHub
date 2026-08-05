@@ -12,6 +12,12 @@ Tạo Note editor có autosave, local draft và conflict detection
 
 - `12-CALENDAR.md` phải hoàn thành.
 
+## Thành quả nhìn thấy và sử dụng được
+
+- **Route:** `/app/notes`
+- **Luồng:** Tạo Note, nhập nội dung và thấy trạng thái autosave cùng dữ liệu phục hồi sau refresh.
+- Task không hoàn thành nếu route chỉ là placeholder hoặc chưa được browser-test desktop/mobile.
+
 ## Công việc
 
 - [ ] Note list/editor
@@ -65,4 +71,8 @@ Note cần version và timestamps; migration nếu thiếu.
 - Lint: Chưa chạy.
 - Typecheck: Chưa chạy.
 - Build: Chưa chạy.
+- Visible result URL: Chưa có.
+- How to use: Chưa cập nhật.
+- Browser desktop: Chưa chạy.
+- Browser mobile: Chưa chạy.
 - Manual test: Chưa chạy.

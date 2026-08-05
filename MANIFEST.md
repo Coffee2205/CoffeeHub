@@ -8,6 +8,7 @@ File này xác định nhiệm vụ, nguồn sự thật và liên kết của t
 |---|---|---|
 | `README.md` | Hướng dẫn nhanh cho người dùng | Quy tắc triển khai chi tiết |
 | `START_AGENT.md` | Prompt ngắn để khởi động agent | Yêu cầu sản phẩm |
+| `PROMPT_CONTINUE_COFFEEHUB.md` | Prompt đầy đủ để tiếp tục dự án theo yêu cầu public CV và AI mới nhất | Trạng thái thực thi chi tiết |
 | `MANIFEST.md` | Bản đồ tài liệu và trách nhiệm từng file | Trạng thái thực thi |
 | `agent/MASTER.md` | Điều phối một phiên làm việc | Chi tiết nghiệp vụ từng feature |
 
@@ -29,6 +30,7 @@ File này xác định nhiệm vụ, nguồn sự thật và liên kết của t
 | `docs/PROJECT_VISION.md` | Định vị và nguyên tắc dài hạn |
 | `docs/PRD.md` | Phạm vi sản phẩm và tiêu chí phiên bản đầu |
 | `docs/CONTENT_REQUIREMENTS.md` | Nội dung hiển thị và nội dung phải quản trị được |
+| `docs/PUBLIC_CV_CONTENT_REFERENCE.md` | Mapping nội dung CV mẫu vào field/section public và visibility mặc định |
 | `docs/SITE_MAP.md` | Route và navigation |
 | `docs/USER_FLOWS.md` | Luồng người dùng |
 | `docs/FUNCTIONAL_RULES.md` | Quy tắc nghiệp vụ theo feature |
@@ -52,11 +54,13 @@ Phân biệt:
 |---|---|
 | `tasks/README.md` | Roadmap, thứ tự và quy tắc trạng thái |
 | `tasks/TASK_TEMPLATE.md` | Cấu trúc chuẩn cho task mới |
-| `tasks/00-...` đến `tasks/21-...` | Phạm vi và acceptance criteria của từng giai đoạn |
+| `tasks/epics/*/EPIC.md` | Mục tiêu và trạng thái Epic |
+| `tasks/epics/*/features/*/FEATURE.md` | Giá trị, dependency và trạng thái Feature |
+| `tasks/epics/*/features/*/tasks/*.md` | Phạm vi và acceptance criteria canonical của từng phiên delivery |
 
 Task file là nguồn sự thật cho **phạm vi phiên hiện tại**, nhưng không được ghi đè PRD hoặc quyết định đã chấp nhận.
 
-Roadmap canonical chỉ có đúng một file cho mỗi số `00`–`21`.
+Các file task phẳng `tasks/00-...` đến `tasks/21-...` là legacy reference và không được dùng để chọn/cập nhật task mới. Roadmap canonical nằm trong `tasks/epics/`.
 
 ## 5. Project log
 
@@ -91,3 +95,27 @@ Không ghi cùng một thông tin vào nhiều file log:
 6. Suy luận của agent
 
 Mâu thuẫn lớn phải được báo cáo, không tự hòa giải âm thầm.
+
+
+## Epic-based work breakdown
+
+Task roadmap hiện dùng cấu trúc:
+
+```text
+tasks/epics/<epic>/
+├── EPIC.md
+└── features/<feature>/
+    ├── FEATURE.md
+    └── tasks/
+        └── 01-delivery.md
+```
+
+Responsibilities:
+
+- `EPIC.md`: mục tiêu lớn và danh sách Feature.
+- `FEATURE.md`: giá trị người dùng, trạng thái và danh sách Task.
+- `tasks/*.md`: delivery unit của một phiên.
+- Checklist trong Task: Subtasks.
+- `agent/CONTINUE.md`: prompt mặc định cho mọi phiên tiếp theo.
+
+Không tạo thêm task phẳng trong `tasks/`.

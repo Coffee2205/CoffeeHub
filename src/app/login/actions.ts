@@ -18,7 +18,9 @@ type CredentialsResult =
   | { ok: false; error: string; email: string };
 
 function readCredentials(formData: FormData): CredentialsResult {
-  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const email = String(formData.get("email") ?? "")
+    .trim()
+    .toLowerCase();
   const password = String(formData.get("password") ?? "");
 
   if (!emailPattern.test(email)) {
@@ -32,18 +34,32 @@ function readCredentials(formData: FormData): CredentialsResult {
   return { ok: true, email, password };
 }
 
-export async function loginAction(_state: AuthActionState, formData: FormData): Promise<AuthActionState> {
+export async function loginAction(
+  _state: AuthActionState,
+  formData: FormData,
+): Promise<AuthActionState> {
   const credentials = readCredentials(formData);
 
   if (!credentials.ok) {
-    return { status: "error", message: credentials.error, fields: { email: credentials.email } };
+    return {
+      status: "error",
+      message: credentials.error,
+      fields: { email: credentials.email },
+    };
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email: credentials.email, password: credentials.password });
+  const { error } = await supabase.auth.signInWithPassword({
+    email: credentials.email,
+    password: credentials.password,
+  });
 
   if (error) {
-    return { status: "error", message: "Không thể đăng nhập. Hãy kiểm tra email và mật khẩu.", fields: { email: credentials.email } };
+    return {
+      status: "error",
+      message: "Không thể đăng nhập. Hãy kiểm tra email và mật khẩu.",
+      fields: { email: credentials.email },
+    };
   }
 
   redirect(safeOwnerNextPath(String(formData.get("next") ?? "")));

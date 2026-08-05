@@ -93,7 +93,7 @@ Quy tắc redirect:
 - Anonymous mở `/admin/*` → `/login?next=<safe-admin-path>`.
 - Owner đăng nhập thành công → `next` hợp lệ hoặc `/app/dashboard`.
 - Owner mở `/login` → `/app/dashboard`.
-- Owner mở `/` → có thể chuyển thẳng `/app/dashboard`; public CV vẫn xem được qua `/admin/preview` hoặc cửa sổ anonymous.
+- Owner mở `/` → vẫn xem trang CV công khai giống khách; dùng nút `Dashboard`/`Manage CV` để vào workspace. Không tự redirect khỏi CV.
 - Logout → `/`.
 
 Không tạo redirect loop giữa `/`, `/login`, `/app/dashboard` và `/admin`.
@@ -112,6 +112,14 @@ email/password
 Proxy chỉ refresh session và redirect sớm. `/app` gọi lại `requireUser()` hoặc `requireOwner()` trong server layout; `/admin` gọi `requireAdmin()`/`requireOwnerAdmin()`. Mutation vẫn phải gọi guard phù hợp, không tin `userId` hoặc role từ client.
 
 Role tin cậy lấy từ `app_metadata.role`. `user_metadata` không dùng để phân quyền.
+
+## Danh tính hiển thị và email đăng nhập
+
+- Email trong `auth.users` chỉ dùng cho đăng nhập, khôi phục tài khoản và thông báo bảo mật.
+- Tên trên CV, header, dashboard và lời chào lấy từ `profiles.display_name` hoặc field hồ sơ tương đương trong database.
+- Owner chỉnh tên này qua `/admin/profile` hoặc giao diện Profile được phân quyền; không cần sửa code hay SQL.
+- Không dùng auth email, phần trước dấu `@`, username suy ra từ Gmail hoặc placeholder chứa email làm tên hiển thị.
+- Nếu chưa có `display_name`, UI hiển thị lời nhắc cấu hình hồ sơ hoặc fallback trung tính như `CoffeeHub Owner`, tuyệt đối không public auth email.
 
 ## Tài khoản
 

@@ -47,6 +47,7 @@ Trang CV tổng hợp:
 - Footer và social links.
 
 Chỉ hiển thị dữ liệu đã publish.
+Tên trong Hero lấy từ hồ sơ database (`display_name`), không lấy từ auth email/Gmail. Owner đang đăng nhập vẫn xem route này như CV và có thêm CTA tới Dashboard/Manage CV.
 
 ### `/about`
 
@@ -134,7 +135,7 @@ Owner/admin dùng các route này để chỉnh thông tin hiển thị công kh
 | Trạng thái | Public CV | `/app/*` | `/admin/*` |
 |---|---:|---:|---:|
 | Anonymous | Có | Không | Không |
-| Owner đã đăng nhập | Có hoặc redirect về app | Có toàn bộ | Có |
+| Owner đã đăng nhập | Có, không tự redirect | Có toàn bộ | Có |
 | Account test không phải owner/admin | Có | Chỉ khi policy cho phép test | Không |
 
 Production không cung cấp account khách.

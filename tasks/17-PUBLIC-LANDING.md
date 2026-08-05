@@ -6,11 +6,17 @@ Pending
 
 ## Mục tiêu
 
-Tạo website công khai giới thiệu CoffeeHub và portfolio
+Hoàn thiện và tối ưu website công khai đã được tạo ở Task 07; không phải lần đầu tạo public website
 
 ## Dependency
 
 - `16-PWA-OFFLINE.md` phải hoàn thành.
+
+## Thành quả nhìn thấy và sử dụng được
+
+- Route: `/`, `/about`, `/projects`, `/posts` và các public detail routes.
+- Người dùng anonymous xem được toàn bộ nội dung published.
+- Task này tập trung polish, storytelling, SEO, performance và case-study; public rendering cơ bản đã phải tồn tại từ Task 07.
 
 ## Công việc
 
@@ -41,7 +47,7 @@ Không có.
 
 ## Tiêu chí hoàn thành
 
-- Public page responsive
+- Public page đã có từ Task 07 được polish và responsive
 - Không truy cập dữ liệu private
 - Metadata đầy đủ
 - Build đạt

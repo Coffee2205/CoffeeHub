@@ -299,6 +299,7 @@ Commit:
 Push result:
 Known issues:
 ```
+
 # 2026-07-27 — Supabase documentation architecture
 
 - Đọc và rà soát toàn bộ Markdown trong repository.

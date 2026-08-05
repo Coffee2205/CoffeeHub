@@ -9,15 +9,22 @@ export async function GET(request: Request) {
   const code = url.searchParams.get("code");
   const type = url.searchParams.get("type") as EmailOtpType | null;
   const next = url.searchParams.get("next");
-  const destination = next?.startsWith("/app") && !next.startsWith("//") ? next : "/app/dashboard";
+  const destination =
+    next?.startsWith("/app") && !next.startsWith("//")
+      ? next
+      : "/app/dashboard";
   const supabase = await createClient();
 
-  const result = tokenHash && type
-    ? await supabase.auth.verifyOtp({ token_hash: tokenHash, type })
-    : code
-      ? await supabase.auth.exchangeCodeForSession(code)
-      : { error: new Error("Missing confirmation token") };
+  const result =
+    tokenHash && type
+      ? await supabase.auth.verifyOtp({ token_hash: tokenHash, type })
+      : code
+        ? await supabase.auth.exchangeCodeForSession(code)
+        : { error: new Error("Missing confirmation token") };
 
-  if (result.error) return NextResponse.redirect(new URL("/login?reason=confirmation-failed", url.origin));
+  if (result.error)
+    return NextResponse.redirect(
+      new URL("/login?reason=confirmation-failed", url.origin),
+    );
   return NextResponse.redirect(new URL(destination, url.origin));
 }

@@ -12,6 +12,12 @@ Tạo trợ lý AI đọc context được phép và hỗ trợ daily/weekly pla
 
 - `19-AI-GOAL-ASSISTANT.md` phải hoàn thành.
 
+## Thành quả nhìn thấy và sử dụng được
+
+- **Route:** `/app/ai`
+- **Luồng:** Chat với trợ lý, chọn context và nhận daily/weekly plan có nguồn context minh bạch.
+- Task không hoàn thành nếu route chỉ là placeholder hoặc chưa được browser-test desktop/mobile.
+
 ## Công việc
 
 - [ ] Chat UI
@@ -66,4 +72,8 @@ Có thể thêm AIConversation/AIMessage tùy quyết định lưu history.
 - Lint: Chưa chạy.
 - Typecheck: Chưa chạy.
 - Build: Chưa chạy.
+- Visible result URL: Chưa có.
+- How to use: Chưa cập nhật.
+- Browser desktop: Chưa chạy.
+- Browser mobile: Chưa chạy.
 - Manual test: Chưa chạy.
