@@ -6,6 +6,30 @@ import { requireUser } from "@/lib/supabase/auth";
 import { archiveNote, createNote, saveNote } from "./note.repository";
 import { parseNoteInput, type NoteInput } from "./note.schema";
 
+export type NoteSnapshot = {
+  id: string;
+  title: string;
+  content: string;
+  version: number;
+  updatedAt: number;
+};
+
+function toNoteSnapshot(note: {
+  id: string;
+  title: string;
+  content: string;
+  version: number;
+  updatedAt: Date;
+}): NoteSnapshot {
+  return {
+    id: note.id,
+    title: note.title,
+    content: note.content,
+    version: note.version,
+    updatedAt: note.updatedAt.getTime(),
+  };
+}
+
 export async function createNoteAction(form: FormData) {
   const user = await requireUser();
   const parsed = parseNoteInput({
@@ -33,7 +57,9 @@ export async function saveNoteAction(
     return { status: "invalid" as const, error: parsed.errors.join(" ") };
   }
   const result = await saveNote(user.id, id, expectedVersion, parsed.data);
-  revalidatePath("/app/notes");
+  if (result.status === "saved" || result.status === "conflict") {
+    return { status: result.status, note: toNoteSnapshot(result.note) };
+  }
   return result;
 }
 

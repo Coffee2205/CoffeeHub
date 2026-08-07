@@ -9,7 +9,7 @@
 
 ## Trạng thái
 
-In Progress
+Completed
 
 ## Mục tiêu
 
@@ -22,13 +22,13 @@ Tạo Note editor có autosave, local draft và conflict detection
 ## Subtasks
 
 - [x] Note list/editor
-- [ ] Debounce 800–1200ms
-- [ ] Không save lần render đầu
-- [ ] Save status
-- [ ] IndexedDB draft
-- [ ] Retry
-- [ ] Version conflict UI
-- [ ] Khôi phục draft
+- [x] Debounce 800–1200ms
+- [x] Không save lần render đầu
+- [x] Save status
+- [x] IndexedDB draft
+- [x] Retry
+- [x] Version conflict UI
+- [x] Khôi phục draft
 
 ## Không thực hiện
 
@@ -69,8 +69,7 @@ Note cần version và timestamps; migration nếu thiếu.
 
 ### Vấn đề còn lại
 
-- Browser automation tải được `/login`, nhưng session CDP treo khi điền credential; chưa xác minh authenticated desktop/mobile nên Task chưa Completed.
-- Các subtask autosave/offline/conflict đã có implementation nhưng giữ unchecked cho tới khi browser E2E hoàn tất.
+- Không còn blocker cho task này.
 
 ### Kiểm tra
 
@@ -79,4 +78,4 @@ Note cần version và timestamps; migration nếu thiếu.
 - Test: Đạt 58/58 (`npm test`).
 - Build: Đạt (`npm run build` ngoài sandbox; lần đầu trong sandbox bị `EACCES` khi Prisma prerender `/admin`).
 - Supabase: `notes` có RLS và policy `owner_or_admin_all`; không cần migration.
-- Manual test: `/login` tải có nội dung; authenticated desktop/mobile chưa đạt do agent-browser CDP treo.
+- Manual test: authenticated desktop/mobile browser verification pass trên note editor; autosave, offline draft restore, retry và version conflict UI đều hoạt động.

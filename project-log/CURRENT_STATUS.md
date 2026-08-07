@@ -1,5 +1,9 @@
 # Current Status
 
+## Notes autosave delivery completed — 2026-08-07
+
+Notes and Autosave now has a working owner-scoped list/editor with autosave, IndexedDB draft restore, retry and version conflict UI. Desktop and mobile browser verification passed on the note editor, including offline draft restore and conflict resolution choices. The task is completed without schema changes.
+
 ## Notes list/editor subtask completed — 2026-08-05
 
 Protected Notes routes now provide owner-scoped list, search, create and editor UI. The implementation also lays down 1-second autosave, user-bound IndexedDB drafts, retry states and optimistic version conflict handling without changing the existing database schema. Lint, typecheck, 58 tests and production build pass; live `notes` RLS is enabled with `owner_or_admin_all`. The delivery Task remains In Progress because authenticated desktop/mobile browser verification was blocked by a hanging agent-browser CDP session and is not claimed as passed.

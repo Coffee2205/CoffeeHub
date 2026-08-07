@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Note } from "@/generated/prisma/client";
-import { saveNoteAction } from "../note.actions";
+import { saveNoteAction, type NoteSnapshot } from "../note.actions";
 import {
   readNoteDraft,
   removeNoteDraft,
@@ -10,13 +10,7 @@ import {
 } from "@/features/sync/note-draft-store";
 
 type SaveState =
-  | "idle"
-  | "saving"
-  | "saved"
-  | "error"
-  | "offline"
-  | "syncing"
-  | "conflict";
+  "idle" | "saving" | "saved" | "error" | "offline" | "syncing" | "conflict";
 
 const labels: Record<SaveState, string> = {
   idle: "Sẵn sàng",
@@ -33,7 +27,7 @@ export function NoteEditor({ note, userId }: { note: Note; userId: string }) {
   const [content, setContent] = useState(note.content);
   const [version, setVersion] = useState(note.version);
   const [state, setState] = useState<SaveState>("idle");
-  const [remote, setRemote] = useState<Note | null>(null);
+  const [remote, setRemote] = useState<NoteSnapshot | null>(null);
   const [online, setOnline] = useState(true);
   const hydrated = useRef(false);
   const latest = useRef({ title, content, version });
@@ -57,11 +51,14 @@ export function NoteEditor({ note, userId }: { note: Note; userId: string }) {
       }
       setState((current) => (current === "offline" ? "syncing" : "saving"));
       try {
-        const result = await saveNoteAction(note.id, draft.version, draft);
+        const result = await saveNoteAction(note.id, draft.version, {
+          title: draft.title,
+          content: draft.content,
+        });
         if (result.status === "saved") {
           setVersion(result.note.version);
           latest.current.version = result.note.version;
-          lastSaved.current = `${draft.title}\u0000${draft.content}`;
+          lastSaved.current = `${result.note.title}\u0000${result.note.content}`;
           await removeNoteDraft(note.id);
           setState("saved");
           setRemote(null);
