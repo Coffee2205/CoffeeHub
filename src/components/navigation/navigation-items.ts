@@ -43,7 +43,11 @@ export const desktopNavigation: Array<{
     label: "Tài khoản",
     items: [
       { href: "/app/profile", label: "Hồ sơ", icon: "profile" },
-      { href: "/app/settings", label: "Cài đặt", icon: "settings" },
+      {
+        href: "/app/settings/notifications",
+        label: "Thông báo",
+        icon: "settings",
+      },
     ],
   },
 ];
@@ -74,7 +78,7 @@ export const mobileNavigation: NavigationItem[] = [
     icon: "calendar",
   },
   {
-    href: "/app/settings",
+    href: "/app/settings/notifications",
     label: "Xem thêm",
     shortLabel: "More",
     icon: "more",
