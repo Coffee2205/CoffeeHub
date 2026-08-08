@@ -5,6 +5,9 @@ export type NoteDraft = {
   content: string;
   version: number;
   updatedAt: number;
+  idempotencyKey: string;
+  attempts: number;
+  nextAttemptAt: number;
 };
 
 const DATABASE = "coffeehub-notes";
@@ -47,4 +50,31 @@ export function writeNoteDraft(draft: NoteDraft) {
 
 export function removeNoteDraft(noteId: string) {
   return transaction<undefined>("readwrite", (store) => store.delete(noteId));
+}
+
+export function createNoteDraft(
+  input: Omit<NoteDraft, "idempotencyKey" | "attempts" | "nextAttemptAt">,
+): NoteDraft {
+  return {
+    ...input,
+    idempotencyKey: crypto.randomUUID(),
+    attempts: 0,
+    nextAttemptAt: 0,
+  };
+}
+
+export function mergeNoteDraft(
+  current: NoteDraft | undefined,
+  input: Omit<NoteDraft, "idempotencyKey" | "attempts" | "nextAttemptAt">,
+): NoteDraft {
+  return current ? { ...current, ...input } : createNoteDraft(input);
+}
+
+export function postponeNoteDraft(
+  draft: NoteDraft,
+  now = Date.now(),
+): NoteDraft {
+  const attempts = draft.attempts + 1;
+  const delay = Math.min(30_000, 1_000 * 2 ** Math.min(attempts - 1, 5));
+  return { ...draft, attempts, nextAttemptAt: now + delay };
 }

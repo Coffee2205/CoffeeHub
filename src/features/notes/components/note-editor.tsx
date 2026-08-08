@@ -4,13 +4,21 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { Note } from "@/generated/prisma/client";
 import { saveNoteAction, type NoteSnapshot } from "../note.actions";
 import {
+  mergeNoteDraft,
+  postponeNoteDraft,
   readNoteDraft,
   removeNoteDraft,
   writeNoteDraft,
 } from "@/features/sync/note-draft-store";
 
 type SaveState =
-  "idle" | "saving" | "saved" | "error" | "offline" | "syncing" | "conflict";
+  | "idle"
+  | "saving"
+  | "saved"
+  | "error"
+  | "offline"
+  | "syncing"
+  | "conflict";
 
 const labels: Record<SaveState, string> = {
   idle: "Sẵn sàng",
@@ -39,22 +47,33 @@ export function NoteEditor({ note, userId }: { note: Note; userId: string }) {
 
   const persist = useCallback(
     async (draft = latest.current) => {
-      await writeNoteDraft({
-        noteId: note.id,
-        userId,
-        ...draft,
-        updatedAt: Date.now(),
-      });
+      const stored = await readNoteDraft(note.id);
+      const queued = mergeNoteDraft(
+        stored?.userId === userId ? stored : undefined,
+        {
+          noteId: note.id,
+          userId,
+          ...draft,
+          updatedAt: Date.now(),
+        },
+      );
+      await writeNoteDraft(queued);
       if (!navigator.onLine) {
         setState("offline");
         return;
       }
       setState((current) => (current === "offline" ? "syncing" : "saving"));
       try {
-        const result = await saveNoteAction(note.id, draft.version, {
-          title: draft.title,
-          content: draft.content,
-        });
+        if (queued.nextAttemptAt > Date.now()) {
+          setState("error");
+          return;
+        }
+        const result = await saveNoteAction(
+          note.id,
+          queued.version,
+          { title: queued.title, content: queued.content },
+          queued.idempotencyKey,
+        );
         if (result.status === "saved") {
           setVersion(result.note.version);
           latest.current.version = result.note.version;
@@ -66,9 +85,12 @@ export function NoteEditor({ note, userId }: { note: Note; userId: string }) {
           setRemote(result.note);
           setState("conflict");
         } else {
+          await writeNoteDraft(postponeNoteDraft(queued));
           setState("error");
         }
       } catch {
+        const postponed = postponeNoteDraft(queued);
+        await writeNoteDraft(postponed);
         setState(navigator.onLine ? "error" : "offline");
       }
     },
@@ -76,21 +98,38 @@ export function NoteEditor({ note, userId }: { note: Note; userId: string }) {
   );
 
   useEffect(() => {
+    if (state !== "error" || !online) return;
+    let timer: number | undefined;
     void readNoteDraft(note.id).then((draft) => {
-      if (
-        draft?.userId === userId &&
-        draft.updatedAt > note.updatedAt.getTime()
-      ) {
+      if (!draft || draft.userId !== userId) return;
+      timer = window.setTimeout(
+        () => void persist(),
+        Math.max(0, draft.nextAttemptAt - Date.now()),
+      );
+    });
+    return () => window.clearTimeout(timer);
+  }, [note.id, online, persist, state, userId]);
+
+  useEffect(() => {
+    void readNoteDraft(note.id).then(async (draft) => {
+      if (draft && draft.userId !== userId) {
+        await removeNoteDraft(note.id);
+      } else if (draft && draft.updatedAt > note.updatedAt.getTime()) {
         setTitle(draft.title);
         setContent(draft.content);
         setVersion(draft.version);
-        latest.current = draft;
+        latest.current = {
+          title: draft.title,
+          content: draft.content,
+          version: draft.version,
+        };
         setOnline(navigator.onLine);
-        setState(navigator.onLine ? "error" : "offline");
+        setState(navigator.onLine ? "syncing" : "offline");
+        if (navigator.onLine) void persist(draft);
       }
       hydrated.current = true;
     });
-  }, [note.id, note.updatedAt, userId]);
+  }, [note.id, note.updatedAt, persist, userId]);
 
   useEffect(() => {
     if (!hydrated.current || state === "conflict" || state === "saving") return;

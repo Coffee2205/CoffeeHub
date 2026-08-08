@@ -50,8 +50,12 @@ export async function saveNoteAction(
   id: string,
   expectedVersion: number,
   input: NoteInput,
+  idempotencyKey: string,
 ) {
   const user = await requireUser();
+  if (!/^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(idempotencyKey)) {
+    return { status: "invalid" as const, error: "Khóa đồng bộ không hợp lệ." };
+  }
   const parsed = parseNoteInput(input);
   if (!parsed.data) {
     return { status: "invalid" as const, error: parsed.errors.join(" ") };
