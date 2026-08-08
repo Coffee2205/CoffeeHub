@@ -24,3 +24,10 @@ Thumbs.db
 *.swp
 
 .vercel
+
+# Local project operating kit (restored from c4054e8)
+/agent/
+/docs/
+/project-log/
+/scripts/
+/tasks/
