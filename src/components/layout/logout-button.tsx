@@ -11,7 +11,10 @@ export function LogoutButton() {
   async function logout() {
     setPending(true);
     try {
-      await clearNoteDrafts();
+      await Promise.race([
+        clearNoteDrafts(),
+        new Promise<void>((resolve) => window.setTimeout(resolve, 1_500)),
+      ]);
     } finally {
       await logoutAction();
     }

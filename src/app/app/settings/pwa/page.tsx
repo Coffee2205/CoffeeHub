@@ -20,8 +20,8 @@ export default function PwaSettingsPage() {
             riêng tư.
           </li>
           <li>
-            Mutation queue chưa bật cho đến khi có endpoint allow-list,
-            idempotency và Auth revalidation.
+            Ghi chú có mutation queue allow-list theo owner, idempotency key,
+            retry/backoff và Auth revalidation phía server.
           </li>
           <li>
             Logout hoặc session hết hạn không thể phát lại mutation từ phiên cũ.
