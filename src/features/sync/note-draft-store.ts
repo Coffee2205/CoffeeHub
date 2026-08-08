@@ -52,6 +52,16 @@ export function removeNoteDraft(noteId: string) {
   return transaction<undefined>("readwrite", (store) => store.delete(noteId));
 }
 
+export function clearNoteDrafts() {
+  return new Promise<void>((resolve, reject) => {
+    const request = indexedDB.deleteDatabase(DATABASE);
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+    request.onblocked = () =>
+      reject(new Error("Note draft cleanup was blocked."));
+  });
+}
+
 export function createNoteDraft(
   input: Omit<NoteDraft, "idempotencyKey" | "attempts" | "nextAttemptAt">,
 ): NoteDraft {

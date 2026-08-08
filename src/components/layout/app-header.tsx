@@ -1,4 +1,4 @@
-import { logoutAction } from "@/app/login/actions";
+import { LogoutButton } from "./logout-button";
 
 type UserSummary = { displayName: string | null; isAdmin: boolean };
 
@@ -18,14 +18,7 @@ export function AppHeader({ user }: { user: UserSummary }) {
           {user.displayName ?? "Thành viên CoffeeHub"}
           {user.isAdmin ? " · Admin" : ""}
         </span>
-        <form action={logoutAction}>
-          <button
-            type="submit"
-            className="min-h-11 rounded-sm border border-border px-3 text-sm font-semibold text-foreground-secondary hover:border-primary-hover hover:text-foreground"
-          >
-            Đăng xuất
-          </button>
-        </form>
+        <LogoutButton />
       </div>
     </header>
   );
