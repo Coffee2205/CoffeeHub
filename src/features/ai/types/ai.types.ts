@@ -39,6 +39,16 @@ export type AIProviderResult<T> = {
 };
 export type RuntimeSchema<T> = { parse(value: unknown): T };
 
+export type GoalAnalysis = {
+  summary: string;
+  objective: string;
+  constraints: string[];
+  successCriteria: string[];
+  assumptions: string[];
+  risks: string[];
+  clarifyingQuestions: string[];
+  recommendedNextSteps: string[];
+};
 export type GoalProposal = {
   title: string;
   description?: string;

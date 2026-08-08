@@ -4,12 +4,14 @@ import { getAIConfig } from "../config/ai.config";
 import { AIError } from "../errors/ai-error";
 import { getProvider } from "../providers/provider-registry";
 import {
+  goalAnalysisSchema,
   goalProposalSchema,
   roadmapProposalSchema,
   taskProposalSchema,
 } from "../schemas/proposal.schemas";
 
 const schemas = {
+  [AI_ACTIONS.ANALYZE_GOAL]: goalAnalysisSchema,
   [AI_ACTIONS.CREATE_GOAL_PROPOSAL]: goalProposalSchema,
   [AI_ACTIONS.CREATE_ROADMAP_PROPOSAL]: roadmapProposalSchema,
   [AI_ACTIONS.CREATE_TASK_PROPOSAL]: taskProposalSchema,
@@ -34,6 +36,8 @@ export async function generateMockProposal(input: {
     timeoutMs: config.timeoutMs,
     maxOutputTokens: config.maxOutputTokens,
   };
+  if (input.action === AI_ACTIONS.ANALYZE_GOAL)
+    return provider.generateStructured(input, goalAnalysisSchema, options);
   if (input.action === AI_ACTIONS.CREATE_GOAL_PROPOSAL)
     return provider.generateStructured(input, goalProposalSchema, options);
   if (input.action === AI_ACTIONS.CREATE_ROADMAP_PROPOSAL)

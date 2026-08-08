@@ -2,6 +2,7 @@ import { AIError } from "../errors/ai-error";
 import type {
   ChecklistProposal,
   DailyPlanProposal,
+  GoalAnalysis,
   GoalProposal,
   GoalReviewProposal,
   RoadmapProposal,
@@ -40,6 +41,28 @@ const priority = (value: unknown): GoalProposal["priority"] => {
   )
     throw new AIError("SCHEMA_VALIDATION_ERROR", "Priority không hợp lệ.");
   return value as GoalProposal["priority"];
+};
+
+export const goalAnalysisSchema: RuntimeSchema<GoalAnalysis> = {
+  parse(value) {
+    const item = record(value);
+    return {
+      summary: text(item.summary, "summary"),
+      objective: text(item.objective, "objective"),
+      constraints: strings(item.constraints, "constraints"),
+      successCriteria: strings(item.successCriteria, "successCriteria"),
+      assumptions: strings(item.assumptions, "assumptions"),
+      risks: strings(item.risks, "risks"),
+      clarifyingQuestions: strings(
+        item.clarifyingQuestions,
+        "clarifyingQuestions",
+      ),
+      recommendedNextSteps: strings(
+        item.recommendedNextSteps,
+        "recommendedNextSteps",
+      ),
+    };
+  },
 };
 
 export const goalProposalSchema: RuntimeSchema<GoalProposal> = {

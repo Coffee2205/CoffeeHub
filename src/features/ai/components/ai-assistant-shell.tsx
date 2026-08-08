@@ -18,6 +18,7 @@ import {
 } from "../actions/proposal-state";
 
 const options = [
+  { value: AI_ACTIONS.ANALYZE_GOAL, label: "Analyze Goal" },
   { value: AI_ACTIONS.CREATE_GOAL_PROPOSAL, label: "Create Goal Proposal" },
   {
     value: AI_ACTIONS.CREATE_ROADMAP_PROPOSAL,
@@ -54,7 +55,7 @@ export function AIAssistantShell({
             <span className="text-sm font-medium">Action</span>
             <select
               name="action"
-              defaultValue={AI_ACTIONS.CREATE_GOAL_PROPOSAL}
+              defaultValue={AI_ACTIONS.ANALYZE_GOAL}
               className="min-h-11 rounded-sm border border-border bg-background-secondary px-3"
             >
               {options.map((item) => (
@@ -80,7 +81,7 @@ export function AIAssistantShell({
             phỏng lỗi provider
           </label>
           <Button type="submit" disabled={pending}>
-            {pending ? "Đang tạo proposal…" : "Generate mock proposal"}
+            {pending ? "Đang xử lý…" : "Analyze / generate mock"}
           </Button>
         </form>
         <div className="mt-5 flex flex-wrap gap-2 text-xs">
@@ -123,6 +124,8 @@ function ProposalPreview({ state }: { state: ProposalActionState }) {
       </Card>
     );
   const proposal = state.proposal as Record<string, unknown>;
+  if (state.action === AI_ACTIONS.ANALYZE_GOAL)
+    return <GoalAnalysisPreview state={state} analysis={proposal} />;
   return (
     <Card key={state.proposalId}>
       <CardHeader>
@@ -161,6 +164,63 @@ function ProposalPreview({ state }: { state: ProposalActionState }) {
         <p className="text-xs text-muted">
           {state.metadata?.provider}/{state.metadata?.model} ·{" "}
           {state.usage?.totalTokens ?? 0} mock tokens · proposal{" "}
+          {state.proposalId}
+        </p>
+      </div>
+    </Card>
+  );
+}
+
+function GoalAnalysisPreview({
+  state,
+  analysis,
+}: {
+  state: ProposalActionState;
+  analysis: Record<string, unknown>;
+}) {
+  const sections = [
+    ["Ràng buộc", analysis.constraints],
+    ["Tiêu chí thành công", analysis.successCriteria],
+    ["Giả định", analysis.assumptions],
+    ["Rủi ro", analysis.risks],
+    ["Câu hỏi cần làm rõ", analysis.clarifyingQuestions],
+    ["Bước tiếp theo", analysis.recommendedNextSteps],
+  ] as const;
+  return (
+    <Card key={state.proposalId}>
+      <CardHeader>
+        <CardTitle>Goal analysis</CardTitle>
+        <CardDescription>
+          Phân tích chỉ đọc đã qua runtime validation. Không tạo hoặc thay đổi
+          dữ liệu CoffeeHub.
+        </CardDescription>
+      </CardHeader>
+      <div className="grid gap-5">
+        <div>
+          <p className="text-sm font-medium">Tóm tắt</p>
+          <p className="mt-1 text-sm leading-6 text-foreground-secondary">
+            {String(analysis.summary ?? "")}
+          </p>
+        </div>
+        <div>
+          <p className="text-sm font-medium">Mục tiêu</p>
+          <p className="mt-1 text-sm leading-6 text-foreground-secondary">
+            {String(analysis.objective ?? "")}
+          </p>
+        </div>
+        {sections.map(([label, value]) => (
+          <div key={label}>
+            <p className="text-sm font-medium">{label}</p>
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-6 text-foreground-secondary">
+              {(Array.isArray(value) ? value : []).map((item, index) => (
+                <li key={`${label}-${index}`}>{String(item)}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        <p className="text-xs text-muted">
+          {state.metadata?.provider}/{state.metadata?.model} ·{" "}
+          {state.usage?.totalTokens ?? 0} mock tokens · analysis{" "}
           {state.proposalId}
         </p>
       </div>

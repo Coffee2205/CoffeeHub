@@ -9,7 +9,10 @@ import { AIError } from "../src/features/ai/errors/ai-error";
 import { mapGoalProposalToGoalFormValues } from "../src/features/ai/mappers/proposal-mappers";
 import { AI_ACTION_POLICY } from "../src/features/ai/policies/action-policy";
 import { MockAIProvider } from "../src/features/ai/providers/mock.provider";
-import { goalProposalSchema } from "../src/features/ai/schemas/proposal.schemas";
+import {
+  goalAnalysisSchema,
+  goalProposalSchema,
+} from "../src/features/ai/schemas/proposal.schemas";
 
 test("registers typed AI actions and confirmation policy", () => {
   assert.equal(isAIAction("create_goal_proposal"), true);
@@ -34,6 +37,20 @@ test("mock provider returns a validated development proposal without network", a
   assert.equal(result.metadata.model, "mock-planner-v1");
   assert.equal(result.data.priority, "HIGH");
   assert.equal(result.usage.estimatedCost, 0);
+});
+
+test("mock provider analyzes a goal as validated read-only output", async () => {
+  const provider = new MockAIProvider();
+  const result = await provider.generateStructured(
+    {
+      action: AI_ACTIONS.ANALYZE_GOAL,
+      prompt: "Hoàn thiện CoffeeHub trong tám tuần",
+    },
+    goalAnalysisSchema,
+  );
+  assert.equal(result.data.objective, "Hoàn thiện CoffeeHub trong tám tuần");
+  assert.equal(result.data.clarifyingQuestions.length, 2);
+  assert.equal(result.metadata.provider, "mock");
 });
 
 test("proposal mapper strips AI-only fields and prepares Goal form values", () => {

@@ -42,53 +42,79 @@ export class MockAIProvider implements AIProvider {
     await wait(Math.min(options?.timeoutMs ?? 350, 350));
     const source = request.prompt.trim().slice(0, 120);
     const payload =
-      request.action === AI_ACTIONS.CREATE_GOAL_PROPOSAL
+      request.action === AI_ACTIONS.ANALYZE_GOAL
         ? {
-            title: source || "Mục tiêu development mock",
-            description:
-              "Proposal mẫu được tạo cục bộ. Chưa có dữ liệu nào được lưu.",
-            priority: "HIGH",
-            targetDate: "2026-12-31",
-            successCriteria: [
-              "Xác định kết quả có thể kiểm chứng",
-              "Chia nhỏ thành roadmap và task",
+            summary: `Phân tích yêu cầu: ${source}`,
+            objective: source || "Làm rõ mục tiêu cần lập kế hoạch",
+            constraints: [
+              "Phạm vi, nguồn lực và thời hạn cần được owner xác nhận",
             ],
-            assumptions: ["Owner sẽ xem và chỉnh proposal trước khi lưu"],
-            risks: ["Ước lượng cần được xác minh bằng dữ liệu thực tế"],
+            successCriteria: [
+              "Kết quả cuối có tiêu chí đo lường được",
+              "Mốc hoàn thành và người chịu trách nhiệm được xác định",
+            ],
+            assumptions: [
+              "Yêu cầu hiện tại là nguồn thông tin duy nhất của bản phân tích mock",
+            ],
+            risks: [
+              "Thiếu dữ liệu về thời hạn hoặc nguồn lực có thể làm kế hoạch thiếu thực tế",
+            ],
+            clarifyingQuestions: [
+              "Thời hạn mong muốn là khi nào?",
+              "Nguồn lực hoặc giới hạn nào phải được giữ cố định?",
+            ],
+            recommendedNextSteps: [
+              "Trả lời các câu hỏi còn thiếu",
+              "Xác nhận tiêu chí thành công trước khi tạo Goal proposal",
+            ],
           }
-        : request.action === AI_ACTIONS.CREATE_ROADMAP_PROPOSAL
+        : request.action === AI_ACTIONS.CREATE_GOAL_PROPOSAL
           ? {
-              title: source || "Roadmap development mock",
-              description: "Roadmap mẫu chưa được lưu.",
-              estimatedDurationDays: 30,
-              stages: [
-                {
-                  title: "Khởi động",
-                  description: "Xác nhận phạm vi",
-                  order: 1,
-                  estimatedDays: 7,
-                  tasks: [
-                    {
-                      title: "Chốt tiêu chí",
-                      priority: "MEDIUM",
-                      estimatedMinutes: 45,
-                    },
-                  ],
-                },
+              title: source || "Mục tiêu development mock",
+              description:
+                "Proposal mẫu được tạo cục bộ. Chưa có dữ liệu nào được lưu.",
+              priority: "HIGH",
+              targetDate: "2026-12-31",
+              successCriteria: [
+                "Xác định kết quả có thể kiểm chứng",
+                "Chia nhỏ thành roadmap và task",
               ],
+              assumptions: ["Owner sẽ xem và chỉnh proposal trước khi lưu"],
+              risks: ["Ước lượng cần được xác minh bằng dữ liệu thực tế"],
             }
-          : request.action === AI_ACTIONS.CREATE_TASK_PROPOSAL
+          : request.action === AI_ACTIONS.CREATE_ROADMAP_PROPOSAL
             ? {
-                title: source || "Task development mock",
-                description: "Task mẫu chưa được lưu.",
-                priority: "MEDIUM",
-                estimatedMinutes: 60,
+                title: source || "Roadmap development mock",
+                description: "Roadmap mẫu chưa được lưu.",
+                estimatedDurationDays: 30,
+                stages: [
+                  {
+                    title: "Khởi động",
+                    description: "Xác nhận phạm vi",
+                    order: 1,
+                    estimatedDays: 7,
+                    tasks: [
+                      {
+                        title: "Chốt tiêu chí",
+                        priority: "MEDIUM",
+                        estimatedMinutes: 45,
+                      },
+                    ],
+                  },
+                ],
               }
-            : null;
+            : request.action === AI_ACTIONS.CREATE_TASK_PROPOSAL
+              ? {
+                  title: source || "Task development mock",
+                  description: "Task mẫu chưa được lưu.",
+                  priority: "MEDIUM",
+                  estimatedMinutes: 60,
+                }
+              : null;
     if (!payload)
       throw new AIError(
         "ACTION_NOT_ALLOWED",
-        "Mock UI hiện chỉ hỗ trợ Goal, Roadmap và Task Proposal.",
+        "Mock UI hiện chỉ hỗ trợ phân tích Goal và các proposal đã được bật.",
       );
     return {
       data: schema.parse(payload),
