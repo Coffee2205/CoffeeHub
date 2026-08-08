@@ -26,6 +26,7 @@ Thumbs.db
 .vercel
 
 # Local project operating kit (restored from c4054e8)
+/*.md
 /agent/
 /docs/
 /project-log/
