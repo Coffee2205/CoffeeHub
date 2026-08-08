@@ -6,6 +6,7 @@ export type NavigationItem = {
     | "home"
     | "target"
     | "check"
+    | "list"
     | "calendar"
     | "notes"
     | "roadmap"
@@ -28,6 +29,7 @@ export const desktopNavigation: Array<{
     items: [
       { href: "/app/goals", label: "Mục tiêu", icon: "target" },
       { href: "/app/tasks", label: "Công việc", icon: "check" },
+      { href: "/app/checklists", label: "Checklists", icon: "list" },
       { href: "/app/calendar", label: "Lịch", icon: "calendar" },
       { href: "/app/notes", label: "Ghi chú", icon: "notes" },
       { href: "/app/roadmaps", label: "Lộ trình", icon: "roadmap" },

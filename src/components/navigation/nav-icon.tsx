@@ -22,6 +22,13 @@ export function NavIcon({ name }: { name: NavigationItem["icon"] }) {
         <path d="m8 12 3 3 5-6" />
       </>
     ),
+    list: (
+      <>
+        <rect x="4" y="4" width="16" height="16" rx="3" />
+        <path d="M8 8h8M8 12h8M8 16h5" />
+        <path d="M6.5 8h.01M6.5 12h.01M6.5 16h.01" />
+      </>
+    ),
     calendar: (
       <>
         <rect x="3" y="5" width="18" height="16" rx="3" />

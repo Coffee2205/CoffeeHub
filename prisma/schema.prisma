@@ -68,6 +68,8 @@ model User {
   tasks         Task[]
   events        Event[]
   notes         Note[]
+  checklists    Checklist[]
+  checklistItems ChecklistItem[]
   projects      Project[]
   mediaAssets   MediaAsset[]
   experiences   Experience[]
@@ -352,6 +354,7 @@ model Goal {
   roadmaps Roadmap[]
   tasks    Task[]
   events   Event[]
+  checklists Checklist[]
 
   @@index([userId, status, deletedAt])
   @@index([userId, deadline])
@@ -374,6 +377,7 @@ model Roadmap {
   goal   Goal           @relation(fields: [goalId, userId], references: [id, userId], onDelete: Cascade)
   stages RoadmapStage[]
   tasks  Task[]
+  checklists Checklist[]
 
   @@index([userId, deletedAt])
   @@index([goalId])
@@ -428,6 +432,7 @@ model Task {
   roadmap      Roadmap?      @relation(fields: [roadmapId, userId], references: [id, userId], onDelete: Restrict)
   roadmapStage RoadmapStage? @relation(fields: [roadmapStageId, userId], references: [id, userId], onDelete: Restrict)
   events       Event[]
+  checklists   Checklist[]
 
   @@index([userId, status, deletedAt])
   @@index([userId, dueAt])
@@ -483,4 +488,55 @@ model Note {
   @@index([userId, updatedAt])
   @@index([userId, deletedAt])
   @@map("notes")
+}
+
+model Checklist {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  goalId      String?   @map("goal_id") @db.Uuid
+  roadmapId   String?   @map("roadmap_id") @db.Uuid
+  taskId      String?   @map("task_id") @db.Uuid
+  title       String    @db.VarChar(220)
+  description String?
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
+  version     Int       @default(1)
+
+  user    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goal    Goal?          @relation(fields: [goalId, userId], references: [id, userId], onDelete: Restrict)
+  roadmap Roadmap?       @relation(fields: [roadmapId, userId], references: [id, userId], onDelete: Restrict)
+  task    Task?          @relation(fields: [taskId, userId], references: [id, userId], onDelete: Restrict)
+  items   ChecklistItem[]
+
+  @@index([userId, deletedAt])
+  @@index([userId, updatedAt])
+  @@index([goalId, userId])
+  @@index([roadmapId, userId])
+  @@index([taskId, userId])
+  @@unique([id, userId])
+  @@map("checklists")
+}
+
+model ChecklistItem {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  checklistId String    @map("checklist_id") @db.Uuid
+  title       String    @db.VarChar(220)
+  completed   Boolean   @default(false)
+  position    Int       @default(0)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
+  version     Int       @default(1)
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  checklist Checklist @relation(fields: [checklistId, userId], references: [id, userId], onDelete: Cascade)
+
+  @@unique([checklistId, position])
+  @@index([userId, deletedAt])
+  @@index([checklistId, deletedAt])
+  @@index([checklistId, userId])
+  @@unique([id, userId])
+  @@map("checklist_items")
 }
