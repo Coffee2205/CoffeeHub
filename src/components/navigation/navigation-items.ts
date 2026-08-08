@@ -48,6 +48,7 @@ export const desktopNavigation: Array<{
         label: "Thông báo",
         icon: "settings",
       },
+      { href: "/app/settings/pwa", label: "PWA & Offline", icon: "settings" },
     ],
   },
 ];
