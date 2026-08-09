@@ -407,6 +407,28 @@ test("create-new override removes model or stale relationship IDs", () => {
   );
 });
 
+test("validated relationship removes undefined IDs before JSON persistence", () => {
+  const relationship = validateRelationshipHierarchy(
+    {
+      action: "LINK_EXISTING",
+      confidence: "MEDIUM",
+      goalId: "goal-coffeehub",
+      roadmapId: undefined,
+      stageId: undefined,
+      ambiguous: false,
+    },
+    planningCandidates,
+  );
+
+  assert.deepEqual(relationship, {
+    action: "LINK_EXISTING",
+    confidence: "MEDIUM",
+    goalId: "goal-coffeehub",
+    ambiguous: false,
+  });
+  assert.equal(JSON.stringify(relationship).includes("undefined"), false);
+});
+
 test("conversation planning context preserves validated active references", () => {
   assert.deepEqual(
     readPlanningContextSummary(

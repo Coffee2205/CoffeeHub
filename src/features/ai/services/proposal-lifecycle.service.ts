@@ -110,10 +110,13 @@ export async function createProposalDraft(
   sourceContext?: PlanningSourceContext,
 ) {
   const parsed = parseWritableProposal(action, payload);
-  await validatePlanningRelationship(userId, relationship);
+  const validatedRelationship = await validatePlanningRelationship(
+    userId,
+    relationship,
+  );
   const stored = {
     data: parsed,
-    relationship,
+    relationship: validatedRelationship,
     ...(sourceContext && Object.keys(sourceContext).length
       ? { sourceContext }
       : {}),
