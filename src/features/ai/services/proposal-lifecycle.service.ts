@@ -251,8 +251,7 @@ async function commitProposalOnce(input: {
       current.status !== "DRAFT" ||
       current.version !== input.version ||
       current.confirmationId !== input.confirmationId ||
-      current.payloadHash !== input.payloadHash ||
-      hashProposal(current.payload) !== input.payloadHash
+      current.payloadHash !== input.payloadHash
     )
       throw new AIError(
         "CONFIRMATION_REQUIRED",

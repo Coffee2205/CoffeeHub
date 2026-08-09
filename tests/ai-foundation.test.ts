@@ -242,6 +242,31 @@ test("proposal confirmation hash changes after an owner edit", () => {
   assert.equal(hashProposal(original), hashProposal(original));
 });
 
+test("proposal confirmation hash is stable across JSON object key order", () => {
+  const beforeJsonb = {
+    title: "Ship CoffeeHub",
+    metadata: { priority: "HIGH", owner: "owner" },
+    items: [
+      { title: "Build", order: 1 },
+      { title: "Verify", order: 2 },
+    ],
+  };
+  const afterJsonb = {
+    items: [
+      { order: 1, title: "Build" },
+      { order: 2, title: "Verify" },
+    ],
+    metadata: { owner: "owner", priority: "HIGH" },
+    title: "Ship CoffeeHub",
+  };
+
+  assert.equal(hashProposal(beforeJsonb), hashProposal(afterJsonb));
+  assert.notEqual(
+    hashProposal(beforeJsonb),
+    hashProposal({ ...afterJsonb, title: "Ship another project" }),
+  );
+});
+
 test("Event proposal maps through Calendar timezone and relation validation", () => {
   const proposal = eventProposalSchema.parse({
     title: "Planning block",
