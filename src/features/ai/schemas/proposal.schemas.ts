@@ -33,6 +33,26 @@ const strings = (value: unknown, field: string) => {
     throw new AIError("SCHEMA_VALIDATION_ERROR", `${field} không hợp lệ.`);
   return value.map((item) => item.trim()).filter(Boolean);
 };
+const boundedStrings = (
+  value: unknown,
+  field: string,
+  maximumItems: number,
+  maximumLength: number,
+) => {
+  const items = strings(value, field);
+  if (
+    items.length > maximumItems ||
+    items.some((item) => item.length > maximumLength)
+  )
+    throw new AIError("SCHEMA_VALIDATION_ERROR", `${field} không hợp lệ.`);
+  return items;
+};
+const optionalDate = (value: unknown, field: string) => {
+  const result = optionalText(value, field);
+  if (result && !/^\d{4}-\d{2}-\d{2}$/.test(result))
+    throw new AIError("SCHEMA_VALIDATION_ERROR", `${field} không hợp lệ.`);
+  return result;
+};
 const priority = (value: unknown): GoalProposal["priority"] => {
   if (
     !(["LOW", "MEDIUM", "HIGH", "URGENT"] as const).includes(
@@ -72,11 +92,16 @@ export const goalProposalSchema: RuntimeSchema<GoalProposal> = {
       title: text(item.title, "title", 180),
       description: optionalText(item.description, "description"),
       priority: priority(item.priority),
-      startDate: optionalText(item.startDate, "startDate"),
-      targetDate: optionalText(item.targetDate, "targetDate"),
-      successCriteria: strings(item.successCriteria, "successCriteria"),
-      assumptions: strings(item.assumptions, "assumptions"),
-      risks: strings(item.risks, "risks"),
+      startDate: optionalDate(item.startDate, "startDate"),
+      targetDate: optionalDate(item.targetDate, "targetDate"),
+      successCriteria: boundedStrings(
+        item.successCriteria,
+        "successCriteria",
+        20,
+        240,
+      ),
+      assumptions: boundedStrings(item.assumptions, "assumptions", 20, 500),
+      risks: boundedStrings(item.risks, "risks", 20, 500),
     };
   },
 };

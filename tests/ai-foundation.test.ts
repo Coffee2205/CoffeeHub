@@ -6,7 +6,10 @@ import {
   limitContextRecords,
 } from "../src/features/ai/context/context-builder";
 import { AIError } from "../src/features/ai/errors/ai-error";
-import { mapGoalProposalToGoalFormValues } from "../src/features/ai/mappers/proposal-mappers";
+import {
+  mapAndValidateGoalProposal,
+  mapGoalProposalToGoalFormValues,
+} from "../src/features/ai/mappers/proposal-mappers";
 import { AI_ACTION_POLICY } from "../src/features/ai/policies/action-policy";
 import { MockAIProvider } from "../src/features/ai/providers/mock.provider";
 import {
@@ -70,6 +73,33 @@ test("proposal mapper strips AI-only fields and prepares Goal form values", () =
     deadline: "2026-12-31",
     successCriteria: "Build passes",
   });
+});
+
+test("Goal proposal maps through the existing Goal form schema", () => {
+  const proposal = goalProposalSchema.parse({
+    title: "Ship CoffeeHub",
+    priority: "HIGH",
+    targetDate: "2026-12-31",
+    successCriteria: ["Build passes"],
+    assumptions: [],
+    risks: [],
+  });
+  assert.equal(mapAndValidateGoalProposal(proposal).status, "DRAFT");
+});
+
+test("Goal proposal schema rejects invalid dates and oversized criteria", () => {
+  assert.throws(
+    () =>
+      goalProposalSchema.parse({
+        title: "Ship CoffeeHub",
+        priority: "HIGH",
+        targetDate: "next Friday",
+        successCriteria: ["x".repeat(241)],
+        assumptions: [],
+        risks: [],
+      }),
+    (error) => error instanceof AIError,
+  );
 });
 
 test("context builder applies an explicit budget and record limit", () => {

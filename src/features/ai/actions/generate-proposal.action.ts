@@ -2,8 +2,10 @@
 
 import { randomUUID } from "node:crypto";
 import { requireUser } from "@/lib/supabase/auth";
-import { isAIAction } from "./ai-actions";
+import { AI_ACTIONS, isAIAction } from "./ai-actions";
 import { safeAIError } from "../errors/ai-error";
+import { mapAndValidateGoalProposal } from "../mappers/proposal-mappers";
+import { goalProposalSchema } from "../schemas/proposal.schemas";
 import {
   generateMockProposal,
   isMockProposalAction,
@@ -39,11 +41,16 @@ export async function generateProposalAction(
       prompt,
       simulateError: form.get("simulateError") === "on",
     });
+    const goalFormValues =
+      actionValue === AI_ACTIONS.CREATE_GOAL_PROPOSAL
+        ? mapAndValidateGoalProposal(goalProposalSchema.parse(result.data))
+        : undefined;
     return {
       status: "success",
       proposalId: randomUUID(),
       action: actionValue,
       proposal: result.data,
+      goalFormValues,
       usage: result.usage,
       metadata: result.metadata,
     };

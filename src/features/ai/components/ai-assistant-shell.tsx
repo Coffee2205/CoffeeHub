@@ -148,7 +148,7 @@ function ProposalPreview({ state }: { state: ProposalActionState }) {
           />
         </label>
         {state.action === AI_ACTIONS.CREATE_GOAL_PROPOSAL ? (
-          <GoalFields proposal={proposal} />
+          <GoalFields proposal={proposal} state={state} />
         ) : null}
         {state.action === AI_ACTIONS.CREATE_ROADMAP_PROPOSAL ? (
           <RoadmapFields proposal={proposal} />
@@ -228,12 +228,29 @@ function GoalAnalysisPreview({
   );
 }
 
-function GoalFields({ proposal }: { proposal: Record<string, unknown> }) {
+function GoalFields({
+  proposal,
+  state,
+}: {
+  proposal: Record<string, unknown>;
+  state: ProposalActionState;
+}) {
+  const details = [
+    ["Giả định", proposal.assumptions],
+    ["Rủi ro", proposal.risks],
+  ] as const;
   return (
     <>
       <label className="grid gap-2">
         <span className="text-sm font-medium">Priority</span>
         <Input defaultValue={String(proposal.priority ?? "MEDIUM")} />
+      </label>
+      <label className="grid gap-2">
+        <span className="text-sm font-medium">Deadline</span>
+        <Input
+          type="date"
+          defaultValue={state.goalFormValues?.deadline ?? ""}
+        />
       </label>
       <label className="grid gap-2">
         <span className="text-sm font-medium">Success criteria</span>
@@ -245,6 +262,20 @@ function GoalFields({ proposal }: { proposal: Record<string, unknown> }) {
           }
         />
       </label>
+      {details.map(([label, value]) => (
+        <div key={label} className="rounded-sm border border-border p-3">
+          <p className="text-sm font-medium">{label}</p>
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-foreground-secondary">
+            {(Array.isArray(value) ? value : []).map((item, index) => (
+              <li key={`${label}-${index}`}>{String(item)}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+      <p className="text-xs text-muted">
+        Đã map và kiểm tra lại bằng Goal form schema · trạng thái mặc định
+        DRAFT.
+      </p>
     </>
   );
 }

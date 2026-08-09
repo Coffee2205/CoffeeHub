@@ -3,6 +3,8 @@ import type {
   RoadmapProposal,
   TaskProposal,
 } from "../types/ai.types";
+import { AIError } from "../errors/ai-error";
+import { parseGoalForm } from "@/features/goals/goal.schema";
 export type GoalFormValues = {
   title: string;
   description: string;
@@ -22,6 +24,19 @@ export function mapGoalProposalToGoalFormValues(
     deadline: proposal.targetDate ?? "",
     successCriteria: proposal.successCriteria.join("\n"),
   };
+}
+
+export function mapAndValidateGoalProposal(proposal: GoalProposal) {
+  const values = mapGoalProposalToGoalFormValues(proposal);
+  const form = new FormData();
+  Object.entries(values).forEach(([key, value]) => form.set(key, value));
+  const parsed = parseGoalForm(form);
+  if (!parsed.data)
+    throw new AIError(
+      "SCHEMA_VALIDATION_ERROR",
+      `Goal proposal không khớp form nghiệp vụ: ${parsed.errors.join(" ")}`,
+    );
+  return values;
 }
 export function mapRoadmapProposalToFormValues(proposal: RoadmapProposal) {
   return {
