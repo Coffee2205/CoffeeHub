@@ -25,8 +25,16 @@ export default function RootLayout({
   return (
     <html lang="vi" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body className={GeistSans.className}>
+        <a
+          href="#main-content"
+          className="fixed left-4 top-4 z-50 -translate-y-24 rounded-sm bg-primary-control px-4 py-3 font-semibold text-white transition-transform focus:translate-y-0"
+        >
+          Bỏ qua đến nội dung chính
+        </a>
         <PwaClient />
-        {children}
+        <div id="main-content" tabIndex={-1}>
+          {children}
+        </div>
       </body>
     </html>
   );

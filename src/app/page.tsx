@@ -484,7 +484,7 @@ export default async function Home() {
             <p className="font-semibold">
               {profile?.displayName ?? "Portfolio"}
             </p>
-            <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500">
+            <p className="mt-2 max-w-xl text-sm leading-6 text-slate-400">
               {settings?.footerText ??
                 settings?.privacyNote ??
                 "Chỉ nội dung được publish qua CMS mới xuất hiện trên trang này."}
