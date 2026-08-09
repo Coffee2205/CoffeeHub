@@ -36,6 +36,18 @@ export const AI_PROMPTS: Record<AIAction, AIPromptTemplate> = {
     "Draft a concise checklist.",
     "Valid ChecklistProposal JSON.",
   ),
+  [AI_ACTIONS.CREATE_EVENT_PROPOSAL]: template(
+    "Draft one calendar event without choosing owner relations.",
+    "Valid EventProposal JSON.",
+  ),
+  [AI_ACTIONS.CREATE_NOTE_PROPOSAL]: template(
+    "Draft one note.",
+    "Valid NoteProposal JSON without an owner identifier.",
+  ),
+  [AI_ACTIONS.UPDATE_NOTE_PROPOSAL]: template(
+    "Draft an update for the explicitly selected note.",
+    "Valid NoteProposal JSON bound to note id and version.",
+  ),
   [AI_ACTIONS.CREATE_DAILY_PLAN]: template(
     "Draft a realistic daily plan.",
     "Valid DailyPlanProposal JSON.",

@@ -5,10 +5,12 @@ import { AIError } from "../errors/ai-error";
 import { getProvider } from "../providers/provider-registry";
 import {
   checklistProposalSchema,
+  eventProposalSchema,
   goalAnalysisSchema,
   goalProposalSchema,
   roadmapProposalSchema,
   taskProposalSchema,
+  noteProposalSchema,
 } from "../schemas/proposal.schemas";
 
 const schemas = {
@@ -17,6 +19,9 @@ const schemas = {
   [AI_ACTIONS.CREATE_ROADMAP_PROPOSAL]: roadmapProposalSchema,
   [AI_ACTIONS.CREATE_TASK_PROPOSAL]: taskProposalSchema,
   [AI_ACTIONS.CREATE_CHECKLIST_PROPOSAL]: checklistProposalSchema,
+  [AI_ACTIONS.CREATE_EVENT_PROPOSAL]: eventProposalSchema,
+  [AI_ACTIONS.CREATE_NOTE_PROPOSAL]: noteProposalSchema,
+  [AI_ACTIONS.UPDATE_NOTE_PROPOSAL]: noteProposalSchema,
 } as const;
 export type MockProposalAction = keyof typeof schemas;
 export function isMockProposalAction(
@@ -46,5 +51,9 @@ export async function generateMockProposal(input: {
     return provider.generateStructured(input, roadmapProposalSchema, options);
   if (input.action === AI_ACTIONS.CREATE_TASK_PROPOSAL)
     return provider.generateStructured(input, taskProposalSchema, options);
-  return provider.generateStructured(input, checklistProposalSchema, options);
+  if (input.action === AI_ACTIONS.CREATE_CHECKLIST_PROPOSAL)
+    return provider.generateStructured(input, checklistProposalSchema, options);
+  if (input.action === AI_ACTIONS.CREATE_EVENT_PROPOSAL)
+    return provider.generateStructured(input, eventProposalSchema, options);
+  return provider.generateStructured(input, noteProposalSchema, options);
 }

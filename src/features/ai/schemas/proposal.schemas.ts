@@ -1,6 +1,7 @@
 import { AIError } from "../errors/ai-error";
 import type {
   ChecklistProposal,
+  EventProposal,
   DailyPlanProposal,
   GoalAnalysis,
   GoalProposal,
@@ -8,6 +9,7 @@ import type {
   RoadmapProposal,
   RuntimeSchema,
   TaskProposal,
+  NoteProposal,
   WeeklyPlanProposal,
 } from "../types/ai.types";
 
@@ -212,6 +214,57 @@ export const checklistProposalSchema: RuntimeSchema<ChecklistProposal> = {
           order: Number(row.order),
         };
       }),
+    };
+  },
+};
+export const eventProposalSchema: RuntimeSchema<EventProposal> = {
+  parse(value) {
+    const item = record(value);
+    const recurrence = String(item.recurrence ?? "NONE");
+    if (
+      !(["NONE", "DAILY", "WEEKLY", "MONTHLY"] as const).includes(
+        recurrence as EventProposal["recurrence"],
+      )
+    )
+      throw new AIError("SCHEMA_VALIDATION_ERROR", "recurrence không hợp lệ.");
+    return {
+      title: text(item.title, "title", 220),
+      description: optionalBoundedText(item.description, "description", 5000),
+      startsAt: text(item.startsAt, "startsAt", 16),
+      endsAt: optionalBoundedText(item.endsAt, "endsAt", 16),
+      timezone: text(item.timezone, "timezone", 64),
+      recurrence: recurrence as EventProposal["recurrence"],
+    };
+  },
+};
+export const noteProposalSchema: RuntimeSchema<NoteProposal> = {
+  parse(value) {
+    const item = record(value);
+    const expectedVersion =
+      item.expectedVersion === undefined
+        ? undefined
+        : Number(item.expectedVersion);
+    if (
+      expectedVersion !== undefined &&
+      (!Number.isInteger(expectedVersion) || expectedVersion < 1)
+    )
+      throw new AIError(
+        "SCHEMA_VALIDATION_ERROR",
+        "expectedVersion không hợp lệ.",
+      );
+    return {
+      title: text(item.title, "title", 220),
+      content:
+        typeof item.content === "string" && item.content.length <= 100_000
+          ? item.content
+          : (() => {
+              throw new AIError(
+                "SCHEMA_VALIDATION_ERROR",
+                "content không hợp lệ.",
+              );
+            })(),
+      noteId: optionalBoundedText(item.noteId, "noteId", 36),
+      expectedVersion,
     };
   },
 };

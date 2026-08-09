@@ -84,6 +84,20 @@ export type ChecklistProposal = {
   title: string;
   items: Array<{ title: string; order: number }>;
 };
+export type EventProposal = {
+  title: string;
+  description?: string;
+  startsAt: string;
+  endsAt?: string;
+  timezone: string;
+  recurrence: "NONE" | "DAILY" | "WEEKLY" | "MONTHLY";
+};
+export type NoteProposal = {
+  title: string;
+  content: string;
+  noteId?: string;
+  expectedVersion?: number;
+};
 export type TimeBlockProposal = {
   title: string;
   startsAt: string;

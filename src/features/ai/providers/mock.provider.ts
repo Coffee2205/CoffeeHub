@@ -120,7 +120,26 @@ export class MockAIProvider implements AIProvider {
                       { title: "Kiểm tra kết quả", order: 2 },
                     ],
                   }
-                : null;
+                : request.action === AI_ACTIONS.CREATE_EVENT_PROPOSAL
+                  ? {
+                      title: source || "Event development mock",
+                      description: "Event proposal chưa được lưu.",
+                      startsAt: "2026-12-31T09:00",
+                      endsAt: "2026-12-31T10:00",
+                      timezone: "Asia/Ho_Chi_Minh",
+                      recurrence: "NONE",
+                    }
+                  : request.action === AI_ACTIONS.CREATE_NOTE_PROPOSAL
+                    ? {
+                        title: source || "Note development mock",
+                        content: `Ghi chú từ yêu cầu: ${source}`,
+                      }
+                    : request.action === AI_ACTIONS.UPDATE_NOTE_PROPOSAL
+                      ? {
+                          title: source || "Cập nhật Note",
+                          content: `Nội dung cập nhật: ${source}`,
+                        }
+                      : null;
     if (!payload)
       throw new AIError(
         "ACTION_NOT_ALLOWED",

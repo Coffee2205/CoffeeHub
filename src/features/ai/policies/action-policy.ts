@@ -36,6 +36,21 @@ export const AI_ACTION_POLICY: Record<AIAction, Policy> = {
     writesDatabase: true,
     allowed: true,
   },
+  [AI_ACTIONS.CREATE_EVENT_PROPOSAL]: {
+    requiresConfirmation: true,
+    writesDatabase: true,
+    allowed: true,
+  },
+  [AI_ACTIONS.CREATE_NOTE_PROPOSAL]: {
+    requiresConfirmation: true,
+    writesDatabase: true,
+    allowed: true,
+  },
+  [AI_ACTIONS.UPDATE_NOTE_PROPOSAL]: {
+    requiresConfirmation: true,
+    writesDatabase: true,
+    allowed: true,
+  },
   [AI_ACTIONS.CREATE_DAILY_PLAN]: {
     requiresConfirmation: true,
     writesDatabase: true,

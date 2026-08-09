@@ -1,8 +1,10 @@
 import type {
   ChecklistProposal,
+  EventProposal,
   GoalProposal,
   RoadmapProposal,
   TaskProposal,
+  NoteProposal,
 } from "../types/ai.types";
 import { AIError } from "../errors/ai-error";
 import { parseGoalForm } from "@/features/goals/goal.schema";
@@ -11,6 +13,8 @@ import {
   parseStageForm,
 } from "@/features/roadmaps/roadmap.schema";
 import { parseTaskForm } from "@/features/tasks/task.schema";
+import { parseEventForm } from "@/features/calendar/event.schema";
+import { parseNoteInput } from "@/features/notes/note.schema";
 import {
   parseChecklistForm,
   parseChecklistItemForm,
@@ -184,5 +188,40 @@ export function mapAndValidateChecklistProposal(
       title: item.title,
       position: item.order - 1,
     })),
+  };
+}
+
+export function mapAndValidateEventProposal(proposal: EventProposal) {
+  const form = new FormData();
+  Object.entries({
+    ...proposal,
+    description: proposal.description ?? "",
+    endsAt: proposal.endsAt ?? "",
+    goalId: "",
+    taskId: "",
+  }).forEach(([key, value]) => form.set(key, String(value)));
+  const parsed = parseEventForm(form);
+  if (!parsed.data)
+    throw new AIError(
+      "SCHEMA_VALIDATION_ERROR",
+      `Event proposal không khớp form nghiệp vụ: ${parsed.errors.join(" ")}`,
+    );
+  return parsed.data;
+}
+
+export function mapAndValidateNoteProposal(proposal: NoteProposal) {
+  const parsed = parseNoteInput({
+    title: proposal.title,
+    content: proposal.content,
+  });
+  if (!parsed.data)
+    throw new AIError(
+      "SCHEMA_VALIDATION_ERROR",
+      `Note proposal không khớp schema nghiệp vụ: ${parsed.errors.join(" ")}`,
+    );
+  return {
+    ...parsed.data,
+    noteId: proposal.noteId,
+    expectedVersion: proposal.expectedVersion,
   };
 }

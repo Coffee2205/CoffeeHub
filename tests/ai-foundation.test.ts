@@ -8,19 +8,23 @@ import {
 import { AIError } from "../src/features/ai/errors/ai-error";
 import {
   mapAndValidateChecklistProposal,
+  mapAndValidateEventProposal,
   mapAndValidateGoalProposal,
   mapAndValidateRoadmapProposal,
   mapAndValidateTaskProposal,
+  mapAndValidateNoteProposal,
   mapGoalProposalToGoalFormValues,
 } from "../src/features/ai/mappers/proposal-mappers";
 import { AI_ACTION_POLICY } from "../src/features/ai/policies/action-policy";
 import { MockAIProvider } from "../src/features/ai/providers/mock.provider";
 import {
   checklistProposalSchema,
+  eventProposalSchema,
   goalAnalysisSchema,
   goalProposalSchema,
   roadmapProposalSchema,
   taskProposalSchema,
+  noteProposalSchema,
 } from "../src/features/ai/schemas/proposal.schemas";
 import { hashProposal } from "../src/features/ai/services/proposal-security";
 
@@ -32,6 +36,14 @@ test("registers typed AI actions and confirmation policy", () => {
     writesDatabase: true,
     allowed: true,
   });
+  assert.equal(
+    AI_ACTION_POLICY[AI_ACTIONS.CREATE_EVENT_PROPOSAL].requiresConfirmation,
+    true,
+  );
+  assert.equal(
+    AI_ACTION_POLICY[AI_ACTIONS.UPDATE_NOTE_PROPOSAL].writesDatabase,
+    true,
+  );
 });
 
 test("mock provider returns a validated development proposal without network", async () => {
@@ -200,6 +212,52 @@ test("proposal confirmation hash changes after an owner edit", () => {
   const edited = { ...original, title: "Edited" };
   assert.notEqual(hashProposal(original), hashProposal(edited));
   assert.equal(hashProposal(original), hashProposal(original));
+});
+
+test("Event proposal maps through Calendar timezone and relation validation", () => {
+  const proposal = eventProposalSchema.parse({
+    title: "Planning block",
+    startsAt: "2026-12-31T09:00",
+    endsAt: "2026-12-31T10:00",
+    timezone: "Asia/Ho_Chi_Minh",
+    recurrence: "WEEKLY",
+  });
+  const values = mapAndValidateEventProposal(proposal);
+  assert.equal(values.recurrence, "WEEKLY");
+  assert.equal(values.goalId, null);
+  assert.ok(values.startsAt < values.endsAt!);
+});
+
+test("Event proposal rejects invalid timezone or time range", () => {
+  assert.throws(
+    () =>
+      mapAndValidateEventProposal(
+        eventProposalSchema.parse({
+          title: "Invalid event",
+          startsAt: "2026-12-31T10:00",
+          endsAt: "2026-12-31T09:00",
+          timezone: "Not/AZone",
+          recurrence: "NONE",
+        }),
+      ),
+    (error) => error instanceof AIError,
+  );
+});
+
+test("Note create/update proposal uses Note schema and version binding", () => {
+  const create = mapAndValidateNoteProposal(
+    noteProposalSchema.parse({ title: "Daily note", content: "Content" }),
+  );
+  const update = mapAndValidateNoteProposal(
+    noteProposalSchema.parse({
+      title: "Daily note updated",
+      content: "New content",
+      noteId: "550e8400-e29b-41d4-a716-446655440000",
+      expectedVersion: 2,
+    }),
+  );
+  assert.equal(create.noteId, undefined);
+  assert.equal(update.expectedVersion, 2);
 });
 
 test("context builder applies an explicit budget and record limit", () => {

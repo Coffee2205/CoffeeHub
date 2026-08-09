@@ -63,6 +63,12 @@ enum AIProposalStatus {
   FAILED
 }
 
+enum AIMessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
 enum ProjectMediaKind {
   COVER
   GALLERY
@@ -94,6 +100,9 @@ model User {
   notificationPreference NotificationPreference?
   aiProposals            AIProposal[]
   aiActionLogs           AIActionLog[]
+  aiConversations        AIConversation[]
+  aiMessages             AIMessage[]
+  aiSetting              AISetting?
   projects               Project[]
   mediaAssets            MediaAsset[]
   experiences            Experience[]
@@ -129,6 +138,58 @@ model AIProposal {
   @@unique([id, userId])
   @@index([userId, status, updatedAt])
   @@map("ai_proposals")
+}
+
+model AIConversation {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  title      String    @db.VarChar(160)
+  archivedAt DateTime? @map("archived_at") @db.Timestamptz(6)
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  version    Int       @default(1)
+
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages AIMessage[]
+
+  @@unique([id, userId])
+  @@index([userId, archivedAt, updatedAt])
+  @@map("ai_conversations")
+}
+
+model AIMessage {
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String        @map("user_id") @db.Uuid
+  conversationId String        @map("conversation_id") @db.Uuid
+  role           AIMessageRole
+  content        String
+  contextSummary Json?         @map("context_summary") @db.JsonB
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversation AIConversation @relation(fields: [conversationId, userId], references: [id, userId], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+  @@index([userId, createdAt])
+  @@map("ai_messages")
+}
+
+model AISetting {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String   @unique @map("user_id") @db.Uuid
+  enabled        Boolean  @default(true)
+  historyEnabled Boolean  @default(true) @map("history_enabled")
+  includeGoals   Boolean  @default(true) @map("include_goals")
+  includeTasks   Boolean  @default(true) @map("include_tasks")
+  includeNotes   Boolean  @default(false) @map("include_notes")
+  retentionDays  Int      @default(30) @map("retention_days")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  version        Int      @default(1)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("ai_settings")
 }
 
 model AIActionLog {

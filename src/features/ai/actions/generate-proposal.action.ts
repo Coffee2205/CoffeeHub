@@ -6,15 +6,19 @@ import { AI_ACTIONS, isAIAction } from "./ai-actions";
 import { safeAIError } from "../errors/ai-error";
 import {
   mapAndValidateGoalProposal,
+  mapAndValidateEventProposal,
   mapAndValidateChecklistProposal,
   mapAndValidateRoadmapProposal,
   mapAndValidateTaskProposal,
+  mapAndValidateNoteProposal,
 } from "../mappers/proposal-mappers";
 import {
   goalProposalSchema,
+  eventProposalSchema,
   checklistProposalSchema,
   roadmapProposalSchema,
   taskProposalSchema,
+  noteProposalSchema,
 } from "../schemas/proposal.schemas";
 import {
   generateMockProposal,
@@ -22,12 +26,19 @@ import {
 } from "../services/proposal.service";
 import type { ProposalActionState } from "./proposal-state";
 import { createProposalDraft } from "../services/proposal-lifecycle.service";
+import { getNote } from "@/features/notes/note.repository";
+import { getAssistantData } from "../chat/chat.repository";
 
 export async function generateProposalAction(
   _previous: ProposalActionState,
   form: FormData,
 ): Promise<ProposalActionState> {
   const user = await requireUser();
+  if (!(await getAssistantData(user.id)).settings.enabled)
+    return {
+      status: "error",
+      error: { code: "AI_DISABLED", message: "AI đang bị tắt trong Settings." },
+    };
   const actionValue = String(form.get("action") ?? "");
   const prompt = String(form.get("prompt") ?? "").trim();
   if (!isAIAction(actionValue) || !isMockProposalAction(actionValue))
@@ -52,6 +63,23 @@ export async function generateProposalAction(
       prompt,
       simulateError: form.get("simulateError") === "on",
     });
+    if (actionValue === AI_ACTIONS.UPDATE_NOTE_PROPOSAL) {
+      const noteId = String(form.get("noteId") ?? "");
+      const note = await getNote(user.id, noteId);
+      if (!note)
+        return {
+          status: "error",
+          error: {
+            code: "INVALID_REQUEST",
+            message: "Hãy chọn một Note thuộc owner để tạo update proposal.",
+          },
+        };
+      result.data = {
+        ...(result.data as Record<string, unknown>),
+        noteId: note.id,
+        expectedVersion: note.version,
+      } as typeof result.data;
+    }
     const goalFormValues =
       actionValue === AI_ACTIONS.CREATE_GOAL_PROPOSAL
         ? mapAndValidateGoalProposal(goalProposalSchema.parse(result.data))
@@ -72,6 +100,13 @@ export async function generateProposalAction(
             checklistProposalSchema.parse(result.data),
           )
         : undefined;
+    if (actionValue === AI_ACTIONS.CREATE_EVENT_PROPOSAL)
+      mapAndValidateEventProposal(eventProposalSchema.parse(result.data));
+    if (
+      actionValue === AI_ACTIONS.CREATE_NOTE_PROPOSAL ||
+      actionValue === AI_ACTIONS.UPDATE_NOTE_PROPOSAL
+    )
+      mapAndValidateNoteProposal(noteProposalSchema.parse(result.data));
     const draft =
       actionValue === AI_ACTIONS.ANALYZE_GOAL
         ? null

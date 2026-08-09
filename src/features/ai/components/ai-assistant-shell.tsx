@@ -33,16 +33,24 @@ const options = [
     value: AI_ACTIONS.CREATE_CHECKLIST_PROPOSAL,
     label: "Create Checklist Proposal",
   },
+  { value: AI_ACTIONS.CREATE_EVENT_PROPOSAL, label: "Create Event Proposal" },
+  { value: AI_ACTIONS.CREATE_NOTE_PROPOSAL, label: "Create Note Proposal" },
+  {
+    value: AI_ACTIONS.UPDATE_NOTE_PROPOSAL,
+    label: "Update Note Proposal (JSON needs noteId/version)",
+  },
 ];
 
 export function AIAssistantShell({
   enabled,
   provider,
   model,
+  notes,
 }: {
   enabled: boolean;
   provider: string;
   model: string;
+  notes: Array<{ id: string; title: string }>;
 }) {
   const [state, action, pending] = useActionState(
     generateProposalAction,
@@ -69,6 +77,21 @@ export function AIAssistantShell({
               {options.map((item) => (
                 <option key={item.value} value={item.value}>
                   {item.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="grid gap-2">
+            <span className="text-sm font-medium">Note cần cập nhật</span>
+            <select
+              name="noteId"
+              defaultValue=""
+              className="min-h-11 rounded-sm border border-border bg-background-secondary px-3"
+            >
+              <option value="">Chỉ dùng cho Update Note proposal</option>
+              {notes.map((note) => (
+                <option key={note.id} value={note.id}>
+                  {note.title}
                 </option>
               ))}
             </select>

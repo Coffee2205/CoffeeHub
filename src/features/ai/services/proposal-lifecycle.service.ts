@@ -7,21 +7,27 @@ import { AI_ACTIONS, type AIAction } from "../actions/ai-actions";
 import { AIError } from "../errors/ai-error";
 import {
   mapAndValidateChecklistProposal,
+  mapAndValidateEventProposal,
   mapAndValidateGoalProposal,
   mapAndValidateRoadmapProposal,
   mapAndValidateTaskProposal,
+  mapAndValidateNoteProposal,
 } from "../mappers/proposal-mappers";
 import {
   checklistProposalSchema,
+  eventProposalSchema,
   goalProposalSchema,
   roadmapProposalSchema,
   taskProposalSchema,
+  noteProposalSchema,
 } from "../schemas/proposal.schemas";
 import type {
   ChecklistProposal,
+  EventProposal,
   GoalProposal,
   RoadmapProposal,
   TaskProposal,
+  NoteProposal,
 } from "../types/ai.types";
 import { hashProposal } from "./proposal-security";
 
@@ -29,7 +35,10 @@ type WritableAction =
   | typeof AI_ACTIONS.CREATE_GOAL_PROPOSAL
   | typeof AI_ACTIONS.CREATE_ROADMAP_PROPOSAL
   | typeof AI_ACTIONS.CREATE_TASK_PROPOSAL
-  | typeof AI_ACTIONS.CREATE_CHECKLIST_PROPOSAL;
+  | typeof AI_ACTIONS.CREATE_CHECKLIST_PROPOSAL
+  | typeof AI_ACTIONS.CREATE_EVENT_PROPOSAL
+  | typeof AI_ACTIONS.CREATE_NOTE_PROPOSAL
+  | typeof AI_ACTIONS.UPDATE_NOTE_PROPOSAL;
 
 export function parseWritableProposal(action: AIAction, payload: unknown) {
   if (action === AI_ACTIONS.CREATE_GOAL_PROPOSAL) {
@@ -50,6 +59,19 @@ export function parseWritableProposal(action: AIAction, payload: unknown) {
   if (action === AI_ACTIONS.CREATE_CHECKLIST_PROPOSAL) {
     const proposal = checklistProposalSchema.parse(payload);
     mapAndValidateChecklistProposal(proposal);
+    return proposal;
+  }
+  if (action === AI_ACTIONS.CREATE_EVENT_PROPOSAL) {
+    const proposal = eventProposalSchema.parse(payload);
+    mapAndValidateEventProposal(proposal);
+    return proposal;
+  }
+  if (
+    action === AI_ACTIONS.CREATE_NOTE_PROPOSAL ||
+    action === AI_ACTIONS.UPDATE_NOTE_PROPOSAL
+  ) {
+    const proposal = noteProposalSchema.parse(payload);
+    mapAndValidateNoteProposal(proposal);
     return proposal;
   }
   throw new AIError(
@@ -303,7 +325,13 @@ async function commitDomainProposal(
   tx: Prisma.TransactionClient,
   userId: string,
   action: AIAction,
-  payload: GoalProposal | RoadmapProposal | TaskProposal | ChecklistProposal,
+  payload:
+    | GoalProposal
+    | RoadmapProposal
+    | TaskProposal
+    | ChecklistProposal
+    | EventProposal
+    | NoteProposal,
 ): Promise<CommitResult> {
   if (action === AI_ACTIONS.CREATE_GOAL_PROPOSAL) {
     const values = mapAndValidateGoalProposal(payload as GoalProposal);
@@ -409,24 +437,66 @@ async function commitDomainProposal(
     });
     return { links: [{ label: "Má»Ÿ Task", href: `/app/tasks/${task.id}` }] };
   }
-  const proposal = payload as ChecklistProposal;
-  mapAndValidateChecklistProposal(proposal);
-  const checklist = await tx.checklist.create({
-    data: {
-      userId,
-      title: proposal.title,
-      items: {
-        create: proposal.items.map((item) => ({
-          userId,
-          title: item.title,
-          position: item.order - 1,
-        })),
+  if (action === AI_ACTIONS.CREATE_CHECKLIST_PROPOSAL) {
+    const proposal = payload as ChecklistProposal;
+    mapAndValidateChecklistProposal(proposal);
+    const checklist = await tx.checklist.create({
+      data: {
+        userId,
+        title: proposal.title,
+        items: {
+          create: proposal.items.map((item) => ({
+            userId,
+            title: item.title,
+            position: item.order - 1,
+          })),
+        },
       },
-    },
+    });
+    return {
+      links: [
+        { label: "Má»Ÿ Checklist", href: `/app/checklists/${checklist.id}` },
+      ],
+    };
+  }
+  if (action === AI_ACTIONS.CREATE_EVENT_PROPOSAL) {
+    const values = mapAndValidateEventProposal(payload as EventProposal);
+    const event = await tx.event.create({ data: { ...values, userId } });
+    return {
+      links: [{ label: "Mở Event", href: `/app/calendar/${event.id}` }],
+    };
+  }
+  const values = mapAndValidateNoteProposal(payload as NoteProposal);
+  if (action === AI_ACTIONS.UPDATE_NOTE_PROPOSAL) {
+    if (!values.noteId || !values.expectedVersion)
+      throw new AIError(
+        "SCHEMA_VALIDATION_ERROR",
+        "Update Note cần noteId và expectedVersion.",
+      );
+    const updated = await tx.note.updateMany({
+      where: {
+        id: values.noteId,
+        userId,
+        deletedAt: null,
+        version: values.expectedVersion,
+      },
+      data: {
+        title: values.title,
+        content: values.content,
+        version: { increment: 1 },
+      },
+    });
+    if (updated.count !== 1)
+      throw new AIError(
+        "CONFIRMATION_REQUIRED",
+        "Note đã thay đổi hoặc không thuộc owner.",
+      );
+    return {
+      links: [{ label: "Mở Note", href: `/app/notes/${values.noteId}` }],
+    };
+  }
+  const note = await tx.note.create({
+    data: { userId, title: values.title, content: values.content },
   });
-  return {
-    links: [
-      { label: "Má»Ÿ Checklist", href: `/app/checklists/${checklist.id}` },
-    ],
-  };
+  return { links: [{ label: "Mở Note", href: `/app/notes/${note.id}` }] };
 }
