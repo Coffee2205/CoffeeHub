@@ -112,7 +112,15 @@ export class MockAIProvider implements AIProvider {
                   dueDate: "2026-12-31",
                   roadmapStageReference: "Khởi động",
                 }
-              : null;
+              : request.action === AI_ACTIONS.CREATE_CHECKLIST_PROPOSAL
+                ? {
+                    title: source || "Checklist development mock",
+                    items: [
+                      { title: "Xác nhận yêu cầu", order: 1 },
+                      { title: "Kiểm tra kết quả", order: 2 },
+                    ],
+                  }
+                : null;
     if (!payload)
       throw new AIError(
         "ACTION_NOT_ALLOWED",

@@ -7,6 +7,7 @@ import {
 } from "../src/features/ai/context/context-builder";
 import { AIError } from "../src/features/ai/errors/ai-error";
 import {
+  mapAndValidateChecklistProposal,
   mapAndValidateGoalProposal,
   mapAndValidateRoadmapProposal,
   mapAndValidateTaskProposal,
@@ -15,11 +16,13 @@ import {
 import { AI_ACTION_POLICY } from "../src/features/ai/policies/action-policy";
 import { MockAIProvider } from "../src/features/ai/providers/mock.provider";
 import {
+  checklistProposalSchema,
   goalAnalysisSchema,
   goalProposalSchema,
   roadmapProposalSchema,
   taskProposalSchema,
 } from "../src/features/ai/schemas/proposal.schemas";
+import { hashProposal } from "../src/features/ai/services/proposal-security";
 
 test("registers typed AI actions and confirmation policy", () => {
   assert.equal(isAIAction("create_goal_proposal"), true);
@@ -165,6 +168,38 @@ test("Task proposal rejects invalid date, estimate and oversized stage reference
       }),
     (error) => error instanceof AIError,
   );
+});
+
+test("Checklist proposal maps through Checklist and item feature schemas", () => {
+  const proposal = checklistProposalSchema.parse({
+    title: "Release checklist",
+    items: [
+      { title: "Run tests", order: 1 },
+      { title: "Verify build", order: 2 },
+    ],
+  });
+  const values = mapAndValidateChecklistProposal(proposal);
+  assert.equal(values.items.length, 2);
+  assert.equal(values.items[1]?.position, 1);
+  assert.equal(values.goalId, "");
+});
+
+test("Checklist proposal rejects empty and non-sequential item order", () => {
+  assert.throws(
+    () =>
+      checklistProposalSchema.parse({
+        title: "Release checklist",
+        items: [{ title: "Run tests", order: 2 }],
+      }),
+    (error) => error instanceof AIError,
+  );
+});
+
+test("proposal confirmation hash changes after an owner edit", () => {
+  const original = { title: "Original", items: [{ title: "One", order: 1 }] };
+  const edited = { ...original, title: "Edited" };
+  assert.notEqual(hashProposal(original), hashProposal(edited));
+  assert.equal(hashProposal(original), hashProposal(original));
 });
 
 test("context builder applies an explicit budget and record limit", () => {

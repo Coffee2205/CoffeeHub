@@ -1,5 +1,6 @@
 import type { AIProviderMetadata, AIUsage } from "../types/ai.types";
 import type {
+  ChecklistFormValues,
   GoalFormValues,
   RoadmapFormValues,
   TaskFormValues,
@@ -13,6 +14,12 @@ export type ProposalActionState = {
   goalFormValues?: GoalFormValues;
   roadmapFormValues?: RoadmapFormValues;
   taskFormValues?: TaskFormValues;
+  checklistFormValues?: ChecklistFormValues;
+  version?: number;
+  confirmationId?: string;
+  payloadHash?: string;
+  message?: string;
+  links?: Array<{ label: string; href: string }>;
   usage?: AIUsage;
   metadata?: AIProviderMetadata;
   error?: { code: string; message: string };

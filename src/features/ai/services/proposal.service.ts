@@ -4,6 +4,7 @@ import { getAIConfig } from "../config/ai.config";
 import { AIError } from "../errors/ai-error";
 import { getProvider } from "../providers/provider-registry";
 import {
+  checklistProposalSchema,
   goalAnalysisSchema,
   goalProposalSchema,
   roadmapProposalSchema,
@@ -15,6 +16,7 @@ const schemas = {
   [AI_ACTIONS.CREATE_GOAL_PROPOSAL]: goalProposalSchema,
   [AI_ACTIONS.CREATE_ROADMAP_PROPOSAL]: roadmapProposalSchema,
   [AI_ACTIONS.CREATE_TASK_PROPOSAL]: taskProposalSchema,
+  [AI_ACTIONS.CREATE_CHECKLIST_PROPOSAL]: checklistProposalSchema,
 } as const;
 export type MockProposalAction = keyof typeof schemas;
 export function isMockProposalAction(
@@ -42,5 +44,7 @@ export async function generateMockProposal(input: {
     return provider.generateStructured(input, goalProposalSchema, options);
   if (input.action === AI_ACTIONS.CREATE_ROADMAP_PROPOSAL)
     return provider.generateStructured(input, roadmapProposalSchema, options);
-  return provider.generateStructured(input, taskProposalSchema, options);
+  if (input.action === AI_ACTIONS.CREATE_TASK_PROPOSAL)
+    return provider.generateStructured(input, taskProposalSchema, options);
+  return provider.generateStructured(input, checklistProposalSchema, options);
 }

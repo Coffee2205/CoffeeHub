@@ -188,14 +188,27 @@ export const roadmapProposalSchema: RuntimeSchema<RoadmapProposal> = {
 export const checklistProposalSchema: RuntimeSchema<ChecklistProposal> = {
   parse(value) {
     const item = record(value);
-    if (!Array.isArray(item.items))
+    if (
+      !Array.isArray(item.items) ||
+      item.items.length === 0 ||
+      item.items.length > 100
+    )
       throw new AIError("SCHEMA_VALIDATION_ERROR", "items không hợp lệ.");
+    const orders = item.items.map((raw) => Number(record(raw).order));
+    if (
+      orders.some((order) => !Number.isInteger(order) || order <= 0) ||
+      new Set(orders).size !== orders.length ||
+      ![...orders]
+        .sort((a, b) => a - b)
+        .every((order, index) => order === index + 1)
+    )
+      throw new AIError("SCHEMA_VALIDATION_ERROR", "item.order không hợp lệ.");
     return {
-      title: text(item.title, "title"),
+      title: text(item.title, "title", 220),
       items: item.items.map((raw) => {
         const row = record(raw);
         return {
-          title: text(row.title, "item.title"),
+          title: text(row.title, "item.title", 220),
           order: Number(row.order),
         };
       }),

@@ -12,9 +12,8 @@ export default function AIAssistantPage() {
           AI Assistant
         </h1>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-foreground-secondary sm:text-base">
-          Tạo và xem trước structured proposal an toàn. AI chỉ đề xuất; mọi thay
-          đổi dữ liệu trong tương lai vẫn cần xác nhận và đi qua Feature
-          Service.
+          Tạo và xem trước structured proposal an toàn. AI chỉ đề xuất; dữ liệu
+          kế hoạch chỉ được tạo sau khi owner xác nhận proposal hiện tại.
         </p>
       </header>
       <AIAssistantShell

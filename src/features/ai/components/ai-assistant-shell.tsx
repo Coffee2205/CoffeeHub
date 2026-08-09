@@ -1,17 +1,21 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState, useTransition } from "react";
 import {
   Button,
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
-  Input,
   Textarea,
 } from "@/components/ui";
 import { AI_ACTIONS } from "../actions/ai-actions";
 import { generateProposalAction } from "../actions/generate-proposal.action";
+import {
+  confirmProposalAction,
+  discardProposalAction,
+  updateProposalAction,
+} from "../actions/proposal-lifecycle.actions";
 import {
   initialProposalState,
   type ProposalActionState,
@@ -25,6 +29,10 @@ const options = [
     label: "Create Roadmap Proposal",
   },
   { value: AI_ACTIONS.CREATE_TASK_PROPOSAL, label: "Create Task Proposal" },
+  {
+    value: AI_ACTIONS.CREATE_CHECKLIST_PROPOSAL,
+    label: "Create Checklist Proposal",
+  },
 ];
 
 export function AIAssistantShell({
@@ -46,8 +54,8 @@ export function AIAssistantShell({
         <CardHeader>
           <CardTitle>Tạo AI Proposal</CardTitle>
           <CardDescription>
-            Mock Provider chạy cục bộ trên server. Không gọi OpenAI, Groq hoặc
-            Gemini.
+            Mock Provider chạy cục bộ trên server và không ghi dữ liệu nghiệp
+            vụ.
           </CardDescription>
         </CardHeader>
         <form action={action} className="grid gap-5">
@@ -77,8 +85,8 @@ export function AIAssistantShell({
             />
           </label>
           <label className="flex min-h-11 items-center gap-3 rounded-sm border border-border px-3 text-sm">
-            <input name="simulateError" type="checkbox" className="size-4" /> Mô
-            phỏng lỗi provider
+            <input name="simulateError" type="checkbox" className="size-4" />
+            Mô phỏng lỗi provider
           </label>
           <Button type="submit" disabled={pending}>
             {pending ? "Đang xử lý…" : "Analyze / generate mock"}
@@ -96,7 +104,7 @@ export function AIAssistantShell({
           </span>
         </div>
       </Card>
-      <ProposalPreview state={state} />
+      <ProposalPreview key={state.proposalId ?? state.status} state={state} />
     </div>
   );
 }
@@ -108,261 +116,197 @@ function ProposalPreview({ state }: { state: ProposalActionState }) {
         <div className="max-w-md text-center">
           <p className="text-lg font-semibold">Chưa có proposal</p>
           <p className="mt-2 text-sm leading-6 text-muted">
-            Chọn action và mô tả kết quả mong muốn. Proposal sẽ xuất hiện ở đây
-            để bạn xem và chỉnh, nhưng không được lưu vào database.
+            Proposal ghi được lưu riêng như bản nháp AI; chưa tạo Goal, Roadmap,
+            Task hoặc Checklist cho đến khi bạn xác nhận.
           </p>
         </div>
       </Card>
     );
-  if (state.status === "error")
+  if (state.status === "error") return <ErrorCard state={state} />;
+  if (state.action === AI_ACTIONS.ANALYZE_GOAL)
+    return <AnalysisPreview state={state} />;
+  return <EditableProposal initial={state} />;
+}
+
+function EditableProposal({ initial }: { initial: ProposalActionState }) {
+  const [current, setCurrent] = useState(initial);
+  const [payload, setPayload] = useState(
+    JSON.stringify(initial.proposal, null, 2),
+  );
+  const [dirty, setDirty] = useState(false);
+  const [pending, startTransition] = useTransition();
+
+  const commonForm = () => {
+    const form = new FormData();
+    form.set("proposalId", current.proposalId ?? "");
+    form.set("version", String(current.version ?? 0));
+    form.set("confirmationId", current.confirmationId ?? "");
+    return form;
+  };
+
+  const update = () =>
+    startTransition(async () => {
+      const form = commonForm();
+      form.set("payload", payload);
+      const next = await updateProposalAction(initialProposalState, form);
+      setCurrent(next);
+      if (next.status === "success") {
+        setPayload(JSON.stringify(next.proposal, null, 2));
+        setDirty(false);
+      }
+    });
+
+  const discard = () =>
+    startTransition(async () => {
+      const next = await discardProposalAction(
+        initialProposalState,
+        commonForm(),
+      );
+      setCurrent(next);
+    });
+
+  const confirm = () =>
+    startTransition(async () => {
+      const form = commonForm();
+      form.set("payloadHash", current.payloadHash ?? "");
+      const next = await confirmProposalAction(initialProposalState, form);
+      setCurrent(next);
+    });
+
+  if (current.status === "idle")
     return (
-      <Card className="border-error/40">
-        <p role="alert" className="font-semibold text-red-200">
-          {state.error?.code}
-        </p>
-        <p className="mt-2 text-sm text-muted">{state.error?.message}</p>
+      <Card className="grid min-h-96 place-items-center border-dashed text-center">
+        <div>
+          <p className="font-semibold">Proposal đã được loại bỏ</p>
+          <p className="mt-2 text-sm text-muted">
+            Không có dữ liệu nghiệp vụ nào được tạo.
+          </p>
+        </div>
       </Card>
     );
-  const proposal = state.proposal as Record<string, unknown>;
-  if (state.action === AI_ACTIONS.ANALYZE_GOAL)
-    return <GoalAnalysisPreview state={state} analysis={proposal} />;
+  if (current.status === "error") return <ErrorCard state={current} />;
+  if (current.links)
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Đã tạo thành công</CardTitle>
+          <CardDescription>{current.message}</CardDescription>
+        </CardHeader>
+        <div className="flex flex-wrap gap-3">
+          {current.links.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="inline-flex min-h-11 items-center rounded-sm bg-primary px-4 font-medium text-primary-foreground"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+        <p className="mt-4 text-xs text-muted">
+          Confirmation đã được dùng và retry cùng khóa chỉ trả lại kết quả cũ.
+        </p>
+      </Card>
+    );
+
   return (
-    <Card key={state.proposalId}>
+    <Card>
       <CardHeader>
         <CardTitle>Proposal preview</CardTitle>
         <CardDescription>
-          Đã qua runtime validation · chưa lưu · có thể chỉnh trước khi chuyển
-          sang form nghiệp vụ.
+          Bản nháp AI riêng biệt · chưa tạo dữ liệu kế hoạch · mọi chỉnh sửa
+          được parse lại bằng schema nghiệp vụ.
         </CardDescription>
       </CardHeader>
       <div className="grid gap-4">
         <label className="grid gap-2">
-          <span className="text-sm font-medium">Tiêu đề</span>
-          <Input defaultValue={String(proposal.title ?? "")} />
-        </label>
-        <label className="grid gap-2">
-          <span className="text-sm font-medium">Mô tả</span>
+          <span className="text-sm font-medium">Payload có thể chỉnh sửa</span>
           <Textarea
-            className="min-h-28"
-            defaultValue={String(proposal.description ?? "")}
+            aria-label="Payload proposal"
+            value={payload}
+            onChange={(event) => {
+              setPayload(event.target.value);
+              setDirty(true);
+            }}
+            className="min-h-80 font-mono text-xs"
           />
         </label>
-        {state.action === AI_ACTIONS.CREATE_GOAL_PROPOSAL ? (
-          <GoalFields proposal={proposal} state={state} />
+        {current.action === AI_ACTIONS.CREATE_ROADMAP_PROPOSAL ? (
+          <p className="rounded-sm border border-border p-3 text-sm text-foreground-secondary">
+            Khi xác nhận, hệ thống tạo trọn bộ Goal → Roadmap → Stage → Task
+            trong một transaction. Bất kỳ bước nào lỗi sẽ rollback toàn bộ.
+          </p>
         ) : null}
-        {state.action === AI_ACTIONS.CREATE_ROADMAP_PROPOSAL ? (
-          <RoadmapFields proposal={proposal} state={state} />
+        {dirty ? (
+          <p role="status" className="text-sm text-amber-200">
+            Proposal đã thay đổi. Xác nhận cũ mất hiệu lực cho đến khi lưu lại.
+          </p>
+        ) : (
+          <p role="status" className="text-sm text-emerald-200">
+            Proposal phiên bản {current.version} đã sẵn sàng để xác nhận một
+            lần.
+          </p>
+        )}
+        {current.message ? (
+          <p className="text-sm text-muted">{current.message}</p>
         ) : null}
-        {state.action === AI_ACTIONS.CREATE_TASK_PROPOSAL ? (
-          <TaskFields proposal={proposal} state={state} />
-        ) : null}
-        <div className="rounded-sm border border-warning/40 bg-warning/10 p-3 text-sm text-amber-100">
-          Confirmation required. Nút lưu đang tắt trong AI Foundation; không có
-          database write.
+        <div className="grid gap-3 sm:grid-cols-3">
+          <Button type="button" onClick={update} disabled={pending || !dirty}>
+            Lưu chỉnh sửa
+          </Button>
+          <Button type="button" onClick={discard} disabled={pending}>
+            Loại bỏ
+          </Button>
+          <Button type="button" onClick={confirm} disabled={pending || dirty}>
+            Xác nhận và tạo
+          </Button>
         </div>
-        <Button disabled>Save to CoffeeHub</Button>
         <p className="text-xs text-muted">
-          {state.metadata?.provider}/{state.metadata?.model} ·{" "}
-          {state.usage?.totalTokens ?? 0} mock tokens · proposal{" "}
-          {state.proposalId}
+          {initial.metadata?.provider}/{initial.metadata?.model} · proposal{" "}
+          {current.proposalId}
         </p>
       </div>
     </Card>
   );
 }
 
-function GoalAnalysisPreview({
-  state,
-  analysis,
-}: {
-  state: ProposalActionState;
-  analysis: Record<string, unknown>;
-}) {
-  const sections = [
-    ["Ràng buộc", analysis.constraints],
-    ["Tiêu chí thành công", analysis.successCriteria],
-    ["Giả định", analysis.assumptions],
-    ["Rủi ro", analysis.risks],
-    ["Câu hỏi cần làm rõ", analysis.clarifyingQuestions],
-    ["Bước tiếp theo", analysis.recommendedNextSteps],
-  ] as const;
+function AnalysisPreview({ state }: { state: ProposalActionState }) {
+  const analysis = state.proposal as Record<string, unknown>;
   return (
-    <Card key={state.proposalId}>
+    <Card>
       <CardHeader>
         <CardTitle>Goal analysis</CardTitle>
         <CardDescription>
-          Phân tích chỉ đọc đã qua runtime validation. Không tạo hoặc thay đổi
-          dữ liệu CoffeeHub.
+          Kết quả chỉ đọc; không tạo proposal draft hay dữ liệu CoffeeHub.
         </CardDescription>
       </CardHeader>
-      <div className="grid gap-5">
-        <div>
-          <p className="text-sm font-medium">Tóm tắt</p>
-          <p className="mt-1 text-sm leading-6 text-foreground-secondary">
-            {String(analysis.summary ?? "")}
-          </p>
-        </div>
-        <div>
-          <p className="text-sm font-medium">Mục tiêu</p>
-          <p className="mt-1 text-sm leading-6 text-foreground-secondary">
-            {String(analysis.objective ?? "")}
-          </p>
-        </div>
-        {sections.map(([label, value]) => (
-          <div key={label}>
-            <p className="text-sm font-medium">{label}</p>
-            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-6 text-foreground-secondary">
-              {(Array.isArray(value) ? value : []).map((item, index) => (
-                <li key={`${label}-${index}`}>{String(item)}</li>
+      <p className="font-medium">{String(analysis.objective ?? "")}</p>
+      <p className="mt-3 text-sm leading-6 text-foreground-secondary">
+        {String(analysis.summary ?? "")}
+      </p>
+      {Object.entries(analysis)
+        .filter(([, value]) => Array.isArray(value))
+        .map(([key, value]) => (
+          <div key={key} className="mt-4">
+            <p className="text-sm font-medium">{key}</p>
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted">
+              {(value as unknown[]).map((item, index) => (
+                <li key={`${key}-${index}`}>{String(item)}</li>
               ))}
             </ul>
           </div>
         ))}
-        <p className="text-xs text-muted">
-          {state.metadata?.provider}/{state.metadata?.model} ·{" "}
-          {state.usage?.totalTokens ?? 0} mock tokens · analysis{" "}
-          {state.proposalId}
-        </p>
-      </div>
     </Card>
   );
 }
 
-function GoalFields({
-  proposal,
-  state,
-}: {
-  proposal: Record<string, unknown>;
-  state: ProposalActionState;
-}) {
-  const details = [
-    ["Giả định", proposal.assumptions],
-    ["Rủi ro", proposal.risks],
-  ] as const;
+function ErrorCard({ state }: { state: ProposalActionState }) {
   return (
-    <>
-      <label className="grid gap-2">
-        <span className="text-sm font-medium">Priority</span>
-        <Input defaultValue={String(proposal.priority ?? "MEDIUM")} />
-      </label>
-      <label className="grid gap-2">
-        <span className="text-sm font-medium">Deadline</span>
-        <Input
-          type="date"
-          defaultValue={state.goalFormValues?.deadline ?? ""}
-        />
-      </label>
-      <label className="grid gap-2">
-        <span className="text-sm font-medium">Success criteria</span>
-        <Textarea
-          defaultValue={
-            Array.isArray(proposal.successCriteria)
-              ? proposal.successCriteria.join("\n")
-              : ""
-          }
-        />
-      </label>
-      {details.map(([label, value]) => (
-        <div key={label} className="rounded-sm border border-border p-3">
-          <p className="text-sm font-medium">{label}</p>
-          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-foreground-secondary">
-            {(Array.isArray(value) ? value : []).map((item, index) => (
-              <li key={`${label}-${index}`}>{String(item)}</li>
-            ))}
-          </ul>
-        </div>
-      ))}
-      <p className="text-xs text-muted">
-        Đã map và kiểm tra lại bằng Goal form schema · trạng thái mặc định
-        DRAFT.
+    <Card className="border-error/40">
+      <p role="alert" className="font-semibold text-red-200">
+        {state.error?.code}
       </p>
-    </>
-  );
-}
-function RoadmapFields({
-  proposal,
-  state,
-}: {
-  proposal: Record<string, unknown>;
-  state: ProposalActionState;
-}) {
-  const stages = Array.isArray(proposal.stages) ? proposal.stages : [];
-  return (
-    <div className="grid gap-3 rounded-sm border border-border p-3">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-sm font-medium">Stages ({stages.length})</p>
-        <p className="text-xs text-muted">
-          {state.roadmapFormValues?.estimatedDurationDays ?? "—"} ngày dự kiến
-        </p>
-      </div>
-      {stages.map((stage, index) => (
-        <div
-          key={index}
-          className="grid gap-2 rounded-sm bg-background-secondary p-3"
-        >
-          <Input
-            defaultValue={String(
-              (stage as Record<string, unknown>).title ?? "",
-            )}
-            aria-label={`Stage ${index + 1}`}
-          />
-          <p className="text-sm leading-6 text-foreground-secondary">
-            {String((stage as Record<string, unknown>).description ?? "")}
-          </p>
-          <p className="text-xs text-muted">
-            {Number((stage as Record<string, unknown>).estimatedDays ?? 0)} ngày
-            ·{" "}
-            {Array.isArray((stage as Record<string, unknown>).tasks)
-              ? ((stage as Record<string, unknown>).tasks as unknown[]).length
-              : 0}{" "}
-            task đề xuất
-          </p>
-        </div>
-      ))}
-      <p className="text-xs text-muted">
-        Đã map và kiểm tra lại bằng Roadmap/Milestone form schema.
-      </p>
-    </div>
-  );
-}
-function TaskFields({
-  proposal,
-  state,
-}: {
-  proposal: Record<string, unknown>;
-  state: ProposalActionState;
-}) {
-  return (
-    <div className="grid gap-4 rounded-sm border border-border p-3 sm:grid-cols-2">
-      <label className="grid gap-2">
-        <span className="text-sm font-medium">Priority</span>
-        <Input defaultValue={String(proposal.priority ?? "MEDIUM")} />
-      </label>
-      <label className="grid gap-2">
-        <span className="text-sm font-medium">Estimated minutes</span>
-        <Input
-          type="number"
-          defaultValue={Number(proposal.estimatedMinutes ?? 0)}
-        />
-      </label>
-      <label className="grid gap-2">
-        <span className="text-sm font-medium">Deadline</span>
-        <Input type="date" defaultValue={state.taskFormValues?.dueAt ?? ""} />
-      </label>
-      <div className="sm:col-span-2">
-        <p className="text-sm font-medium">Stage reference</p>
-        <p className="mt-1 text-sm text-foreground-secondary">
-          {String(proposal.roadmapStageReference ?? "Chưa đề xuất")}
-        </p>
-        <p className="mt-2 text-xs text-muted">
-          Reference chỉ là gợi ý; chưa resolve thành relation ID và không được
-          model quyết định ownership.
-        </p>
-      </div>
-      <p className="text-xs text-muted sm:col-span-2">
-        Đã map và kiểm tra lại bằng Task form schema · trạng thái mặc định TODO
-        · relation IDs để trống.
-      </p>
-    </div>
+      <p className="mt-2 text-sm text-muted">{state.error?.message}</p>
+    </Card>
   );
 }

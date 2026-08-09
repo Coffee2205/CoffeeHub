@@ -1,4 +1,5 @@
 import type {
+  ChecklistProposal,
   GoalProposal,
   RoadmapProposal,
   TaskProposal,
@@ -10,6 +11,10 @@ import {
   parseStageForm,
 } from "@/features/roadmaps/roadmap.schema";
 import { parseTaskForm } from "@/features/tasks/task.schema";
+import {
+  parseChecklistForm,
+  parseChecklistItemForm,
+} from "@/features/checklists/checklist.schema";
 export type GoalFormValues = {
   title: string;
   description: string;
@@ -139,4 +144,45 @@ export function mapAndValidateTaskProposal(proposal: TaskProposal) {
       `Task proposal không khớp form nghiệp vụ: ${parsed.errors.join(" ")}`,
     );
   return values;
+}
+
+export type ChecklistFormValues = {
+  title: string;
+  description: "";
+  goalId: "";
+  roadmapId: "";
+  taskId: "";
+  items: Array<{ title: string; position: number }>;
+};
+
+export function mapAndValidateChecklistProposal(
+  proposal: ChecklistProposal,
+): ChecklistFormValues {
+  const form = new FormData();
+  form.set("title", proposal.title);
+  const checklist = parseChecklistForm(form);
+  const errors = proposal.items.flatMap((item) => {
+    const itemForm = new FormData();
+    itemForm.set("title", item.title);
+    return parseChecklistItemForm(itemForm).errors;
+  });
+  if (!checklist.data || errors.length)
+    throw new AIError(
+      "SCHEMA_VALIDATION_ERROR",
+      `Checklist proposal does not match feature form: ${[
+        ...checklist.errors,
+        ...errors,
+      ].join(" ")}`,
+    );
+  return {
+    title: proposal.title,
+    description: "",
+    goalId: "",
+    roadmapId: "",
+    taskId: "",
+    items: proposal.items.map((item) => ({
+      title: item.title,
+      position: item.order - 1,
+    })),
+  };
 }
