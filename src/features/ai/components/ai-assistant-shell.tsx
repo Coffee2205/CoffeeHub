@@ -151,7 +151,7 @@ function ProposalPreview({ state }: { state: ProposalActionState }) {
           <GoalFields proposal={proposal} state={state} />
         ) : null}
         {state.action === AI_ACTIONS.CREATE_ROADMAP_PROPOSAL ? (
-          <RoadmapFields proposal={proposal} />
+          <RoadmapFields proposal={proposal} state={state} />
         ) : null}
         {state.action === AI_ACTIONS.CREATE_TASK_PROPOSAL ? (
           <TaskFields proposal={proposal} />
@@ -279,19 +279,49 @@ function GoalFields({
     </>
   );
 }
-function RoadmapFields({ proposal }: { proposal: Record<string, unknown> }) {
+function RoadmapFields({
+  proposal,
+  state,
+}: {
+  proposal: Record<string, unknown>;
+  state: ProposalActionState;
+}) {
   const stages = Array.isArray(proposal.stages) ? proposal.stages : [];
   return (
-    <div className="rounded-sm border border-border p-3">
-      <p className="text-sm font-medium">Stages ({stages.length})</p>
+    <div className="grid gap-3 rounded-sm border border-border p-3">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-sm font-medium">Stages ({stages.length})</p>
+        <p className="text-xs text-muted">
+          {state.roadmapFormValues?.estimatedDurationDays ?? "—"} ngày dự kiến
+        </p>
+      </div>
       {stages.map((stage, index) => (
-        <Input
+        <div
           key={index}
-          className="mt-2"
-          defaultValue={String((stage as Record<string, unknown>).title ?? "")}
-          aria-label={`Stage ${index + 1}`}
-        />
+          className="grid gap-2 rounded-sm bg-background-secondary p-3"
+        >
+          <Input
+            defaultValue={String(
+              (stage as Record<string, unknown>).title ?? "",
+            )}
+            aria-label={`Stage ${index + 1}`}
+          />
+          <p className="text-sm leading-6 text-foreground-secondary">
+            {String((stage as Record<string, unknown>).description ?? "")}
+          </p>
+          <p className="text-xs text-muted">
+            {Number((stage as Record<string, unknown>).estimatedDays ?? 0)} ngày
+            ·{" "}
+            {Array.isArray((stage as Record<string, unknown>).tasks)
+              ? ((stage as Record<string, unknown>).tasks as unknown[]).length
+              : 0}{" "}
+            task đề xuất
+          </p>
+        </div>
       ))}
+      <p className="text-xs text-muted">
+        Đã map và kiểm tra lại bằng Roadmap/Milestone form schema.
+      </p>
     </div>
   );
 }

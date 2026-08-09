@@ -28,6 +28,10 @@ const optionalText = (value: unknown, field: string) =>
   value === undefined || value === null || value === ""
     ? undefined
     : text(value, field);
+const optionalBoundedText = (value: unknown, field: string, max: number) =>
+  value === undefined || value === null || value === ""
+    ? undefined
+    : text(value, field, max);
 const strings = (value: unknown, field: string) => {
   if (!Array.isArray(value) || !value.every((item) => typeof item === "string"))
     throw new AIError("SCHEMA_VALIDATION_ERROR", `${field} không hợp lệ.`);
@@ -52,6 +56,12 @@ const optionalDate = (value: unknown, field: string) => {
   if (result && !/^\d{4}-\d{2}-\d{2}$/.test(result))
     throw new AIError("SCHEMA_VALIDATION_ERROR", `${field} không hợp lệ.`);
   return result;
+};
+const optionalPositiveInteger = (value: unknown, field: string) => {
+  if (value === undefined || value === null) return undefined;
+  if (!Number.isInteger(value) || Number(value) <= 0)
+    throw new AIError("SCHEMA_VALIDATION_ERROR", `${field} không hợp lệ.`);
+  return Number(value);
 };
 const priority = (value: unknown): GoalProposal["priority"] => {
   if (
@@ -127,30 +137,47 @@ export const taskProposalSchema: RuntimeSchema<TaskProposal> = {
 export const roadmapProposalSchema: RuntimeSchema<RoadmapProposal> = {
   parse(value) {
     const item = record(value);
-    if (!Array.isArray(item.stages))
+    if (
+      !Array.isArray(item.stages) ||
+      item.stages.length === 0 ||
+      item.stages.length > 20
+    )
       throw new AIError("SCHEMA_VALIDATION_ERROR", "stages không hợp lệ.");
+    const stageOrders = item.stages.map((raw) => Number(record(raw).order));
+    if (
+      stageOrders.some((order) => !Number.isInteger(order) || order <= 0) ||
+      new Set(stageOrders).size !== stageOrders.length ||
+      ![...stageOrders]
+        .sort((a, b) => a - b)
+        .every((order, index) => order === index + 1)
+    )
+      throw new AIError("SCHEMA_VALIDATION_ERROR", "stage.order không hợp lệ.");
     return {
       title: text(item.title, "title", 180),
-      description: optionalText(item.description, "description"),
-      estimatedDurationDays:
-        typeof item.estimatedDurationDays === "number"
-          ? item.estimatedDurationDays
-          : undefined,
+      description: optionalBoundedText(item.description, "description", 3000),
+      estimatedDurationDays: optionalPositiveInteger(
+        item.estimatedDurationDays,
+        "estimatedDurationDays",
+      ),
       stages: item.stages.map((raw) => {
         const stage = record(raw);
-        if (!Array.isArray(stage.tasks))
+        if (!Array.isArray(stage.tasks) || stage.tasks.length > 50)
           throw new AIError(
             "SCHEMA_VALIDATION_ERROR",
             "stage.tasks không hợp lệ.",
           );
         return {
           title: text(stage.title, "stage.title", 180),
-          description: optionalText(stage.description, "stage.description"),
+          description: optionalBoundedText(
+            stage.description,
+            "stage.description",
+            3000,
+          ),
           order: Number(stage.order),
-          estimatedDays:
-            typeof stage.estimatedDays === "number"
-              ? stage.estimatedDays
-              : undefined,
+          estimatedDays: optionalPositiveInteger(
+            stage.estimatedDays,
+            "stage.estimatedDays",
+          ),
           tasks: stage.tasks.map((task) => taskProposalSchema.parse(task)),
         };
       }),

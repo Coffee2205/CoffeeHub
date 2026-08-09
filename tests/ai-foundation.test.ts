@@ -8,6 +8,7 @@ import {
 import { AIError } from "../src/features/ai/errors/ai-error";
 import {
   mapAndValidateGoalProposal,
+  mapAndValidateRoadmapProposal,
   mapGoalProposalToGoalFormValues,
 } from "../src/features/ai/mappers/proposal-mappers";
 import { AI_ACTION_POLICY } from "../src/features/ai/policies/action-policy";
@@ -15,6 +16,7 @@ import { MockAIProvider } from "../src/features/ai/providers/mock.provider";
 import {
   goalAnalysisSchema,
   goalProposalSchema,
+  roadmapProposalSchema,
 } from "../src/features/ai/schemas/proposal.schemas";
 
 test("registers typed AI actions and confirmation policy", () => {
@@ -97,6 +99,38 @@ test("Goal proposal schema rejects invalid dates and oversized criteria", () => 
         successCriteria: ["x".repeat(241)],
         assumptions: [],
         risks: [],
+      }),
+    (error) => error instanceof AIError,
+  );
+});
+
+test("Roadmap proposal maps through existing Roadmap and Milestone schemas", () => {
+  const proposal = roadmapProposalSchema.parse({
+    title: "Ship CoffeeHub",
+    description: "Ordered delivery plan",
+    estimatedDurationDays: 30,
+    stages: [
+      {
+        title: "Foundation",
+        description: "Confirm scope",
+        order: 1,
+        estimatedDays: 7,
+        tasks: [],
+      },
+    ],
+  });
+  const values = mapAndValidateRoadmapProposal(proposal);
+  assert.equal(values.stages[0]?.position, 0);
+  assert.equal(values.stages[0]?.taskCount, 0);
+});
+
+test("Roadmap proposal rejects non-sequential stage order and invalid duration", () => {
+  assert.throws(
+    () =>
+      roadmapProposalSchema.parse({
+        title: "Ship CoffeeHub",
+        estimatedDurationDays: -1,
+        stages: [{ title: "Foundation", order: 2, tasks: [] }],
       }),
     (error) => error instanceof AIError,
   );

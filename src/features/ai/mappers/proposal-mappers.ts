@@ -5,6 +5,10 @@ import type {
 } from "../types/ai.types";
 import { AIError } from "../errors/ai-error";
 import { parseGoalForm } from "@/features/goals/goal.schema";
+import {
+  parseRoadmapForm,
+  parseStageForm,
+} from "@/features/roadmaps/roadmap.schema";
 export type GoalFormValues = {
   title: string;
   description: string;
@@ -38,16 +42,54 @@ export function mapAndValidateGoalProposal(proposal: GoalProposal) {
     );
   return values;
 }
-export function mapRoadmapProposalToFormValues(proposal: RoadmapProposal) {
+export type RoadmapFormValues = {
+  title: string;
+  description: string;
+  estimatedDurationDays?: number;
+  stages: Array<{
+    title: string;
+    description: string;
+    position: number;
+    estimatedDays?: number;
+    taskCount: number;
+  }>;
+};
+export function mapRoadmapProposalToFormValues(
+  proposal: RoadmapProposal,
+): RoadmapFormValues {
   return {
     title: proposal.title,
     description: proposal.description ?? "",
+    estimatedDurationDays: proposal.estimatedDurationDays,
     stages: proposal.stages.map((stage) => ({
       title: stage.title,
       description: stage.description ?? "",
       position: stage.order - 1,
+      estimatedDays: stage.estimatedDays,
+      taskCount: stage.tasks.length,
     })),
   };
+}
+
+export function mapAndValidateRoadmapProposal(proposal: RoadmapProposal) {
+  const values = mapRoadmapProposalToFormValues(proposal);
+  const roadmapForm = new FormData();
+  roadmapForm.set("title", values.title);
+  roadmapForm.set("description", values.description);
+  const roadmap = parseRoadmapForm(roadmapForm);
+  const stageErrors = values.stages.flatMap((stage) => {
+    const stageForm = new FormData();
+    stageForm.set("title", stage.title);
+    stageForm.set("description", stage.description);
+    return parseStageForm(stageForm).errors;
+  });
+  const errors = [...roadmap.errors, ...stageErrors];
+  if (!roadmap.data || errors.length)
+    throw new AIError(
+      "SCHEMA_VALIDATION_ERROR",
+      `Roadmap proposal không khớp form nghiệp vụ: ${errors.join(" ")}`,
+    );
+  return values;
 }
 export function mapTaskProposalToFormValues(proposal: TaskProposal) {
   return {
