@@ -5,17 +5,25 @@ import { runWithProviderFallback } from "../services/ai-orchestrator";
 import { getProviderCandidates } from "../providers/provider-registry";
 import type { ChatMode } from "./chat.types";
 import { buildChatContext, defaultAISettings } from "./chat.repository";
+import { resolveConversationPlanningContext } from "../context/planning-entity-resolver";
 
 export async function generateAssistantReply(input: {
   userId: string;
   prompt: string;
   mode: ChatMode;
+  conversationId?: string;
   settings?: typeof defaultAISettings;
   simulateError?: boolean;
 }) {
   if (input.simulateError) throw new Error("Mô phỏng lỗi phản hồi AI.");
   const settings = input.settings ?? defaultAISettings;
   const context = await buildChatContext(input.userId, settings);
+  const sourceContext = input.conversationId
+    ? await resolveConversationPlanningContext(
+        input.userId,
+        input.conversationId,
+      )
+    : undefined;
   const summary = [
     settings.includeGoals
       ? `${context.goals.length} Goal gần nhất`
@@ -47,9 +55,13 @@ export async function generateAssistantReply(input: {
             activeTaskCount: context.tasks.length,
           },
           tasks: context.tasks.map((task) => ({
+            id: task.id,
             title: task.title,
             status: task.status,
             dueDate: task.dueAt?.toISOString(),
+            goalId: task.goalId ?? undefined,
+            roadmapId: task.roadmapId ?? undefined,
+            stageId: task.roadmapStageId ?? undefined,
           })),
           notes: {
             noteCount: context.notes.length,
@@ -57,6 +69,7 @@ export async function generateAssistantReply(input: {
               (note) => `${note.title}: ${note.excerpt}`,
             ),
           },
+          sourceContext,
           tokenBudget: 8_000,
         },
       }),
@@ -81,7 +94,8 @@ function formatModeResponse(
       "Kế hoạch hôm nay (bản đọc, chưa thay đổi dữ liệu):",
       ...(tasks.length
         ? tasks.map(
-            (task, index) => `${index + 1}. ${task.title} — ${task.status}`,
+            (task, index) =>
+              `${index + 1}. ${task.title} — ${task.status} — Linked Task: ${task.id}`,
           )
         : [
             "1. Chưa có Task trong context; hãy tạo Task hoặc bật Task context.",

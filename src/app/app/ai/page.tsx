@@ -7,8 +7,15 @@ import { requireUser } from "@/lib/supabase/auth";
 import { listNotes } from "@/features/notes/note.repository";
 import { getProviderSummary } from "@/features/ai/providers/provider-registry";
 
-export default async function AIAssistantPage() {
+export default async function AIAssistantPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const user = await requireUser();
+  const params = await searchParams;
+  const value = (key: string) =>
+    typeof params[key] === "string" ? params[key] : undefined;
   const [data, notes] = await Promise.all([
     getAssistantData(user.id),
     listNotes(user.id),
@@ -66,6 +73,13 @@ export default async function AIAssistantPage() {
             : "not-configured"
         }
         notes={notes.map((note) => ({ id: note.id, title: note.title }))}
+        sourceContext={{
+          goalId: value("goalId"),
+          roadmapId: value("roadmapId"),
+          stageId: value("stageId"),
+          taskId: value("taskId"),
+          conversationId: data.selectedId,
+        }}
       />
     </div>
   );

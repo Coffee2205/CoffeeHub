@@ -26,14 +26,23 @@ export default async function GoalRoadmapPage({
       >
         ← {goal.title}
       </Link>
-      <header>
-        <Badge variant="primary">Roadmap</Badge>
-        <h1 className="mt-4 text-3xl font-semibold tracking-[-0.035em] sm:text-4xl">
-          Lộ trình của {goal.title}
-        </h1>
-        <p className="mt-2 max-w-2xl text-foreground-secondary">
-          Chia Goal thành milestone có thứ tự và theo dõi tiến độ từ Task thật.
-        </p>
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <Badge variant="primary">Roadmap</Badge>
+          <h1 className="mt-4 text-3xl font-semibold tracking-[-0.035em] sm:text-4xl">
+            Lộ trình của {goal.title}
+          </h1>
+          <p className="mt-2 max-w-2xl text-foreground-secondary">
+            Chia Goal thành milestone có thứ tự và theo dõi tiến độ từ Task
+            thật.
+          </p>
+        </div>
+        <Link
+          href={`/app/ai?goalId=${goal.id}${goal.roadmaps.length === 1 ? `&roadmapId=${goal.roadmaps[0].id}` : ""}`}
+          className="inline-flex min-h-11 items-center justify-center rounded-sm border border-primary/40 bg-primary/10 px-4 text-sm font-semibold text-primary-hover"
+        >
+          Ask AI về Roadmap
+        </Link>
       </header>
       {query.error ? (
         <p

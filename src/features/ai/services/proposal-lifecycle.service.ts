@@ -30,6 +30,31 @@ import type {
   NoteProposal,
 } from "../types/ai.types";
 import { hashProposal } from "./proposal-security";
+import { validatePlanningRelationship } from "../context/planning-entity-resolver";
+import type {
+  PlanningRelationship,
+  PlanningSourceContext,
+} from "../types/ai.types";
+
+type StoredPlanningProposal = {
+  data: unknown;
+  relationship: PlanningRelationship;
+  sourceContext?: PlanningSourceContext;
+};
+
+function storedProposal(value: unknown): StoredPlanningProposal {
+  if (
+    value &&
+    typeof value === "object" &&
+    "data" in value &&
+    "relationship" in value
+  )
+    return value as StoredPlanningProposal;
+  return {
+    data: value,
+    relationship: { action: "CREATE_NEW", confidence: "LOW", ambiguous: false },
+  };
+}
 
 type WritableAction =
   | typeof AI_ACTIONS.CREATE_GOAL_PROPOSAL
@@ -81,16 +106,26 @@ export async function createProposalDraft(
   userId: string,
   action: WritableAction,
   payload: unknown,
+  relationship: PlanningRelationship,
+  sourceContext?: PlanningSourceContext,
 ) {
   const parsed = parseWritableProposal(action, payload);
-  const payloadHash = hashProposal(parsed);
+  await validatePlanningRelationship(userId, relationship);
+  const stored = {
+    data: parsed,
+    relationship,
+    ...(sourceContext && Object.keys(sourceContext).length
+      ? { sourceContext }
+      : {}),
+  };
+  const payloadHash = hashProposal(stored);
   const confirmationId = randomUUID();
   return getPrisma().$transaction(async (tx) => {
     const proposal = await tx.aIProposal.create({
       data: {
         userId,
         action,
-        payload: parsed as Prisma.InputJsonValue,
+        payload: stored as Prisma.InputJsonValue,
         payloadHash,
         confirmationId,
       },
@@ -115,6 +150,7 @@ export async function updateProposalDraft(input: {
   version: number;
   confirmationId: string;
   payload: unknown;
+  relationship: PlanningRelationship;
 }) {
   const prisma = getPrisma();
   return prisma.$transaction(async (tx) => {
@@ -134,12 +170,24 @@ export async function updateProposalDraft(input: {
       );
     const action = current.action as AIAction;
     const payload = parseWritableProposal(action, input.payload);
-    const payloadHash = hashProposal(payload);
+    const relationship = await validatePlanningRelationship(
+      input.userId,
+      input.relationship,
+    );
+    const previous = storedProposal(current.payload);
+    const stored = {
+      data: payload,
+      relationship,
+      ...(previous.sourceContext
+        ? { sourceContext: previous.sourceContext }
+        : {}),
+    };
+    const payloadHash = hashProposal(stored);
     const confirmationId = randomUUID();
     const proposal = await tx.aIProposal.update({
       where: { id: current.id },
       data: {
-        payload: payload as Prisma.InputJsonValue,
+        payload: stored as Prisma.InputJsonValue,
         payloadHash,
         confirmationId,
         version: { increment: 1 },
@@ -198,7 +246,10 @@ export async function discardProposalDraft(input: {
   });
 }
 
-type CommitResult = { links: Array<{ label: string; href: string }> };
+type CommitResult = {
+  links: Array<{ label: string; href: string }>;
+  activeContext?: PlanningSourceContext;
+};
 
 export async function commitProposal(input: {
   userId: string;
@@ -281,13 +332,37 @@ async function commitProposalOnce(input: {
       throw new AIError("CONFIRMATION_REQUIRED", "Xác nhận đã được sử dụng.");
     }
     const action = current.action as AIAction;
-    const payload = parseWritableProposal(action, current.payload);
+    const stored = storedProposal(current.payload);
+    const relationship = await validatePlanningRelationship(
+      input.userId,
+      stored.relationship,
+    );
+    if (relationship.ambiguous)
+      throw new AIError(
+        "RELATIONSHIP_CONFLICT",
+        "Có nhiều parent phù hợp; hãy chọn rõ relationship trước khi xác nhận.",
+      );
+    const payload = parseWritableProposal(action, stored.data);
     const result = await commitDomainProposal(
       tx,
       input.userId,
       action,
       payload,
+      relationship,
     );
+    if (stored.sourceContext?.conversationId && result.activeContext)
+      await tx.aIMessage.create({
+        data: {
+          userId: input.userId,
+          conversationId: stored.sourceContext.conversationId,
+          role: "SYSTEM",
+          content: "Planning context updated after confirmed proposal.",
+          contextSummary: {
+            kind: "planning-context",
+            ...result.activeContext,
+          },
+        },
+      });
     await tx.aIProposal.update({
       where: { id: current.id },
       data: {
@@ -322,8 +397,19 @@ async function commitDomainProposal(
     | ChecklistProposal
     | EventProposal
     | NoteProposal,
+  relationship: PlanningRelationship,
 ): Promise<CommitResult> {
   if (action === AI_ACTIONS.CREATE_GOAL_PROPOSAL) {
+    if (relationship.action === "LINK_EXISTING" && relationship.goalId)
+      return {
+        links: [
+          {
+            label: "Mở Goal hiện có",
+            href: `/app/goals/${relationship.goalId}`,
+          },
+        ],
+        activeContext: { goalId: relationship.goalId },
+      };
     const values = mapAndValidateGoalProposal(payload as GoalProposal);
     const goal = await tx.goal.create({
       data: {
@@ -339,11 +425,125 @@ async function commitDomainProposal(
           .successCriteria as Prisma.InputJsonValue,
       },
     });
-    return { links: [{ label: "Mở Goal", href: `/app/goals/${goal.id}` }] };
+    return {
+      links: [{ label: "Mở Goal", href: `/app/goals/${goal.id}` }],
+      activeContext: { goalId: goal.id },
+    };
   }
   if (action === AI_ACTIONS.CREATE_ROADMAP_PROPOSAL) {
     const proposal = payload as RoadmapProposal;
     mapAndValidateRoadmapProposal(proposal);
+    if (relationship.action === "EXTEND_EXISTING" && relationship.roadmapId) {
+      const roadmap = await tx.roadmap.findFirst({
+        where: {
+          id: relationship.roadmapId,
+          userId,
+          deletedAt: null,
+          ...(relationship.goalId ? { goalId: relationship.goalId } : {}),
+        },
+        select: {
+          id: true,
+          goalId: true,
+          stages: {
+            where: { deletedAt: null },
+            select: { title: true, position: true },
+          },
+        },
+      });
+      if (!roadmap)
+        throw new AIError(
+          "RELATIONSHIP_CONFLICT",
+          "Roadmap cần mở rộng không còn hợp lệ.",
+        );
+      const existingTitles = new Set(
+        roadmap.stages.map((stage) => stage.title.trim().toLowerCase()),
+      );
+      if (
+        proposal.stages.some((stage) =>
+          existingTitles.has(stage.title.trim().toLowerCase()),
+        )
+      )
+        throw new AIError(
+          "RELATIONSHIP_CONFLICT",
+          "Proposal chứa Stage trùng với Roadmap hiện có.",
+        );
+      let nextPosition =
+        Math.max(-1, ...roadmap.stages.map((stage) => stage.position)) + 1;
+      for (const stageProposal of proposal.stages) {
+        const stage = await tx.roadmapStage.create({
+          data: {
+            userId,
+            roadmapId: roadmap.id,
+            title: stageProposal.title,
+            description: stageProposal.description ?? null,
+            position: nextPosition++,
+          },
+        });
+        for (
+          let position = 0;
+          position < stageProposal.tasks.length;
+          position++
+        ) {
+          const task = stageProposal.tasks[position];
+          mapAndValidateTaskProposal(task);
+          await tx.task.create({
+            data: {
+              userId,
+              goalId: roadmap.goalId,
+              roadmapId: roadmap.id,
+              roadmapStageId: stage.id,
+              title: task.title,
+              description: task.description ?? null,
+              status: "TODO",
+              priority: task.priority,
+              dueAt: task.dueDate
+                ? new Date(`${task.dueDate}T23:59:59.999Z`)
+                : null,
+              position,
+            },
+          });
+        }
+      }
+      return {
+        links: [
+          {
+            label: "Mở Roadmap đã mở rộng",
+            href: `/app/goals/${roadmap.goalId}/roadmap`,
+          },
+        ],
+        activeContext: {
+          goalId: roadmap.goalId,
+          roadmapId: roadmap.id,
+        },
+      };
+    }
+    if (relationship.action === "LINK_EXISTING" && relationship.goalId) {
+      const goal = await tx.goal.findFirst({
+        where: { id: relationship.goalId, userId, deletedAt: null },
+        select: { id: true },
+      });
+      if (!goal)
+        throw new AIError(
+          "RELATIONSHIP_CONFLICT",
+          "Goal liên kết không hợp lệ.",
+        );
+      const roadmap = await tx.roadmap.create({
+        data: {
+          userId,
+          goalId: goal.id,
+          title: proposal.title,
+          description: proposal.description ?? null,
+        },
+      });
+      await createRoadmapStages(tx, userId, goal.id, roadmap.id, proposal);
+      return {
+        links: [
+          { label: "Mở Goal", href: `/app/goals/${goal.id}` },
+          { label: "Mở Roadmap", href: `/app/goals/${goal.id}/roadmap` },
+        ],
+        activeContext: { goalId: goal.id, roadmapId: roadmap.id },
+      };
+    }
     const goal = await tx.goal.create({
       data: {
         userId,
@@ -362,41 +562,7 @@ async function commitDomainProposal(
         description: proposal.description ?? null,
       },
     });
-    for (const stageProposal of proposal.stages) {
-      const stage = await tx.roadmapStage.create({
-        data: {
-          userId,
-          roadmapId: roadmap.id,
-          title: stageProposal.title,
-          description: stageProposal.description ?? null,
-          position: stageProposal.order - 1,
-        },
-      });
-      for (
-        let position = 0;
-        position < stageProposal.tasks.length;
-        position++
-      ) {
-        const task = stageProposal.tasks[position];
-        mapAndValidateTaskProposal(task);
-        await tx.task.create({
-          data: {
-            userId,
-            goalId: goal.id,
-            roadmapId: roadmap.id,
-            roadmapStageId: stage.id,
-            title: task.title,
-            description: task.description ?? null,
-            status: "TODO",
-            priority: task.priority,
-            dueAt: task.dueDate
-              ? new Date(`${task.dueDate}T23:59:59.999Z`)
-              : null,
-            position,
-          },
-        });
-      }
-    }
+    await createRoadmapStages(tx, userId, goal.id, roadmap.id, proposal);
     return {
       links: [
         { label: "Mở Goal", href: `/app/goals/${goal.id}` },
@@ -405,6 +571,7 @@ async function commitDomainProposal(
           href: `/app/goals/${goal.id}/roadmap`,
         },
       ],
+      activeContext: { goalId: goal.id, roadmapId: roadmap.id },
     };
   }
   if (action === AI_ACTIONS.CREATE_TASK_PROPOSAL) {
@@ -417,6 +584,9 @@ async function commitDomainProposal(
     const task = await tx.task.create({
       data: {
         userId,
+        goalId: relationship.goalId ?? null,
+        roadmapId: relationship.roadmapId ?? null,
+        roadmapStageId: relationship.stageId ?? null,
         title: values.title,
         description: values.description || null,
         status: values.status,
@@ -425,7 +595,15 @@ async function commitDomainProposal(
         position: (last?.position ?? -1) + 1,
       },
     });
-    return { links: [{ label: "Mở Task", href: `/app/tasks/${task.id}` }] };
+    return {
+      links: [{ label: "Mở Task", href: `/app/tasks/${task.id}` }],
+      activeContext: cleanPlanningContext({
+        goalId: task.goalId ?? undefined,
+        roadmapId: task.roadmapId ?? undefined,
+        stageId: task.roadmapStageId ?? undefined,
+        taskId: task.id,
+      }),
+    };
   }
   if (action === AI_ACTIONS.CREATE_CHECKLIST_PROPOSAL) {
     const proposal = payload as ChecklistProposal;
@@ -433,6 +611,9 @@ async function commitDomainProposal(
     const checklist = await tx.checklist.create({
       data: {
         userId,
+        goalId: relationship.goalId ?? null,
+        roadmapId: relationship.roadmapId ?? null,
+        taskId: relationship.taskId ?? null,
         title: proposal.title,
         items: {
           create: proposal.items.map((item) => ({
@@ -447,6 +628,11 @@ async function commitDomainProposal(
       links: [
         { label: "Mở Checklist", href: `/app/checklists/${checklist.id}` },
       ],
+      activeContext: cleanPlanningContext({
+        goalId: relationship.goalId,
+        roadmapId: relationship.roadmapId,
+        taskId: relationship.taskId,
+      }),
     };
   }
   if (action === AI_ACTIONS.CREATE_EVENT_PROPOSAL) {
@@ -489,4 +675,50 @@ async function commitDomainProposal(
     data: { userId, title: values.title, content: values.content },
   });
   return { links: [{ label: "Mở Note", href: `/app/notes/${note.id}` }] };
+}
+
+async function createRoadmapStages(
+  tx: Prisma.TransactionClient,
+  userId: string,
+  goalId: string,
+  roadmapId: string,
+  proposal: RoadmapProposal,
+) {
+  for (const stageProposal of proposal.stages) {
+    const stage = await tx.roadmapStage.create({
+      data: {
+        userId,
+        roadmapId,
+        title: stageProposal.title,
+        description: stageProposal.description ?? null,
+        position: stageProposal.order - 1,
+      },
+    });
+    for (let position = 0; position < stageProposal.tasks.length; position++) {
+      const task = stageProposal.tasks[position];
+      mapAndValidateTaskProposal(task);
+      await tx.task.create({
+        data: {
+          userId,
+          goalId,
+          roadmapId,
+          roadmapStageId: stage.id,
+          title: task.title,
+          description: task.description ?? null,
+          status: "TODO",
+          priority: task.priority,
+          dueAt: task.dueDate
+            ? new Date(`${task.dueDate}T23:59:59.999Z`)
+            : null,
+          position,
+        },
+      });
+    }
+  }
+}
+
+function cleanPlanningContext(context: PlanningSourceContext) {
+  return Object.fromEntries(
+    Object.entries(context).filter(([, value]) => value !== undefined),
+  ) as PlanningSourceContext;
 }

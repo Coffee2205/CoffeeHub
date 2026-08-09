@@ -30,9 +30,17 @@ export default async function TaskDetailPage({
       >
         ← Tasks
       </Link>
-      <header>
-        <Badge variant="primary">Task detail</Badge>
-        <h1 className="mt-4 text-3xl font-semibold">{task.title}</h1>
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <Badge variant="primary">Task detail</Badge>
+          <h1 className="mt-4 text-3xl font-semibold">{task.title}</h1>
+        </div>
+        <Link
+          href={`/app/ai?taskId=${task.id}`}
+          className="inline-flex min-h-11 items-center justify-center rounded-sm border border-primary/40 bg-primary/10 px-4 text-sm font-semibold text-primary-hover"
+        >
+          Ask AI về Task
+        </Link>
       </header>
       {query.saved ? (
         <p

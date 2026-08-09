@@ -1,5 +1,9 @@
 import type { AIProviderMetadata, AIUsage } from "../types/ai.types";
 import type {
+  PlanningCandidates,
+  PlanningRelationship,
+} from "../types/ai.types";
+import type {
   ChecklistFormValues,
   GoalFormValues,
   RoadmapFormValues,
@@ -15,6 +19,8 @@ export type ProposalActionState = {
   roadmapFormValues?: RoadmapFormValues;
   taskFormValues?: TaskFormValues;
   checklistFormValues?: ChecklistFormValues;
+  relationship?: PlanningRelationship;
+  candidates?: PlanningCandidates;
   version?: number;
   confirmationId?: string;
   payloadHash?: string;

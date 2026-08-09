@@ -29,6 +29,9 @@ import { createProposalDraft } from "../services/proposal-lifecycle.service";
 import { getNote } from "@/features/notes/note.repository";
 import { getAssistantData } from "../chat/chat.repository";
 import { checkAIRateLimit } from "../services/ai-rate-limit";
+import { resolvePlanningEntities } from "../context/planning-entity-resolver";
+import type { PlanningSourceContext } from "../types/ai.types";
+import { buildPlanningContext } from "../context/context-builder";
 
 export async function generateProposalAction(
   _previous: ProposalActionState,
@@ -60,9 +63,29 @@ export async function generateProposalAction(
     };
   try {
     checkAIRateLimit(user.id);
+    const sourceContext = Object.fromEntries(
+      [
+        ["conversationId", String(form.get("conversationId") ?? "")],
+        ["goalId", String(form.get("sourceGoalId") ?? "")],
+        ["roadmapId", String(form.get("sourceRoadmapId") ?? "")],
+        ["stageId", String(form.get("sourceStageId") ?? "")],
+        ["taskId", String(form.get("sourceTaskId") ?? "")],
+      ].filter(([, value]) => value),
+    ) as PlanningSourceContext;
+    const planning = await resolvePlanningEntities({
+      userId: user.id,
+      action: actionValue,
+      request: prompt,
+      sourceContext,
+    });
     const result = await generateProposal({
       action: actionValue,
       prompt,
+      context: buildPlanningContext({
+        timezone: "Asia/Ho_Chi_Minh",
+        existingPlanning: planning.candidates,
+        sourceContext,
+      }),
       simulateError: form.get("simulateError") === "on",
     });
     if (actionValue === AI_ACTIONS.UPDATE_NOTE_PROPOSAL) {
@@ -112,7 +135,13 @@ export async function generateProposalAction(
     const draft =
       actionValue === AI_ACTIONS.ANALYZE_GOAL
         ? null
-        : await createProposalDraft(user.id, actionValue, result.data);
+        : await createProposalDraft(
+            user.id,
+            actionValue,
+            result.data,
+            planning.relationship,
+            planning.sourceContext,
+          );
     return {
       status: "success",
       proposalId: draft?.id ?? randomUUID(),
@@ -122,6 +151,8 @@ export async function generateProposalAction(
       roadmapFormValues,
       taskFormValues,
       checklistFormValues,
+      relationship: planning.relationship,
+      candidates: planning.candidates,
       version: draft?.version,
       confirmationId: draft?.confirmationId,
       payloadHash: draft?.payloadHash,

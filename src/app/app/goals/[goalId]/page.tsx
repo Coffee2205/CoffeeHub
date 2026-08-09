@@ -58,7 +58,15 @@ export default async function GoalDetailPage({
             Chi tiết, tiến độ và thiết lập Goal.
           </p>
         </div>
-        <ArchiveGoalButton action={archiveGoalAction.bind(null, goal.id)} />
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href={`/app/ai?goalId=${goal.id}`}
+            className="inline-flex min-h-11 items-center rounded-sm border border-primary/40 bg-primary/10 px-4 text-sm font-semibold text-primary-hover"
+          >
+            Ask AI về Goal
+          </Link>
+          <ArchiveGoalButton action={archiveGoalAction.bind(null, goal.id)} />
+        </div>
       </header>
       {query.created ? (
         <p

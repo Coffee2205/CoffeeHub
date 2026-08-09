@@ -125,6 +125,43 @@ export type GoalReviewProposal = {
   nextActions: string[];
 };
 
+export type PlanningRelationshipAction =
+  "CREATE_NEW" | "LINK_EXISTING" | "EXTEND_EXISTING" | "UPDATE_EXISTING";
+export type PlanningRelationship = {
+  action: PlanningRelationshipAction;
+  confidence: "HIGH" | "MEDIUM" | "LOW";
+  goalId?: string;
+  roadmapId?: string;
+  stageId?: string;
+  taskId?: string;
+  ambiguous: boolean;
+};
+export type PlanningSourceContext = {
+  conversationId?: string;
+  goalId?: string;
+  roadmapId?: string;
+  stageId?: string;
+  taskId?: string;
+};
+export type PlanningCandidates = {
+  goals: Array<{ id: string; title: string; status: string; progress: number }>;
+  roadmaps: Array<{ id: string; title: string; goalId: string }>;
+  stages: Array<{
+    id: string;
+    title: string;
+    roadmapId: string;
+    goalId: string;
+  }>;
+  tasks: Array<{
+    id: string;
+    title: string;
+    status: string;
+    goalId: string | null;
+    roadmapId: string | null;
+    roadmapStageId: string | null;
+  }>;
+};
+
 export type UserContext = { locale: string; timezone: string };
 export type WorkspaceContext = {
   activeGoalCount: number;
@@ -136,7 +173,15 @@ export type GoalContext = {
   targetDate?: string;
 };
 export type RoadmapContext = { title: string; stageCount: number };
-export type TaskContext = { title: string; status: string; dueDate?: string };
+export type TaskContext = {
+  id: string;
+  title: string;
+  status: string;
+  dueDate?: string;
+  goalId?: string;
+  roadmapId?: string;
+  stageId?: string;
+};
 export type CalendarContext = {
   availableMinutesPerWeek?: number;
   upcomingEventCount: number;
@@ -155,16 +200,13 @@ export type AIContextEnvelope = {
   calendar?: CalendarContext;
   notes?: NotesContext;
   preferences?: PlanningPreferencesContext;
+  existingPlanning?: PlanningCandidates;
+  sourceContext?: PlanningSourceContext;
   tokenBudget: number;
 };
 
 export type AIProposalStatus =
-  | "DRAFT"
-  | "CONFIRMED"
-  | "COMMITTED"
-  | "REJECTED"
-  | "EXPIRED"
-  | "FAILED";
+  "DRAFT" | "CONFIRMED" | "COMMITTED" | "REJECTED" | "EXPIRED" | "FAILED";
 export type AIConversation = { id: string; userId: string; createdAt: string };
 export type AIConversationMessage = {
   id: string;

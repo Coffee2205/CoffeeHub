@@ -100,7 +100,15 @@ export async function buildChatContext(
     settings.includeTasks
       ? prisma.task.findMany({
           where: { userId, deletedAt: null },
-          select: { title: true, status: true, dueAt: true },
+          select: {
+            id: true,
+            title: true,
+            status: true,
+            dueAt: true,
+            goalId: true,
+            roadmapId: true,
+            roadmapStageId: true,
+          },
           orderBy: { updatedAt: "desc" },
           take: 10,
         })

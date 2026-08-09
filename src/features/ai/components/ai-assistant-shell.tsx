@@ -20,6 +20,7 @@ import {
   initialProposalState,
   type ProposalActionState,
 } from "../actions/proposal-state";
+import type { PlanningSourceContext } from "../types/ai.types";
 
 const options = [
   { value: AI_ACTIONS.ANALYZE_GOAL, label: "Analyze Goal" },
@@ -46,11 +47,13 @@ export function AIAssistantShell({
   provider,
   model,
   notes,
+  sourceContext,
 }: {
   enabled: boolean;
   provider: string;
   model: string;
   notes: Array<{ id: string; title: string }>;
+  sourceContext?: PlanningSourceContext;
 }) {
   const [state, action, pending] = useActionState(
     generateProposalAction,
@@ -67,6 +70,26 @@ export function AIAssistantShell({
           </CardDescription>
         </CardHeader>
         <form action={action} className="grid gap-5">
+          <input
+            type="hidden"
+            name="sourceGoalId"
+            value={sourceContext?.goalId ?? ""}
+          />
+          <input
+            type="hidden"
+            name="sourceRoadmapId"
+            value={sourceContext?.roadmapId ?? ""}
+          />
+          <input
+            type="hidden"
+            name="sourceStageId"
+            value={sourceContext?.stageId ?? ""}
+          />
+          <input
+            type="hidden"
+            name="sourceTaskId"
+            value={sourceContext?.taskId ?? ""}
+          />
           <label className="grid gap-2">
             <span className="text-sm font-medium">Action</span>
             <select
@@ -166,7 +189,33 @@ function EditableProposal({ initial }: { initial: ProposalActionState }) {
     form.set("proposalId", current.proposalId ?? "");
     form.set("version", String(current.version ?? 0));
     form.set("confirmationId", current.confirmationId ?? "");
+    form.set(
+      "relationshipAction",
+      current.relationship?.action ?? "CREATE_NEW",
+    );
+    form.set(
+      "relationshipConfidence",
+      current.relationship?.confidence ?? "LOW",
+    );
+    form.set("goalId", current.relationship?.goalId ?? "");
+    form.set("roadmapId", current.relationship?.roadmapId ?? "");
+    form.set("stageId", current.relationship?.stageId ?? "");
+    form.set("taskId", current.relationship?.taskId ?? "");
+    form.set("ambiguous", String(current.relationship?.ambiguous ?? false));
     return form;
+  };
+
+  const changeRelationship = (
+    patch: Partial<NonNullable<ProposalActionState["relationship"]>>,
+  ) => {
+    setCurrent((value) => ({
+      ...value,
+      relationship: value.relationship
+        ? { ...value.relationship, ...patch, ambiguous: false }
+        : undefined,
+    }));
+    setDirty(true);
+    setActionError(undefined);
   };
 
   const update = () =>
@@ -174,7 +223,7 @@ function EditableProposal({ initial }: { initial: ProposalActionState }) {
       setActionError(undefined);
       const form = commonForm();
       form.set("payload", payload);
-      const next = await updateProposalAction(initialProposalState, form);
+      const next = await updateProposalAction(current, form);
       if (next.status === "success") {
         setCurrent(next);
         setPayload(JSON.stringify(next.proposal, null, 2));
@@ -188,10 +237,7 @@ function EditableProposal({ initial }: { initial: ProposalActionState }) {
   const discard = () =>
     startTransition(async () => {
       setActionError(undefined);
-      const next = await discardProposalAction(
-        initialProposalState,
-        commonForm(),
-      );
+      const next = await discardProposalAction(current, commonForm());
       if (next.status === "error") setActionError(next.error);
       else setCurrent(next);
     });
@@ -201,7 +247,7 @@ function EditableProposal({ initial }: { initial: ProposalActionState }) {
       setActionError(undefined);
       const form = commonForm();
       form.set("payloadHash", current.payloadHash ?? "");
-      const next = await confirmProposalAction(initialProposalState, form);
+      const next = await confirmProposalAction(current, form);
       if (next.status === "error") {
         setActionError(next.error);
         if (next.error?.code === "CONFIRMATION_REQUIRED") setDirty(true);
@@ -254,6 +300,9 @@ function EditableProposal({ initial }: { initial: ProposalActionState }) {
         </CardDescription>
       </CardHeader>
       <div className="grid gap-4">
+        {current.relationship ? (
+          <RelationshipPreview state={current} onChange={changeRelationship} />
+        ) : null}
         <label className="grid gap-2">
           <span className="text-sm font-medium">Payload có thể chỉnh sửa</span>
           <Textarea
@@ -308,6 +357,171 @@ function EditableProposal({ initial }: { initial: ProposalActionState }) {
         </p>
       </div>
     </Card>
+  );
+}
+
+function RelationshipPreview({
+  state,
+  onChange,
+}: {
+  state: ProposalActionState;
+  onChange: (
+    patch: Partial<NonNullable<ProposalActionState["relationship"]>>,
+  ) => void;
+}) {
+  const relationship = state.relationship!;
+  const candidates = state.candidates;
+  const needsGoal =
+    state.action === AI_ACTIONS.CREATE_GOAL_PROPOSAL ||
+    state.action === AI_ACTIONS.CREATE_ROADMAP_PROPOSAL ||
+    state.action === AI_ACTIONS.CREATE_TASK_PROPOSAL;
+  const needsRoadmap =
+    state.action === AI_ACTIONS.CREATE_ROADMAP_PROPOSAL ||
+    state.action === AI_ACTIONS.CREATE_TASK_PROPOSAL;
+  const needsStage = state.action === AI_ACTIONS.CREATE_TASK_PROPOSAL;
+  const needsTask = state.action === AI_ACTIONS.CREATE_CHECKLIST_PROPOSAL;
+  const roadmaps = (candidates?.roadmaps ?? []).filter(
+    (item) => !relationship.goalId || item.goalId === relationship.goalId,
+  );
+  const stages = (candidates?.stages ?? []).filter(
+    (item) =>
+      (!relationship.goalId || item.goalId === relationship.goalId) &&
+      (!relationship.roadmapId || item.roadmapId === relationship.roadmapId),
+  );
+
+  return (
+    <section className="grid gap-3 rounded-sm border border-primary/30 bg-primary/5 p-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <p className="font-semibold">Planning relationships</p>
+          <p className="text-xs text-muted">
+            {relationship.action} · confidence {relationship.confidence}
+          </p>
+        </div>
+        {relationship.ambiguous ? (
+          <span className="rounded-full border border-amber-400/40 px-2 py-1 text-xs text-amber-200">
+            Cần chọn parent rõ ràng
+          </span>
+        ) : null}
+      </div>
+      <label className="grid gap-1 text-sm">
+        <span>Hành động</span>
+        <select
+          value={relationship.action}
+          onChange={(event) =>
+            onChange({
+              action: event.target.value as typeof relationship.action,
+            })
+          }
+          className="min-h-11 rounded-sm border border-border bg-background-secondary px-3"
+        >
+          <option value="CREATE_NEW">Tạo mới</option>
+          <option value="LINK_EXISTING">Liên kết entity hiện có</option>
+          {state.action === AI_ACTIONS.CREATE_ROADMAP_PROPOSAL ? (
+            <option value="EXTEND_EXISTING">Mở rộng Roadmap hiện có</option>
+          ) : null}
+        </select>
+      </label>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {needsGoal ? (
+          <RelationshipSelect
+            label="Goal"
+            value={relationship.goalId}
+            options={candidates?.goals ?? []}
+            onChange={(goalId) =>
+              onChange({
+                goalId,
+                roadmapId: undefined,
+                stageId: undefined,
+                confidence: goalId ? "HIGH" : "LOW",
+              })
+            }
+          />
+        ) : null}
+        {needsRoadmap ? (
+          <RelationshipSelect
+            label="Roadmap"
+            value={relationship.roadmapId}
+            options={roadmaps}
+            onChange={(roadmapId) => {
+              const roadmap = roadmaps.find((item) => item.id === roadmapId);
+              onChange({
+                roadmapId,
+                goalId: roadmap?.goalId ?? relationship.goalId,
+                stageId: undefined,
+                confidence: roadmapId ? "HIGH" : relationship.confidence,
+              });
+            }}
+          />
+        ) : null}
+        {needsStage ? (
+          <RelationshipSelect
+            label="Stage"
+            value={relationship.stageId}
+            options={stages}
+            onChange={(stageId) => {
+              const stage = stages.find((item) => item.id === stageId);
+              onChange({
+                stageId,
+                roadmapId: stage?.roadmapId ?? relationship.roadmapId,
+                goalId: stage?.goalId ?? relationship.goalId,
+                confidence: stageId ? "HIGH" : relationship.confidence,
+              });
+            }}
+          />
+        ) : null}
+        {needsTask ? (
+          <RelationshipSelect
+            label="Task"
+            value={relationship.taskId}
+            options={candidates?.tasks ?? []}
+            onChange={(taskId) =>
+              onChange({
+                taskId,
+                goalId: undefined,
+                roadmapId: undefined,
+                stageId: undefined,
+                confidence: taskId ? "HIGH" : "LOW",
+              })
+            }
+          />
+        ) : null}
+      </div>
+      <p className="text-xs leading-5 text-muted">
+        ID chỉ đến từ danh sách owner-scoped do server tải. Mọi hierarchy được
+        kiểm tra lại khi lưu và xác nhận.
+      </p>
+    </section>
+  );
+}
+
+function RelationshipSelect({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value?: string;
+  options: Array<{ id: string; title: string }>;
+  onChange: (value?: string) => void;
+}) {
+  return (
+    <label className="grid min-w-0 gap-1 text-sm">
+      <span>{label}</span>
+      <select
+        value={value ?? ""}
+        onChange={(event) => onChange(event.target.value || undefined)}
+        className="min-h-11 min-w-0 rounded-sm border border-border bg-background-secondary px-3"
+      >
+        <option value="">Không liên kết</option>
+        {options.map((option) => (
+          <option key={option.id} value={option.id}>
+            {option.title}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }
 

@@ -12,6 +12,7 @@ export const AI_ERROR_CODES = [
   "CONTEXT_TOO_LARGE",
   "ACTION_NOT_ALLOWED",
   "CONFIRMATION_REQUIRED",
+  "RELATIONSHIP_CONFLICT",
   "UNKNOWN_AI_ERROR",
 ] as const;
 export type AIErrorCode = (typeof AI_ERROR_CODES)[number];

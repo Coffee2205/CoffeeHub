@@ -33,6 +33,7 @@ export async function sendChatAction(form: FormData): Promise<ChatActionState> {
     const result = await generateAssistantReply({
       userId: user.id,
       prompt,
+      conversationId: text(form, "conversationId") || undefined,
       mode: ["chat", "daily_plan", "weekly_review", "note_summary"].includes(
         mode,
       )

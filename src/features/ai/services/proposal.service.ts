@@ -31,6 +31,7 @@ export function isProposalAction(action: AIAction): action is ProposalAction {
 export async function generateProposal(input: {
   action: ProposalAction;
   prompt: string;
+  context?: import("../types/ai.types").AIContextEnvelope;
   simulateError?: boolean;
 }) {
   const config = getAIConfig();

@@ -28,6 +28,14 @@ import {
 } from "../src/features/ai/schemas/proposal.schemas";
 import { hashProposal } from "../src/features/ai/services/proposal-security";
 import {
+  normalizePlanningText,
+  planningMatchScore,
+  readPlanningContextSummary,
+  rankPlanningCandidates,
+  validateRelationshipHierarchy,
+} from "../src/features/ai/context/planning-relationship";
+import type { PlanningCandidates } from "../src/features/ai/types/ai.types";
+import {
   getStructuredOutputGuide,
   getStructuredOutputSchema,
 } from "../src/features/ai/prompts/structured-output-guide";
@@ -264,6 +272,163 @@ test("proposal confirmation hash is stable across JSON object key order", () => 
   assert.notEqual(
     hashProposal(beforeJsonb),
     hashProposal({ ...afterJsonb, title: "Ship another project" }),
+  );
+});
+
+const planningCandidates: PlanningCandidates = {
+  goals: [
+    {
+      id: "goal-coffeehub",
+      title: "Complete CoffeeHub",
+      status: "ACTIVE",
+      progress: 35,
+    },
+    {
+      id: "goal-japanese",
+      title: "JLPT N3",
+      status: "ACTIVE",
+      progress: 20,
+    },
+  ],
+  roadmaps: [
+    {
+      id: "roadmap-coffeehub",
+      title: "CoffeeHub Development Roadmap",
+      goalId: "goal-coffeehub",
+    },
+  ],
+  stages: [
+    {
+      id: "stage-ai",
+      title: "AI Integration",
+      goalId: "goal-coffeehub",
+      roadmapId: "roadmap-coffeehub",
+    },
+  ],
+  tasks: [
+    {
+      id: "task-openai",
+      title: "Implement OpenAI Provider",
+      status: "TODO",
+      goalId: "goal-coffeehub",
+      roadmapId: "roadmap-coffeehub",
+      roadmapStageId: "stage-ai",
+    },
+  ],
+};
+
+test("planning resolver normalizes titles and ranks duplicate candidates", () => {
+  assert.equal(
+    normalizePlanningText("Hoàn thiện CoffeeHub"),
+    "hoan thien coffeehub",
+  );
+  assert.ok(
+    planningMatchScore("Create a roadmap for CoffeeHub", "Complete CoffeeHub") >
+      0.4,
+  );
+  const matches = rankPlanningCandidates(
+    "Create a roadmap for CoffeeHub",
+    planningCandidates.goals,
+    10,
+  );
+  assert.equal(matches[0].candidate.id, "goal-coffeehub");
+});
+
+test("relationship hierarchy accepts Goal to Roadmap to Stage to Task", () => {
+  assert.doesNotThrow(() =>
+    validateRelationshipHierarchy(
+      {
+        action: "LINK_EXISTING",
+        confidence: "HIGH",
+        goalId: "goal-coffeehub",
+        roadmapId: "roadmap-coffeehub",
+        stageId: "stage-ai",
+        ambiguous: false,
+      },
+      planningCandidates,
+    ),
+  );
+  assert.doesNotThrow(() =>
+    validateRelationshipHierarchy(
+      {
+        action: "LINK_EXISTING",
+        confidence: "HIGH",
+        taskId: "task-openai",
+        ambiguous: false,
+      },
+      planningCandidates,
+    ),
+  );
+});
+
+test("relationship hierarchy rejects cross-owner and mismatched parents", () => {
+  assert.throws(
+    () =>
+      validateRelationshipHierarchy(
+        {
+          action: "LINK_EXISTING",
+          confidence: "HIGH",
+          goalId: "goal-japanese",
+          roadmapId: "roadmap-coffeehub",
+          ambiguous: false,
+        },
+        planningCandidates,
+      ),
+    /Quan hệ/,
+  );
+  assert.throws(
+    () =>
+      validateRelationshipHierarchy(
+        {
+          action: "LINK_EXISTING",
+          confidence: "HIGH",
+          taskId: "task-from-another-owner",
+          ambiguous: false,
+        },
+        planningCandidates,
+      ),
+    /Quan hệ/,
+  );
+});
+
+test("create-new override removes model or stale relationship IDs", () => {
+  assert.deepEqual(
+    validateRelationshipHierarchy(
+      {
+        action: "CREATE_NEW",
+        confidence: "LOW",
+        goalId: "goal-coffeehub",
+        roadmapId: "roadmap-coffeehub",
+        ambiguous: true,
+      },
+      planningCandidates,
+    ),
+    { action: "CREATE_NEW", confidence: "LOW", ambiguous: false },
+  );
+});
+
+test("conversation planning context preserves validated active references", () => {
+  assert.deepEqual(
+    readPlanningContextSummary(
+      {
+        kind: "planning-context",
+        goalId: "goal-coffeehub",
+        roadmapId: "roadmap-coffeehub",
+        ignored: "not-forwarded",
+      },
+      "conversation-1",
+    ),
+    {
+      conversationId: "conversation-1",
+      goalId: "goal-coffeehub",
+      roadmapId: "roadmap-coffeehub",
+      stageId: undefined,
+      taskId: undefined,
+    },
+  );
+  assert.equal(
+    readPlanningContextSummary(["untrusted"], "conversation-1"),
+    undefined,
   );
 });
 
