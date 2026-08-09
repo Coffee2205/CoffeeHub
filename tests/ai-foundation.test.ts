@@ -27,7 +27,10 @@ import {
   noteProposalSchema,
 } from "../src/features/ai/schemas/proposal.schemas";
 import { hashProposal } from "../src/features/ai/services/proposal-security";
-import { getStructuredOutputGuide } from "../src/features/ai/prompts/structured-output-guide";
+import {
+  getStructuredOutputGuide,
+  getStructuredOutputSchema,
+} from "../src/features/ai/prompts/structured-output-guide";
 
 test("registers typed AI actions and confirmation policy", () => {
   assert.equal(isAIAction("create_goal_proposal"), true);
@@ -59,7 +62,14 @@ test("every enabled structured action has a JSON output guide", () => {
     AI_ACTIONS.UPDATE_NOTE_PROPOSAL,
   ]) {
     const guide = getStructuredOutputGuide(action);
+    const schema = getStructuredOutputSchema(action);
     assert.equal(typeof guide, "string");
+    if (action === AI_ACTIONS.CREATE_ROADMAP_PROPOSAL) {
+      assert.equal(schema, undefined);
+    } else {
+      assert.equal(schema?.type, "object");
+      assert.equal(schema?.additionalProperties, false);
+    }
     assert.doesNotThrow(() => JSON.parse(guide!));
   }
 });

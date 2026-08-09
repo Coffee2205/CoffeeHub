@@ -1,10 +1,13 @@
 import "server-only";
 
-import { generateText, Output, type LanguageModel } from "ai";
+import { generateText, jsonSchema, Output, type LanguageModel } from "ai";
 import { getAIConfig } from "../config/ai.config";
 import { AIError } from "../errors/ai-error";
 import { AI_PROMPTS } from "../prompts/prompt-library";
-import { getStructuredOutputGuide } from "../prompts/structured-output-guide";
+import {
+  getStructuredOutputGuide,
+  getStructuredOutputSchema,
+} from "../prompts/structured-output-guide";
 import type {
   AIChatInput,
   AIGenerationOptions,
@@ -61,7 +64,13 @@ export class AISdkProvider implements AIProvider {
           latencyMs: Date.now() - startedAt,
         },
       };
-    } catch {
+    } catch (error) {
+      console.warn("[ai-provider] structured output validation failed", {
+        provider: this.name,
+        action: request.action,
+        validationError:
+          error instanceof AIError ? error.message : "Unknown schema error",
+      });
       throw new AIError(
         "SCHEMA_VALIDATION_ERROR",
         "Provider trả về proposal không đúng schema.",
@@ -86,6 +95,9 @@ export class AISdkProvider implements AIProvider {
     const structuredGuide = structured
       ? getStructuredOutputGuide(input.action)
       : undefined;
+    const structuredSchema = structured
+      ? getStructuredOutputSchema(input.action)
+      : undefined;
     const controller = new AbortController();
     const timer = setTimeout(
       () => controller.abort(),
@@ -108,7 +120,13 @@ export class AISdkProvider implements AIProvider {
           request: input.prompt,
           context: input.context,
         }),
-        output: structured ? Output.json() : Output.text(),
+        output: structuredSchema
+          ? Output.object({
+              schema: jsonSchema<Record<string, unknown>>(structuredSchema),
+            })
+          : structured
+            ? Output.json()
+            : Output.text(),
         maxOutputTokens: options?.maxOutputTokens ?? config.maxOutputTokens,
         maxRetries: config.retryLimit,
         abortSignal: controller.signal,
