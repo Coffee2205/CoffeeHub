@@ -4,6 +4,7 @@ import { generateText, Output, type LanguageModel } from "ai";
 import { getAIConfig } from "../config/ai.config";
 import { AIError } from "../errors/ai-error";
 import { AI_PROMPTS } from "../prompts/prompt-library";
+import { getStructuredOutputGuide } from "../prompts/structured-output-guide";
 import type {
   AIChatInput,
   AIGenerationOptions,
@@ -82,6 +83,9 @@ export class AISdkProvider implements AIProvider {
     }
     const config = getAIConfig();
     const prompt = AI_PROMPTS[input.action];
+    const structuredGuide = structured
+      ? getStructuredOutputGuide(input.action)
+      : undefined;
     const controller = new AbortController();
     const timer = setTimeout(
       () => controller.abort(),
@@ -90,7 +94,16 @@ export class AISdkProvider implements AIProvider {
     try {
       return await generateText({
         model: this.createModel(this.modelId),
-        system: `${prompt.system}\n${prompt.safety}\n${prompt.outputExpectation}`,
+        system: [
+          prompt.system,
+          prompt.safety,
+          prompt.outputExpectation,
+          structuredGuide
+            ? `Return only one valid JSON object matching this exact shape. Do not use Markdown or code fences: ${structuredGuide}`
+            : undefined,
+        ]
+          .filter(Boolean)
+          .join("\n"),
         prompt: JSON.stringify({
           request: input.prompt,
           context: input.context,

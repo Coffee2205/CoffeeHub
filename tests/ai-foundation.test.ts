@@ -27,6 +27,7 @@ import {
   noteProposalSchema,
 } from "../src/features/ai/schemas/proposal.schemas";
 import { hashProposal } from "../src/features/ai/services/proposal-security";
+import { getStructuredOutputGuide } from "../src/features/ai/prompts/structured-output-guide";
 
 test("registers typed AI actions and confirmation policy", () => {
   assert.equal(isAIAction("create_goal_proposal"), true);
@@ -44,6 +45,23 @@ test("registers typed AI actions and confirmation policy", () => {
     AI_ACTION_POLICY[AI_ACTIONS.UPDATE_NOTE_PROPOSAL].writesDatabase,
     true,
   );
+});
+
+test("every enabled structured action has a JSON output guide", () => {
+  for (const action of [
+    AI_ACTIONS.ANALYZE_GOAL,
+    AI_ACTIONS.CREATE_GOAL_PROPOSAL,
+    AI_ACTIONS.CREATE_ROADMAP_PROPOSAL,
+    AI_ACTIONS.CREATE_TASK_PROPOSAL,
+    AI_ACTIONS.CREATE_CHECKLIST_PROPOSAL,
+    AI_ACTIONS.CREATE_EVENT_PROPOSAL,
+    AI_ACTIONS.CREATE_NOTE_PROPOSAL,
+    AI_ACTIONS.UPDATE_NOTE_PROPOSAL,
+  ]) {
+    const guide = getStructuredOutputGuide(action);
+    assert.equal(typeof guide, "string");
+    assert.doesNotThrow(() => JSON.parse(guide!));
+  }
 });
 
 test("mock provider returns a validated development proposal without network", async () => {

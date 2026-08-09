@@ -25,6 +25,10 @@ export async function runWithProviderFallback<
         status: "failed",
         errorCode: error instanceof AIError ? error.code : "UNKNOWN_AI_ERROR",
       });
+      console.warn("[ai-provider] attempt failed", {
+        provider: provider.name,
+        errorCode: error instanceof AIError ? error.code : "UNKNOWN_AI_ERROR",
+      });
       if (!canFallback(error)) throw error;
     }
   }
