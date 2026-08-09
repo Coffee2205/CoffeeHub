@@ -2,6 +2,7 @@ import "server-only";
 
 import { getPrisma } from "@/lib/prisma";
 import type { NoteInput } from "./note.schema";
+import { noteOwnerWhere } from "./note-ownership";
 
 export function listNotes(userId: string, query = "") {
   return getPrisma().note.findMany({
@@ -56,7 +57,7 @@ export async function saveNote(
 
 export function archiveNote(userId: string, id: string) {
   return getPrisma().note.updateMany({
-    where: { id, userId, deletedAt: null },
+    where: noteOwnerWhere(userId, id),
     data: { deletedAt: new Date(), version: { increment: 1 } },
   });
 }

@@ -5,6 +5,7 @@ import { PersonalAssistantShell } from "@/features/ai/chat/personal-assistant-sh
 import { getAssistantData } from "@/features/ai/chat/chat.repository";
 import { requireUser } from "@/lib/supabase/auth";
 import { listNotes } from "@/features/notes/note.repository";
+import { getProviderSummary } from "@/features/ai/providers/provider-registry";
 
 export default async function AIAssistantPage() {
   const user = await requireUser();
@@ -13,10 +14,18 @@ export default async function AIAssistantPage() {
     listNotes(user.id),
   ]);
   const config = getAIConfig();
+  const providerSummary = getProviderSummary();
+  const providerLabel = providerSummary.primary
+    ? `${providerSummary.primary}/${config.models[providerSummary.primary]}`
+    : "Chưa cấu hình provider";
   return (
     <div className="space-y-6">
       <header>
-        <Badge variant="primary">Development mock</Badge>
+        <Badge variant="primary">
+          {providerSummary.primary === "mock"
+            ? "Development mock"
+            : "AI provider"}
+        </Badge>
         <h1 className="mt-4 text-3xl font-semibold tracking-[-0.035em] sm:text-4xl">
           AI Assistant
         </h1>
@@ -39,6 +48,7 @@ export default async function AIAssistantPage() {
         }))}
         initialConversationId={data.selectedId}
         settings={data.settings}
+        providerLabel={providerLabel}
       />
       <div>
         <h2 className="text-2xl font-semibold">Action proposals</h2>
@@ -49,8 +59,12 @@ export default async function AIAssistantPage() {
       </div>
       <AIAssistantShell
         enabled={config.enabled}
-        provider="mock"
-        model={config.models.mock}
+        provider={providerSummary.primary ?? "unavailable"}
+        model={
+          providerSummary.primary
+            ? config.models[providerSummary.primary]
+            : "not-configured"
+        }
         notes={notes.map((note) => ({ id: note.id, title: note.title }))}
       />
     </div>

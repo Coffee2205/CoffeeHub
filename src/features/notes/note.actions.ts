@@ -74,3 +74,17 @@ export async function archiveNoteAction(id: string) {
   revalidatePath("/app/notes");
   redirect("/app/notes?archived=1");
 }
+
+export async function deleteNoteAction(id: string) {
+  const user = await requireUser();
+  if (!/^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(id))
+    return { status: "error" as const, error: "Note không hợp lệ." };
+  const result = await archiveNote(user.id, id);
+  if (!result.count)
+    return {
+      status: "error" as const,
+      error: "Không tìm thấy Note hoặc bạn không có quyền xóa.",
+    };
+  revalidatePath("/app/notes");
+  return { status: "success" as const };
+}

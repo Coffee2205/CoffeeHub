@@ -1,6 +1,8 @@
 import "server-only";
 
-import { getProvider } from "../providers/provider-registry";
+import { AI_ACTIONS } from "../actions/ai-actions";
+import { runWithProviderFallback } from "../services/ai-orchestrator";
+import { getProviderCandidates } from "../providers/provider-registry";
 import type { ChatMode } from "./chat.types";
 import { buildChatContext, defaultAISettings } from "./chat.repository";
 
@@ -25,33 +27,45 @@ export async function generateAssistantReply(input: {
       ? `${context.notes.length} Note gần nhất`
       : "Note: tắt",
   ];
-  const base = await getProvider("mock").chat({
-    action: "chat",
-    prompt: input.prompt,
-    context: {
-      user: { locale: "vi", timezone: "Asia/Ho_Chi_Minh" },
-      workspace: {
-        activeGoalCount: context.goals.length,
-        activeTaskCount: context.tasks.length,
-      },
-      tasks: context.tasks.map((task) => ({
-        title: task.title,
-        status: task.status,
-        dueDate: task.dueAt?.toISOString(),
-      })),
-      notes: {
-        noteCount: context.notes.length,
-        excerpts: context.notes.map((note) => `${note.title}: ${note.excerpt}`),
-      },
-      tokenBudget: 8_000,
-    },
-  });
-  const response = formatModeResponse(
-    input.mode,
-    input.prompt,
-    context,
-    base.text,
+  const action =
+    input.mode === "daily_plan"
+      ? AI_ACTIONS.CREATE_DAILY_PLAN
+      : input.mode === "weekly_review"
+        ? AI_ACTIONS.CREATE_WEEKLY_PLAN
+        : input.mode === "note_summary"
+          ? AI_ACTIONS.SUMMARIZE_NOTES
+          : AI_ACTIONS.CHAT;
+  const base = await runWithProviderFallback(
+    (provider) =>
+      provider.chat({
+        action,
+        prompt: input.prompt,
+        context: {
+          user: { locale: "vi", timezone: "Asia/Ho_Chi_Minh" },
+          workspace: {
+            activeGoalCount: context.goals.length,
+            activeTaskCount: context.tasks.length,
+          },
+          tasks: context.tasks.map((task) => ({
+            title: task.title,
+            status: task.status,
+            dueDate: task.dueAt?.toISOString(),
+          })),
+          notes: {
+            noteCount: context.notes.length,
+            excerpts: context.notes.map(
+              (note) => `${note.title}: ${note.excerpt}`,
+            ),
+          },
+          tokenBudget: 8_000,
+        },
+      }),
+    getProviderCandidates(),
   );
+  const response =
+    base.metadata.provider === "mock"
+      ? formatModeResponse(input.mode, input.prompt, context, base.text)
+      : base.text;
   return { response, summary, metadata: base.metadata };
 }
 

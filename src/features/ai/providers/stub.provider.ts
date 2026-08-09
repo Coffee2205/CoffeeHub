@@ -2,6 +2,7 @@ import { AIError } from "../errors/ai-error";
 import type { AIProviderName } from "../types/ai.types";
 import type { AIProvider } from "./ai-provider";
 export class StubProvider implements AIProvider {
+  readonly configured = false;
   constructor(public readonly name: Exclude<AIProviderName, "mock">) {}
   async chat(): Promise<never> {
     throw new AIError(

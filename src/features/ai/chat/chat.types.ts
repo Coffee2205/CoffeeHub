@@ -28,4 +28,7 @@ export type ChatActionState = {
   message?: ChatMessageView;
   contextSummary?: string[];
   error?: string;
+  provider?: string;
+  model?: string;
+  fallbackUsed?: boolean;
 };

@@ -14,6 +14,7 @@ const wait = (milliseconds: number) =>
   new Promise((resolve) => setTimeout(resolve, milliseconds));
 export class MockAIProvider implements AIProvider {
   readonly name = "mock" as const;
+  readonly configured = true;
   async chat(input: AIChatInput): Promise<AIChatResult> {
     await wait(250);
     return {

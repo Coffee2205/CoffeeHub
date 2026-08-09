@@ -21,13 +21,14 @@ import {
   noteProposalSchema,
 } from "../schemas/proposal.schemas";
 import {
-  generateMockProposal,
-  isMockProposalAction,
+  generateProposal,
+  isProposalAction,
 } from "../services/proposal.service";
 import type { ProposalActionState } from "./proposal-state";
 import { createProposalDraft } from "../services/proposal-lifecycle.service";
 import { getNote } from "@/features/notes/note.repository";
 import { getAssistantData } from "../chat/chat.repository";
+import { checkAIRateLimit } from "../services/ai-rate-limit";
 
 export async function generateProposalAction(
   _previous: ProposalActionState,
@@ -41,12 +42,12 @@ export async function generateProposalAction(
     };
   const actionValue = String(form.get("action") ?? "");
   const prompt = String(form.get("prompt") ?? "").trim();
-  if (!isAIAction(actionValue) || !isMockProposalAction(actionValue))
+  if (!isAIAction(actionValue) || !isProposalAction(actionValue))
     return {
       status: "error",
       error: {
         code: "ACTION_NOT_ALLOWED",
-        message: "Action chưa được bật trong Mock UI.",
+        message: "Action chưa được hỗ trợ trong Proposal UI.",
       },
     };
   if (prompt.length < 10 || prompt.length > 4_000)
@@ -58,7 +59,8 @@ export async function generateProposalAction(
       },
     };
   try {
-    const result = await generateMockProposal({
+    checkAIRateLimit(user.id);
+    const result = await generateProposal({
       action: actionValue,
       prompt,
       simulateError: form.get("simulateError") === "on",

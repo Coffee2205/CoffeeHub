@@ -14,10 +14,14 @@
     "prisma:generate": "prisma generate"
   },
   "dependencies": {
+    "@ai-sdk/google": "4.0.39",
+    "@ai-sdk/groq": "4.0.26",
+    "@ai-sdk/openai": "4.0.36",
     "@prisma/adapter-pg": "7.9.1",
     "@prisma/client": "7.9.1",
     "@supabase/ssr": "0.12.3",
     "@supabase/supabase-js": "2.110.8",
+    "ai": "7.0.58",
     "dotenv": "17.4.2",
     "geist": "^1.7.2",
     "next": "16.3.0",

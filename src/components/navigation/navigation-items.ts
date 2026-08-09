@@ -73,10 +73,10 @@ export const mobileNavigation: NavigationItem[] = [
     icon: "check",
   },
   {
-    href: "/app/calendar",
-    label: "Kế hoạch",
-    shortLabel: "Planner",
-    icon: "calendar",
+    href: "/app/ai",
+    label: "AI Assistant",
+    shortLabel: "AI",
+    icon: "spark",
   },
   {
     href: "/app/settings/notifications",

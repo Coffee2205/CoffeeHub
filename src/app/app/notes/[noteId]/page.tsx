@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Badge, Button } from "@/components/ui";
+import { Badge } from "@/components/ui";
 import { NoteEditor } from "@/features/notes/components/note-editor";
-import { archiveNoteAction } from "@/features/notes/note.actions";
+import { DeleteNoteButton } from "@/features/notes/components/delete-note-button";
 import { getNote } from "@/features/notes/note.repository";
 import { requireUser } from "@/lib/supabase/auth";
 
@@ -24,11 +24,11 @@ export default async function NotePage({
         >
           ← Ghi chú
         </Link>
-        <form action={archiveNoteAction.bind(null, note.id)}>
-          <Button type="submit" variant="danger">
-            Lưu trữ
-          </Button>
-        </form>
+        <DeleteNoteButton
+          noteId={note.id}
+          noteTitle={note.title}
+          redirectAfterDelete
+        />
       </div>
       <header>
         <Badge variant="primary">Editor</Badge>

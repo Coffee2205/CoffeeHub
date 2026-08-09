@@ -9,6 +9,7 @@ import type {
 } from "../types/ai.types";
 export interface AIProvider {
   readonly name: AIProviderName;
+  readonly configured: boolean;
   chat(input: AIChatInput): Promise<AIChatResult>;
   streamChat?(input: AIChatInput): AsyncIterable<AIStreamChunk>;
   generateStructured<TInput, TOutput>(

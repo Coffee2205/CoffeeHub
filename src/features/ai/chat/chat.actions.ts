@@ -13,6 +13,8 @@ import {
 } from "./chat.repository";
 import { generateAssistantReply } from "./chat.service";
 import type { AISettingsView, ChatActionState, ChatMode } from "./chat.types";
+import { checkAIRateLimit } from "../services/ai-rate-limit";
+import { safeAIError } from "../errors/ai-error";
 
 const text = (form: FormData, key: string) =>
   String(form.get(key) ?? "").trim();
@@ -27,6 +29,7 @@ export async function sendChatAction(form: FormData): Promise<ChatActionState> {
   if (!data.settings.enabled)
     return { status: "error", error: "AI đang bị tắt trong Settings." };
   try {
+    checkAIRateLimit(user.id);
     const result = await generateAssistantReply({
       userId: user.id,
       prompt,
@@ -48,6 +51,9 @@ export async function sendChatAction(form: FormData): Promise<ChatActionState> {
           content: result.response,
           createdAt: new Date().toISOString(),
         },
+        provider: result.metadata.provider,
+        model: result.metadata.model,
+        fallbackUsed: result.metadata.fallbackUsed,
       };
     const saved = await persistChatTurn({
       userId: user.id,
@@ -67,11 +73,14 @@ export async function sendChatAction(form: FormData): Promise<ChatActionState> {
         content: saved.message.content,
         createdAt: saved.message.createdAt.toISOString(),
       },
+      provider: result.metadata.provider,
+      model: result.metadata.model,
+      fallbackUsed: result.metadata.fallbackUsed,
     };
-  } catch {
+  } catch (error) {
     return {
       status: "error",
-      error: "Không thể tạo phản hồi. Bạn có thể thử lại.",
+      error: safeAIError(error).message,
     };
   }
 }

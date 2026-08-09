@@ -5,6 +5,7 @@ export const FALLBACK_ERROR_CODES = [
   "QUOTA_EXCEEDED",
   "TIMEOUT",
   "NETWORK_ERROR",
+  "PROVIDER_NOT_CONFIGURED",
 ] as const;
 export function canFallback(error: unknown) {
   return (

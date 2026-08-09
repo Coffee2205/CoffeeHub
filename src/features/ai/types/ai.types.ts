@@ -14,6 +14,11 @@ export type AIProviderMetadata = {
   requestId?: string;
   latencyMs?: number;
   fallbackUsed?: boolean;
+  attempts?: Array<{
+    provider: AIProviderName;
+    status: "failed" | "success";
+    errorCode?: string;
+  }>;
 };
 export type AIChatInput = {
   action: AIAction;

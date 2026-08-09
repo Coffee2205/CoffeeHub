@@ -1,8 +1,6 @@
 import "server-only";
 import { AI_ACTIONS, type AIAction } from "../actions/ai-actions";
 import { getAIConfig } from "../config/ai.config";
-import { AIError } from "../errors/ai-error";
-import { getProvider } from "../providers/provider-registry";
 import {
   checklistProposalSchema,
   eventProposalSchema,
@@ -12,6 +10,8 @@ import {
   taskProposalSchema,
   noteProposalSchema,
 } from "../schemas/proposal.schemas";
+import { runWithProviderFallback } from "./ai-orchestrator";
+import { getProviderCandidates } from "../providers/provider-registry";
 
 const schemas = {
   [AI_ACTIONS.ANALYZE_GOAL]: goalAnalysisSchema,
@@ -23,37 +23,60 @@ const schemas = {
   [AI_ACTIONS.CREATE_NOTE_PROPOSAL]: noteProposalSchema,
   [AI_ACTIONS.UPDATE_NOTE_PROPOSAL]: noteProposalSchema,
 } as const;
-export type MockProposalAction = keyof typeof schemas;
-export function isMockProposalAction(
-  action: AIAction,
-): action is MockProposalAction {
+export type ProposalAction = keyof typeof schemas;
+export function isProposalAction(action: AIAction): action is ProposalAction {
   return action in schemas;
 }
 
-export async function generateMockProposal(input: {
-  action: MockProposalAction;
+export async function generateProposal(input: {
+  action: ProposalAction;
   prompt: string;
   simulateError?: boolean;
 }) {
   const config = getAIConfig();
-  if (!config.useMockProvider)
-    throw new AIError("ACTION_NOT_ALLOWED", "Mock Provider đang bị tắt.");
-  const provider = getProvider("mock");
   const options = {
     timeoutMs: config.timeoutMs,
     maxOutputTokens: config.maxOutputTokens,
   };
   if (input.action === AI_ACTIONS.ANALYZE_GOAL)
-    return provider.generateStructured(input, goalAnalysisSchema, options);
+    return runWithProviderFallback(
+      (provider) =>
+        provider.generateStructured(input, goalAnalysisSchema, options),
+      getProviderCandidates(),
+    );
   if (input.action === AI_ACTIONS.CREATE_GOAL_PROPOSAL)
-    return provider.generateStructured(input, goalProposalSchema, options);
+    return runWithProviderFallback(
+      (provider) =>
+        provider.generateStructured(input, goalProposalSchema, options),
+      getProviderCandidates(),
+    );
   if (input.action === AI_ACTIONS.CREATE_ROADMAP_PROPOSAL)
-    return provider.generateStructured(input, roadmapProposalSchema, options);
+    return runWithProviderFallback(
+      (provider) =>
+        provider.generateStructured(input, roadmapProposalSchema, options),
+      getProviderCandidates(),
+    );
   if (input.action === AI_ACTIONS.CREATE_TASK_PROPOSAL)
-    return provider.generateStructured(input, taskProposalSchema, options);
+    return runWithProviderFallback(
+      (provider) =>
+        provider.generateStructured(input, taskProposalSchema, options),
+      getProviderCandidates(),
+    );
   if (input.action === AI_ACTIONS.CREATE_CHECKLIST_PROPOSAL)
-    return provider.generateStructured(input, checklistProposalSchema, options);
+    return runWithProviderFallback(
+      (provider) =>
+        provider.generateStructured(input, checklistProposalSchema, options),
+      getProviderCandidates(),
+    );
   if (input.action === AI_ACTIONS.CREATE_EVENT_PROPOSAL)
-    return provider.generateStructured(input, eventProposalSchema, options);
-  return provider.generateStructured(input, noteProposalSchema, options);
+    return runWithProviderFallback(
+      (provider) =>
+        provider.generateStructured(input, eventProposalSchema, options),
+      getProviderCandidates(),
+    );
+  return runWithProviderFallback(
+    (provider) =>
+      provider.generateStructured(input, noteProposalSchema, options),
+    getProviderCandidates(),
+  );
 }

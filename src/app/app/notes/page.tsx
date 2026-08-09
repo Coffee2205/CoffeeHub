@@ -2,11 +2,12 @@ import Link from "next/link";
 import { Badge, Card, EmptyState, Input } from "@/components/ui";
 import { listNotes } from "@/features/notes/note.repository";
 import { requireUser } from "@/lib/supabase/auth";
+import { DeleteNoteButton } from "@/features/notes/components/delete-note-button";
 
 export default async function NotesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; archived?: string }>;
+  searchParams: Promise<{ q?: string; archived?: string; deleted?: string }>;
 }) {
   const user = await requireUser();
   const query = await searchParams;
@@ -38,6 +39,14 @@ export default async function NotesPage({
           Ghi chú đã được lưu trữ.
         </p>
       ) : null}
+      {query.deleted ? (
+        <p
+          role="status"
+          className="rounded-sm border border-success/30 bg-success/10 px-4 py-3 text-sm text-green-200"
+        >
+          Ghi chú đã được xóa an toàn.
+        </p>
+      ) : null}
       <form className="max-w-xl" role="search">
         <Input
           name="q"
@@ -49,8 +58,11 @@ export default async function NotesPage({
       {notes.length ? (
         <div className="grid gap-4 md:grid-cols-2">
           {notes.map((note) => (
-            <Link key={note.id} href={`/app/notes/${note.id}`}>
-              <Card className="h-full hover:border-primary">
+            <Card
+              key={note.id}
+              className="flex h-full flex-col hover:border-primary"
+            >
+              <Link href={`/app/notes/${note.id}`} className="min-w-0 flex-1">
                 <h2 className="font-semibold">{note.title}</h2>
                 <p className="mt-2 line-clamp-3 whitespace-pre-wrap text-sm text-muted">
                   {note.content || "Ghi chú trống"}
@@ -58,8 +70,11 @@ export default async function NotesPage({
                 <p className="mt-4 text-xs text-muted">
                   Cập nhật {note.updatedAt.toLocaleString("vi-VN")}
                 </p>
-              </Card>
-            </Link>
+              </Link>
+              <div className="mt-4 flex justify-end border-t border-border pt-3">
+                <DeleteNoteButton noteId={note.id} noteTitle={note.title} />
+              </div>
+            </Card>
           ))}
         </div>
       ) : (

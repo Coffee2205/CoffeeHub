@@ -19,11 +19,13 @@ export function PersonalAssistantShell({
   initialMessages,
   initialConversationId,
   settings,
+  providerLabel,
 }: {
   initialConversations: ConversationView[];
   initialMessages: ChatMessageView[];
   initialConversationId?: string;
   settings: AISettingsView;
+  providerLabel: string;
 }) {
   const [conversations, setConversations] = useState(initialConversations);
   const [conversationId, setConversationId] = useState(initialConversationId);
@@ -33,6 +35,8 @@ export function PersonalAssistantShell({
   >("idle");
   const [error, setError] = useState("");
   const [context, setContext] = useState<string[]>([]);
+  const [runtimeProvider, setRuntimeProvider] = useState(providerLabel);
+  const [fallbackUsed, setFallbackUsed] = useState(false);
   const [pending, startTransition] = useTransition();
   const streamId = useRef(0);
 
@@ -75,6 +79,12 @@ export function PersonalAssistantShell({
         ]);
       }
       setContext(result.contextSummary ?? []);
+      setRuntimeProvider(
+        result.provider && result.model
+          ? `${result.provider}/${result.model}`
+          : providerLabel,
+      );
+      setFallbackUsed(Boolean(result.fallbackUsed));
       streamAssistantMessage(result.message);
     });
   };
@@ -164,15 +174,20 @@ export function PersonalAssistantShell({
         </a>
       </Card>
 
-      <Card className="grid min-h-[38rem] grid-rows-[auto_1fr_auto] gap-4">
+      <Card className="grid min-h-[calc(100dvh-12rem)] min-w-0 grid-rows-[auto_1fr_auto] gap-4 xl:min-h-[38rem]">
         <div>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="text-lg font-semibold">Personal Assistant</h2>
             <span className="text-xs text-muted">
-              Mock Provider ·{" "}
+              {runtimeProvider} ·{" "}
               {settings.historyEnabled ? "history bật" : "không lưu history"}
             </span>
           </div>
+          {fallbackUsed ? (
+            <p className="mt-2 text-xs text-warning">
+              Đã dùng provider fallback.
+            </p>
+          ) : null}
           <p className="mt-2 text-sm text-muted">
             Context được allow-list và giới hạn. Chat không tự thay đổi dữ liệu;
             dùng khu vực Proposal bên dưới khi cần tạo entity.
@@ -226,7 +241,10 @@ export function PersonalAssistantShell({
           ) : null}
         </div>
 
-        <form action={submit} className="grid gap-3">
+        <form
+          action={submit}
+          className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] grid gap-3 border-t border-border bg-background pt-3 lg:static lg:border-0 lg:pt-0"
+        >
           <div className="grid gap-3 sm:grid-cols-[12rem_1fr]">
             <select
               name="mode"
