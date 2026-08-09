@@ -2,6 +2,7 @@ import type { AIProviderMetadata, AIUsage } from "../types/ai.types";
 import type {
   GoalFormValues,
   RoadmapFormValues,
+  TaskFormValues,
 } from "../mappers/proposal-mappers";
 
 export type ProposalActionState = {
@@ -11,6 +12,7 @@ export type ProposalActionState = {
   proposal?: unknown;
   goalFormValues?: GoalFormValues;
   roadmapFormValues?: RoadmapFormValues;
+  taskFormValues?: TaskFormValues;
   usage?: AIUsage;
   metadata?: AIProviderMetadata;
   error?: { code: string; message: string };

@@ -7,10 +7,12 @@ import { safeAIError } from "../errors/ai-error";
 import {
   mapAndValidateGoalProposal,
   mapAndValidateRoadmapProposal,
+  mapAndValidateTaskProposal,
 } from "../mappers/proposal-mappers";
 import {
   goalProposalSchema,
   roadmapProposalSchema,
+  taskProposalSchema,
 } from "../schemas/proposal.schemas";
 import {
   generateMockProposal,
@@ -57,6 +59,10 @@ export async function generateProposalAction(
             roadmapProposalSchema.parse(result.data),
           )
         : undefined;
+    const taskFormValues =
+      actionValue === AI_ACTIONS.CREATE_TASK_PROPOSAL
+        ? mapAndValidateTaskProposal(taskProposalSchema.parse(result.data))
+        : undefined;
     return {
       status: "success",
       proposalId: randomUUID(),
@@ -64,6 +70,7 @@ export async function generateProposalAction(
       proposal: result.data,
       goalFormValues,
       roadmapFormValues,
+      taskFormValues,
       usage: result.usage,
       metadata: result.metadata,
     };

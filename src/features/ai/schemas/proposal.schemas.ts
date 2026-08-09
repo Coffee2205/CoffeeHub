@@ -120,16 +120,17 @@ export const taskProposalSchema: RuntimeSchema<TaskProposal> = {
     const item = record(value);
     return {
       title: text(item.title, "title", 220),
-      description: optionalText(item.description, "description"),
+      description: optionalBoundedText(item.description, "description", 5000),
       priority: priority(item.priority),
-      estimatedMinutes:
-        typeof item.estimatedMinutes === "number"
-          ? item.estimatedMinutes
-          : undefined,
-      dueDate: optionalText(item.dueDate, "dueDate"),
-      roadmapStageReference: optionalText(
+      estimatedMinutes: optionalPositiveInteger(
+        item.estimatedMinutes,
+        "estimatedMinutes",
+      ),
+      dueDate: optionalDate(item.dueDate, "dueDate"),
+      roadmapStageReference: optionalBoundedText(
         item.roadmapStageReference,
         "roadmapStageReference",
+        180,
       ),
     };
   },

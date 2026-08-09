@@ -9,6 +9,7 @@ import {
   parseRoadmapForm,
   parseStageForm,
 } from "@/features/roadmaps/roadmap.schema";
+import { parseTaskForm } from "@/features/tasks/task.schema";
 export type GoalFormValues = {
   title: string;
   description: string;
@@ -91,12 +92,51 @@ export function mapAndValidateRoadmapProposal(proposal: RoadmapProposal) {
     );
   return values;
 }
-export function mapTaskProposalToFormValues(proposal: TaskProposal) {
+export type TaskFormValues = {
+  title: string;
+  description: string;
+  status: "TODO";
+  priority: TaskProposal["priority"];
+  dueAt: string;
+  goalId: "";
+  roadmapId: "";
+  roadmapStageId: "";
+  estimatedMinutes?: number;
+  roadmapStageReference?: string;
+};
+export function mapTaskProposalToFormValues(
+  proposal: TaskProposal,
+): TaskFormValues {
   return {
     title: proposal.title,
     description: proposal.description ?? "",
+    status: "TODO",
     priority: proposal.priority,
     dueAt: proposal.dueDate ?? "",
-    estimatedMinutes: proposal.estimatedMinutes ?? null,
+    goalId: "",
+    roadmapId: "",
+    roadmapStageId: "",
+    estimatedMinutes: proposal.estimatedMinutes,
+    roadmapStageReference: proposal.roadmapStageReference,
   };
+}
+
+export function mapAndValidateTaskProposal(proposal: TaskProposal) {
+  const values = mapTaskProposalToFormValues(proposal);
+  const form = new FormData();
+  form.set("title", values.title);
+  form.set("description", values.description);
+  form.set("status", values.status);
+  form.set("priority", values.priority);
+  form.set("dueAt", values.dueAt);
+  form.set("goalId", values.goalId);
+  form.set("roadmapId", values.roadmapId);
+  form.set("roadmapStageId", values.roadmapStageId);
+  const parsed = parseTaskForm(form);
+  if (!parsed.data)
+    throw new AIError(
+      "SCHEMA_VALIDATION_ERROR",
+      `Task proposal không khớp form nghiệp vụ: ${parsed.errors.join(" ")}`,
+    );
+  return values;
 }

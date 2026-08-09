@@ -9,6 +9,7 @@ import { AIError } from "../src/features/ai/errors/ai-error";
 import {
   mapAndValidateGoalProposal,
   mapAndValidateRoadmapProposal,
+  mapAndValidateTaskProposal,
   mapGoalProposalToGoalFormValues,
 } from "../src/features/ai/mappers/proposal-mappers";
 import { AI_ACTION_POLICY } from "../src/features/ai/policies/action-policy";
@@ -17,6 +18,7 @@ import {
   goalAnalysisSchema,
   goalProposalSchema,
   roadmapProposalSchema,
+  taskProposalSchema,
 } from "../src/features/ai/schemas/proposal.schemas";
 
 test("registers typed AI actions and confirmation policy", () => {
@@ -131,6 +133,35 @@ test("Roadmap proposal rejects non-sequential stage order and invalid duration",
         title: "Ship CoffeeHub",
         estimatedDurationDays: -1,
         stages: [{ title: "Foundation", order: 2, tasks: [] }],
+      }),
+    (error) => error instanceof AIError,
+  );
+});
+
+test("Task proposal maps through the existing Task form schema without relation IDs", () => {
+  const proposal = taskProposalSchema.parse({
+    title: "Verify CoffeeHub release",
+    description: "Run the release checks",
+    priority: "HIGH",
+    estimatedMinutes: 90,
+    dueDate: "2026-12-31",
+    roadmapStageReference: "Quality assurance",
+  });
+  const values = mapAndValidateTaskProposal(proposal);
+  assert.equal(values.status, "TODO");
+  assert.equal(values.roadmapStageId, "");
+  assert.equal(values.estimatedMinutes, 90);
+});
+
+test("Task proposal rejects invalid date, estimate and oversized stage reference", () => {
+  assert.throws(
+    () =>
+      taskProposalSchema.parse({
+        title: "Verify CoffeeHub release",
+        priority: "HIGH",
+        estimatedMinutes: 0,
+        dueDate: "tomorrow",
+        roadmapStageReference: "x".repeat(181),
       }),
     (error) => error instanceof AIError,
   );

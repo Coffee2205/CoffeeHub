@@ -154,7 +154,7 @@ function ProposalPreview({ state }: { state: ProposalActionState }) {
           <RoadmapFields proposal={proposal} state={state} />
         ) : null}
         {state.action === AI_ACTIONS.CREATE_TASK_PROPOSAL ? (
-          <TaskFields proposal={proposal} />
+          <TaskFields proposal={proposal} state={state} />
         ) : null}
         <div className="rounded-sm border border-warning/40 bg-warning/10 p-3 text-sm text-amber-100">
           Confirmation required. Nút lưu đang tắt trong AI Foundation; không có
@@ -325,9 +325,15 @@ function RoadmapFields({
     </div>
   );
 }
-function TaskFields({ proposal }: { proposal: Record<string, unknown> }) {
+function TaskFields({
+  proposal,
+  state,
+}: {
+  proposal: Record<string, unknown>;
+  state: ProposalActionState;
+}) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2">
+    <div className="grid gap-4 rounded-sm border border-border p-3 sm:grid-cols-2">
       <label className="grid gap-2">
         <span className="text-sm font-medium">Priority</span>
         <Input defaultValue={String(proposal.priority ?? "MEDIUM")} />
@@ -339,6 +345,24 @@ function TaskFields({ proposal }: { proposal: Record<string, unknown> }) {
           defaultValue={Number(proposal.estimatedMinutes ?? 0)}
         />
       </label>
+      <label className="grid gap-2">
+        <span className="text-sm font-medium">Deadline</span>
+        <Input type="date" defaultValue={state.taskFormValues?.dueAt ?? ""} />
+      </label>
+      <div className="sm:col-span-2">
+        <p className="text-sm font-medium">Stage reference</p>
+        <p className="mt-1 text-sm text-foreground-secondary">
+          {String(proposal.roadmapStageReference ?? "Chưa đề xuất")}
+        </p>
+        <p className="mt-2 text-xs text-muted">
+          Reference chỉ là gợi ý; chưa resolve thành relation ID và không được
+          model quyết định ownership.
+        </p>
+      </div>
+      <p className="text-xs text-muted sm:col-span-2">
+        Đã map và kiểm tra lại bằng Task form schema · trạng thái mặc định TODO
+        · relation IDs để trống.
+      </p>
     </div>
   );
 }

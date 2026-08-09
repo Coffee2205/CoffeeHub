@@ -109,6 +109,8 @@ export class MockAIProvider implements AIProvider {
                   description: "Task mẫu chưa được lưu.",
                   priority: "MEDIUM",
                   estimatedMinutes: 60,
+                  dueDate: "2026-12-31",
+                  roadmapStageReference: "Khởi động",
                 }
               : null;
     if (!payload)
