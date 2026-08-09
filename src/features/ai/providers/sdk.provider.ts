@@ -136,10 +136,7 @@ export function normalizeProviderError(error: unknown) {
   if (error instanceof Error && error.name === "AbortError") {
     return new AIError("TIMEOUT", "AI provider đã hết thời gian chờ.", true);
   }
-  const status =
-    error && typeof error === "object" && "statusCode" in error
-      ? Number(error.statusCode)
-      : undefined;
+  const status = findStatusCode(error);
   if (status === 429)
     return new AIError(
       "RATE_LIMITED",
@@ -157,4 +154,23 @@ export function normalizeProviderError(error: unknown) {
   if (status && status >= 400)
     return new AIError("INVALID_REQUEST", "AI provider từ chối yêu cầu.");
   return new AIError("NETWORK_ERROR", "Không thể kết nối AI provider.", true);
+}
+
+function findStatusCode(error: unknown, depth = 0): number | undefined {
+  if (!error || typeof error !== "object" || depth > 3) return undefined;
+  if ("statusCode" in error) {
+    const status = Number(error.statusCode);
+    if (Number.isInteger(status)) return status;
+  }
+  if ("cause" in error) {
+    const status = findStatusCode(error.cause, depth + 1);
+    if (status) return status;
+  }
+  if ("errors" in error && Array.isArray(error.errors)) {
+    for (const nested of error.errors) {
+      const status = findStatusCode(nested, depth + 1);
+      if (status) return status;
+    }
+  }
+  return undefined;
 }
