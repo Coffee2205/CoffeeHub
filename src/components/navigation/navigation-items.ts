@@ -32,7 +32,6 @@ export const desktopNavigation: Array<{
       { href: "/app/checklists", label: "Checklists", icon: "list" },
       { href: "/app/calendar", label: "Lịch", icon: "calendar" },
       { href: "/app/notes", label: "Ghi chú", icon: "notes" },
-      { href: "/app/roadmaps", label: "Lộ trình", icon: "roadmap" },
     ],
   },
   {
