@@ -74,10 +74,7 @@ export function parseWritableProposal(action: AIAction, payload: unknown) {
     mapAndValidateNoteProposal(proposal);
     return proposal;
   }
-  throw new AIError(
-    "ACTION_NOT_ALLOWED",
-    "Action nĂ y khĂ´ng ghi dá»¯ liá»‡u.",
-  );
+  throw new AIError("ACTION_NOT_ALLOWED", "Action này không ghi dữ liệu.");
 }
 
 export async function createProposalDraft(
@@ -133,7 +130,7 @@ export async function updateProposalDraft(input: {
     if (!current)
       throw new AIError(
         "CONFIRMATION_REQUIRED",
-        "Proposal Ä‘Ă£ thay Ä‘á»•i hoáº·c khĂ´ng thuá»™c quyá»n sá»Ÿ há»¯u.",
+        "Proposal đã thay đổi hoặc không thuộc quyền sở hữu.",
       );
     const action = current.action as AIAction;
     const payload = parseWritableProposal(action, input.payload);
@@ -182,7 +179,7 @@ export async function discardProposalDraft(input: {
     if (!current)
       throw new AIError(
         "CONFIRMATION_REQUIRED",
-        "Proposal khĂ´ng cĂ²n hiá»‡u lá»±c.",
+        "Proposal không còn hiệu lực.",
       );
     await tx.aIProposal.update({
       where: { id: current.id },
@@ -244,16 +241,10 @@ async function commitProposalOnce(input: {
       where: { id: input.proposalId, userId: input.userId },
     });
     if (!current)
-      throw new AIError(
-        "CONFIRMATION_REQUIRED",
-        "KhĂ´ng tĂ¬m tháº¥y proposal.",
-      );
+      throw new AIError("CONFIRMATION_REQUIRED", "Không tìm thấy proposal.");
     if (current.status === "COMMITTED") {
       if (current.confirmationId !== input.confirmationId)
-        throw new AIError(
-          "CONFIRMATION_REQUIRED",
-          "XĂ¡c nháº­n Ä‘Ă£ háº¿t hiá»‡u lá»±c.",
-        );
+        throw new AIError("CONFIRMATION_REQUIRED", "Xác nhận đã hết hiệu lực.");
       return current.result as CommitResult;
     }
     if (
@@ -265,7 +256,7 @@ async function commitProposalOnce(input: {
     )
       throw new AIError(
         "CONFIRMATION_REQUIRED",
-        "Proposal Ä‘Ă£ bá»‹ chá»‰nh sá»­a; hĂ£y lÆ°u vĂ  xĂ¡c nháº­n láº¡i.",
+        "Proposal đã bị chỉnh sửa; hãy lưu và xác nhận lại.",
       );
     const claimed = await tx.aIProposal.updateMany({
       where: {
@@ -349,7 +340,7 @@ async function commitDomainProposal(
           .successCriteria as Prisma.InputJsonValue,
       },
     });
-    return { links: [{ label: "Má»Ÿ Goal", href: `/app/goals/${goal.id}` }] };
+    return { links: [{ label: "Mở Goal", href: `/app/goals/${goal.id}` }] };
   }
   if (action === AI_ACTIONS.CREATE_ROADMAP_PROPOSAL) {
     const proposal = payload as RoadmapProposal;
@@ -409,9 +400,9 @@ async function commitDomainProposal(
     }
     return {
       links: [
-        { label: "Má»Ÿ Goal", href: `/app/goals/${goal.id}` },
+        { label: "Mở Goal", href: `/app/goals/${goal.id}` },
         {
-          label: "Má»Ÿ Roadmap",
+          label: "Mở Roadmap",
           href: `/app/goals/${goal.id}/roadmap`,
         },
       ],
@@ -435,7 +426,7 @@ async function commitDomainProposal(
         position: (last?.position ?? -1) + 1,
       },
     });
-    return { links: [{ label: "Má»Ÿ Task", href: `/app/tasks/${task.id}` }] };
+    return { links: [{ label: "Mở Task", href: `/app/tasks/${task.id}` }] };
   }
   if (action === AI_ACTIONS.CREATE_CHECKLIST_PROPOSAL) {
     const proposal = payload as ChecklistProposal;
@@ -455,7 +446,7 @@ async function commitDomainProposal(
     });
     return {
       links: [
-        { label: "Má»Ÿ Checklist", href: `/app/checklists/${checklist.id}` },
+        { label: "Mở Checklist", href: `/app/checklists/${checklist.id}` },
       ],
     };
   }

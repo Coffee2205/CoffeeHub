@@ -157,6 +157,8 @@ function EditableProposal({ initial }: { initial: ProposalActionState }) {
     JSON.stringify(initial.proposal, null, 2),
   );
   const [dirty, setDirty] = useState(false);
+  const [actionError, setActionError] =
+    useState<ProposalActionState["error"]>();
   const [pending, startTransition] = useTransition();
 
   const commonForm = () => {
@@ -169,31 +171,41 @@ function EditableProposal({ initial }: { initial: ProposalActionState }) {
 
   const update = () =>
     startTransition(async () => {
+      setActionError(undefined);
       const form = commonForm();
       form.set("payload", payload);
       const next = await updateProposalAction(initialProposalState, form);
-      setCurrent(next);
       if (next.status === "success") {
+        setCurrent(next);
         setPayload(JSON.stringify(next.proposal, null, 2));
         setDirty(false);
+        setActionError(undefined);
+      } else {
+        setActionError(next.error);
       }
     });
 
   const discard = () =>
     startTransition(async () => {
+      setActionError(undefined);
       const next = await discardProposalAction(
         initialProposalState,
         commonForm(),
       );
-      setCurrent(next);
+      if (next.status === "error") setActionError(next.error);
+      else setCurrent(next);
     });
 
   const confirm = () =>
     startTransition(async () => {
+      setActionError(undefined);
       const form = commonForm();
       form.set("payloadHash", current.payloadHash ?? "");
       const next = await confirmProposalAction(initialProposalState, form);
-      setCurrent(next);
+      if (next.status === "error") {
+        setActionError(next.error);
+        if (next.error?.code === "CONFIRMATION_REQUIRED") setDirty(true);
+      } else setCurrent(next);
     });
 
   if (current.status === "idle")
@@ -272,6 +284,12 @@ function EditableProposal({ initial }: { initial: ProposalActionState }) {
         )}
         {current.message ? (
           <p className="text-sm text-muted">{current.message}</p>
+        ) : null}
+        {actionError ? (
+          <div className="rounded-sm border border-error/40 p-3" role="alert">
+            <p className="font-semibold text-red-200">{actionError.code}</p>
+            <p className="mt-1 text-sm text-muted">{actionError.message}</p>
+          </div>
         ) : null}
         <div className="grid gap-3 sm:grid-cols-3">
           <Button type="button" onClick={update} disabled={pending || !dirty}>
