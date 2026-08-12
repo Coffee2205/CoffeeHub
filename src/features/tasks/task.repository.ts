@@ -30,7 +30,34 @@ export function listTasks(userId: string, filters: TaskFilters) {
 }
 
 export function getTask(userId: string, id: string) {
-  return getPrisma().task.findFirst({ where: { id, userId, deletedAt: null } });
+  return getPrisma().task.findFirst({
+    where: { id, userId, deletedAt: null },
+    include: {
+      checklists: {
+        where: { deletedAt: null },
+        orderBy: { updatedAt: "desc" },
+        select: {
+          id: true,
+          title: true,
+          items: {
+            where: { deletedAt: null },
+            select: { completed: true },
+          },
+        },
+      },
+      events: {
+        where: { deletedAt: null },
+        orderBy: { startsAt: "asc" },
+        select: {
+          id: true,
+          title: true,
+          startsAt: true,
+          endsAt: true,
+          timezone: true,
+        },
+      },
+    },
+  });
 }
 export function getTaskRelations(userId: string) {
   return getPrisma().goal.findMany({

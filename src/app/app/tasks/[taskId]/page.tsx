@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Badge, Button } from "@/components/ui";
+import { Badge, Button, Card, EmptyState } from "@/components/ui";
+import { summarizeChecklistItems } from "@/features/checklists/checklist.schema";
 import {
   archiveTaskAction,
   updateTaskAction,
@@ -56,6 +57,80 @@ export default async function TaskDetailPage({
         relations={relations}
         error={query.error}
       />
+      <section className="space-y-3" aria-labelledby="task-checklists">
+        <div>
+          <h2 id="task-checklists" className="text-xl font-semibold">
+            Checklists
+          </h2>
+          <p className="mt-1 text-sm text-muted">
+            Các bước thực hiện của Task; tiến độ Checklist không tự thay đổi
+            trạng thái Task.
+          </p>
+        </div>
+        {task.checklists.length ? (
+          <div className="grid gap-3">
+            {task.checklists.map((checklist) => {
+              const summary = summarizeChecklistItems(checklist.items);
+              return (
+                <Card key={checklist.id} className="min-w-0">
+                  <Link
+                    href={`/app/checklists/${checklist.id}`}
+                    className="break-words font-semibold text-primary-hover"
+                  >
+                    {checklist.title}
+                  </Link>
+                  <p className="mt-2 text-sm text-muted">
+                    {summary.completed}/{summary.total} item ·{" "}
+                    {summary.progress}%
+                  </p>
+                </Card>
+              );
+            })}
+          </div>
+        ) : (
+          <EmptyState
+            title="Chưa có Checklist"
+            description="Task này chưa có Checklist liên kết."
+          />
+        )}
+      </section>
+      <section className="space-y-3" aria-labelledby="task-events">
+        <div>
+          <h2 id="task-events" className="text-xl font-semibold">
+            Lịch học liên kết
+          </h2>
+          <p className="mt-1 text-sm text-muted">
+            Các phiên học đã lên Calendar cho riêng Task này.
+          </p>
+        </div>
+        {task.events.length ? (
+          <div className="grid gap-3 sm:grid-cols-2">
+            {task.events.map((event) => (
+              <Card key={event.id} className="min-w-0">
+                <Link
+                  href={`/app/calendar/${event.id}`}
+                  className="break-words font-semibold text-primary-hover"
+                >
+                  {event.title}
+                </Link>
+                <p className="mt-2 text-sm text-muted">
+                  {event.startsAt.toLocaleString("vi-VN", {
+                    timeZone: event.timezone,
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  })}
+                </p>
+                <Badge className="mt-3">{event.timezone}</Badge>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            title="Chưa có Event"
+            description="Task này chưa có phiên học được lên lịch trong rolling window hiện tại."
+          />
+        )}
+      </section>
       <form action={archiveTaskAction.bind(null, task.id)}>
         <Button type="submit" variant="secondary">
           Lưu trữ Task
