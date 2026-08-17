@@ -88,11 +88,11 @@ export async function buildChatContext(
   settings: AISettingsView,
 ) {
   const prisma = getPrisma();
-  const [goals, tasks, notes] = await Promise.all([
+  const [goals, tasks, notes, stages, events] = await Promise.all([
     settings.includeGoals
       ? prisma.goal.findMany({
           where: { userId, deletedAt: null },
-          select: { title: true, status: true, deadline: true },
+          select: { id: true, title: true, status: true, startsAt: true, deadline: true },
           orderBy: { updatedAt: "desc" },
           take: 10,
         })
@@ -108,6 +108,8 @@ export async function buildChatContext(
             goalId: true,
             roadmapId: true,
             roadmapStageId: true,
+            isOptional: true,
+            expectedResult: true,
           },
           orderBy: { updatedAt: "desc" },
           take: 10,
@@ -116,18 +118,27 @@ export async function buildChatContext(
     settings.includeNotes
       ? prisma.note.findMany({
           where: { userId, deletedAt: null },
-          select: { title: true, content: true },
+          select: { title: true, content: true, goalId: true, roadmapId: true, roadmapStageId: true, taskId: true, eventId: true },
           orderBy: { updatedAt: "desc" },
           take: 5,
         })
       : [],
+    settings.includeGoals ? prisma.roadmapStage.findMany({ where: { userId, deletedAt: null }, select: { id: true, title: true, status: true, roadmap: { select: { goalId: true, title: true } }, tasks: { where: { deletedAt: null, status: { not: "CANCELLED" }, isOptional: false }, select: { status: true } } }, orderBy: { position: "asc" }, take: 20 }) : [],
+    settings.includeTasks ? prisma.event.findMany({ where: { userId, deletedAt: null, startsAt: { gte: new Date() } }, select: { id: true, title: true, startsAt: true, endsAt: true, timezone: true, goalId: true, taskId: true }, orderBy: { startsAt: "asc" }, take: 20 }) : [],
   ]);
   return {
     goals,
     tasks,
+    stages,
+    upcomingEvents: events,
     notes: notes.map((note) => ({
       title: note.title,
       excerpt: note.content.slice(0, 200),
+      goalId: note.goalId,
+      roadmapId: note.roadmapId,
+      stageId: note.roadmapStageId,
+      taskId: note.taskId,
+      eventId: note.eventId,
     })),
   };
 }

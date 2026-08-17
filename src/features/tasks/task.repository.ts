@@ -24,6 +24,7 @@ export function listTasks(userId: string, filters: TaskFilters) {
     orderBy: [{ dueAt: { sort: "asc", nulls: "last" } }, { createdAt: "desc" }],
     include: {
       goal: { select: { id: true, title: true } },
+      roadmap: { select: { id: true, title: true } },
       roadmapStage: { select: { id: true, title: true } },
     },
   });
@@ -33,6 +34,9 @@ export function getTask(userId: string, id: string) {
   return getPrisma().task.findFirst({
     where: { id, userId, deletedAt: null },
     include: {
+      goal: { select: { id: true, title: true } },
+      roadmap: { select: { id: true, title: true } },
+      roadmapStage: { select: { id: true, title: true } },
       checklists: {
         where: { deletedAt: null },
         orderBy: { updatedAt: "desc" },
@@ -56,6 +60,7 @@ export function getTask(userId: string, id: string) {
           timezone: true,
         },
       },
+      notes: { where: { deletedAt: null }, orderBy: { updatedAt: "desc" }, select: { id: true, title: true, updatedAt: true } },
     },
   });
 }
@@ -129,6 +134,10 @@ async function validRelations(
 export async function createTask(userId: string, input: TaskInput) {
   return getPrisma().$transaction(async (tx) => {
     if (!(await validRelations(tx, userId, input))) return null;
+    if (input.externalKey) {
+      const existing = await tx.task.findFirst({ where: { userId, externalKey: input.externalKey }, select: { id: true } });
+      if (existing) return tx.task.update({ where: { id: existing.id }, data: { ...input, version: { increment: 1 } } });
+    }
     const last = await tx.task.findFirst({
       where: { userId },
       orderBy: { position: "desc" },

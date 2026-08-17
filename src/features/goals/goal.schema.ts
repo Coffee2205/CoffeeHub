@@ -13,6 +13,7 @@ export type GoalInput = {
   status: (typeof GOAL_STATUSES)[number];
   priority: (typeof GOAL_PRIORITIES)[number];
   deadline: Date | null;
+  startsAt: Date | null;
   successCriteria: string[];
 };
 
@@ -33,6 +34,8 @@ export function parseGoalForm(form: FormData): {
   const deadline = deadlineValue
     ? new Date(`${deadlineValue}T23:59:59.999Z`)
     : null;
+  const startsValue = value(form, "startsAt");
+  const startsAt = startsValue ? new Date(`${startsValue}T00:00:00.000Z`) : null;
   const successCriteria = value(form, "successCriteria")
     .split("\n")
     .map((item) => item.trim())
@@ -47,6 +50,8 @@ export function parseGoalForm(form: FormData): {
   if (!priority) errors.push("Mức ưu tiên không hợp lệ.");
   if (deadline && Number.isNaN(deadline.valueOf()))
     errors.push("Deadline không hợp lệ.");
+  if (startsAt && Number.isNaN(startsAt.valueOf())) errors.push("Invalid start date.");
+  if (startsAt && deadline && startsAt > deadline) errors.push("Start date must be before deadline.");
   if (
     successCriteria.length > 20 ||
     successCriteria.some((item) => item.length > 240)
@@ -55,7 +60,7 @@ export function parseGoalForm(form: FormData): {
 
   if (!status || !priority || errors.length) return { errors };
   return {
-    data: { title, description, status, priority, deadline, successCriteria },
+    data: { title, description, status, priority, startsAt, deadline, successCriteria },
     errors,
   };
 }

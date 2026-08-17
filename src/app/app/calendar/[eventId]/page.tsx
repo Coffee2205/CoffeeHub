@@ -53,6 +53,12 @@ export default async function EventDetailPage({
         defaultTimezone={event.timezone}
         error={query.error}
       />
+      <div className="rounded-lg border border-border bg-surface p-5 text-sm">
+        <p>Timezone: {event.timezone}</p>
+        <p className="mt-2">Task: {event.task ? <Link className="font-semibold text-primary-hover" href={`/app/tasks/${event.task.id}`}>{event.task.title}</Link> : "Standalone event"}</p>
+        <p className="mt-2">Goal: {event.goal ? <Link className="font-semibold text-primary-hover" href={`/app/goals/${event.goal.id}`}>{event.goal.title}</Link> : "None"}</p>
+        <Link className="mt-3 inline-block font-semibold text-primary-hover" href={`/app/notes/new?eventId=${event.id}${event.goalId ? `&goalId=${event.goalId}` : ""}${event.taskId ? `&taskId=${event.taskId}` : ""}`}>Add meeting/event note</Link>
+      </div>
       <form action={archiveEventAction.bind(null, event.id)}>
         <Button type="submit" variant="secondary">
           Lưu trữ Event

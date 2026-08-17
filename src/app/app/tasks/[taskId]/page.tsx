@@ -57,6 +57,15 @@ export default async function TaskDetailPage({
         relations={relations}
         error={query.error}
       />
+      <Card>
+        <h2 className="text-xl font-semibold">Planning context</h2>
+        <div className="mt-3 grid gap-2 text-sm">
+          <p>Goal: {task.goal ? <Link className="text-primary-hover" href={`/app/goals/${task.goal.id}`}>{task.goal.title}</Link> : "None"}</p>
+          <p>Roadmap: {task.roadmap?.title ?? "None"}</p><p>Stage: {task.roadmapStage?.title ?? "None"}</p>
+          <p>Estimated duration: {task.estimatedMinutes ? `${task.estimatedMinutes} minutes` : "Not set"}</p>
+          <p>Expected result: {task.expectedResult ?? "Not set"}</p>
+        </div>
+      </Card>
       <section className="space-y-3" aria-labelledby="task-checklists">
         <div>
           <h2 id="task-checklists" className="text-xl font-semibold">
@@ -94,6 +103,7 @@ export default async function TaskDetailPage({
           />
         )}
       </section>
+      <section className="space-y-3"><div className="flex items-center justify-between"><h2 className="text-xl font-semibold">Related Notes</h2><Link className="text-sm font-semibold text-primary-hover" href={`/app/notes/new?taskId=${task.id}${task.goalId ? `&goalId=${task.goalId}` : ""}${task.roadmapId ? `&roadmapId=${task.roadmapId}` : ""}${task.roadmapStageId ? `&roadmapStageId=${task.roadmapStageId}` : ""}`}>Add note</Link></div>{task.notes.length ? task.notes.map((note) => <Card key={note.id}><Link href={`/app/notes/${note.id}`} className="font-semibold text-primary-hover">{note.title}</Link></Card>) : <EmptyState title="No related notes" description="Capture knowledge and lessons without turning them into tasks." />}</section>
       <section className="space-y-3" aria-labelledby="task-events">
         <div>
           <h2 id="task-events" className="text-xl font-semibold">

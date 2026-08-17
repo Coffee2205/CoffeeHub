@@ -30,7 +30,7 @@ test("derives milestone status and progress from Tasks", () => {
   assert.deepEqual(milestoneProgress(["TODO", "COMPLETED"]), {
     completed: 1,
     percentage: 50,
-    status: "IN_PROGRESS",
+    status: "ACTIVE",
   });
   assert.deepEqual(milestoneProgress(["COMPLETED", "COMPLETED"]), {
     completed: 2,

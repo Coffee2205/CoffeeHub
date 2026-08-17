@@ -1,6 +1,11 @@
 export type NoteInput = {
   title: string;
   content: string;
+  goalId?: string | null;
+  roadmapId?: string | null;
+  roadmapStageId?: string | null;
+  taskId?: string | null;
+  eventId?: string | null;
 };
 
 export function parseNoteInput(input: NoteInput) {
@@ -13,5 +18,5 @@ export function parseNoteInput(input: NoteInput) {
 
   return errors.length
     ? { errors }
-    : { data: { title, content: input.content } };
+    : { data: { ...input, title, content: input.content } };
 }

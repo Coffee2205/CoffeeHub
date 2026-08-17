@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/supabase/auth";
-import { archiveNote, createNote, saveNote } from "./note.repository";
+import { archiveNote, createNote, saveNote, updateNoteContext } from "./note.repository";
 import { parseNoteInput, type NoteInput } from "./note.schema";
 
 export type NoteSnapshot = {
@@ -35,6 +35,7 @@ export async function createNoteAction(form: FormData) {
   const parsed = parseNoteInput({
     title: String(form.get("title") ?? ""),
     content: String(form.get("content") ?? ""),
+    ...readContext(form),
   });
   if (!parsed.data) {
     redirect(
@@ -42,8 +43,20 @@ export async function createNoteAction(form: FormData) {
     );
   }
   const note = await createNote(user.id, parsed.data);
+  if (!note) redirect("/app/notes/new?error=Invalid+or+inconsistent+note+context");
   revalidatePath("/app/notes");
   redirect(`/app/notes/${note.id}`);
+}
+
+const optionalId = (form: FormData, name: string) => String(form.get(name) ?? "").trim() || null;
+const readContext = (form: FormData) => ({ goalId: optionalId(form, "goalId"), roadmapId: optionalId(form, "roadmapId"), roadmapStageId: optionalId(form, "roadmapStageId"), taskId: optionalId(form, "taskId"), eventId: optionalId(form, "eventId") });
+
+export async function updateNoteContextAction(id: string, form: FormData) {
+  const user = await requireUser();
+  const result = await updateNoteContext(user.id, id, { title: "context", content: "", ...readContext(form) });
+  if (!result) redirect(`/app/notes/${id}?error=Invalid+or+inconsistent+note+context`);
+  revalidatePath(`/app/notes/${id}`);
+  redirect(`/app/notes/${id}?contextSaved=1`);
 }
 
 export async function saveNoteAction(

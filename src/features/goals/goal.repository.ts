@@ -11,6 +11,7 @@ import type { GoalInput } from "./goal.schema";
 const taskScope = {
   deletedAt: null,
   status: { not: TaskStatus.CANCELLED },
+  isOptional: false,
 } as const;
 
 export function listGoals(userId: string) {
@@ -30,9 +31,11 @@ export function getGoal(userId: string, id: string) {
     include: {
       tasks: {
         where: taskScope,
-        select: { id: true, title: true, status: true },
+        select: { id: true, title: true, status: true, dueAt: true },
       },
-      roadmaps: { where: { deletedAt: null }, select: { id: true } },
+      roadmaps: { where: { deletedAt: null }, select: { id: true, title: true, stages: { where: { deletedAt: null }, orderBy: { position: "asc" }, select: { id: true, title: true, status: true } } } },
+      events: { where: { deletedAt: null, startsAt: { gte: new Date() } }, orderBy: { startsAt: "asc" }, take: 5, select: { id: true, title: true, startsAt: true, timezone: true } },
+      notes: { where: { deletedAt: null }, orderBy: { updatedAt: "desc" }, take: 5, select: { id: true, title: true, updatedAt: true } },
     },
   });
 }

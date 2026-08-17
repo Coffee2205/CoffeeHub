@@ -59,6 +59,9 @@ export function GoalForm({
           ))}
         </select>
       </Field>
+      <Field label="Start date">
+        <Input name="startsAt" type="date" defaultValue={goal?.startsAt?.toISOString().slice(0, 10) ?? ""} />
+      </Field>
       <Field label="Deadline">
         <Input
           name="deadline"

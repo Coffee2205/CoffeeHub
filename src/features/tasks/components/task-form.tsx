@@ -66,7 +66,9 @@ export function TaskForm({
           defaultValue={task?.dueAt?.toISOString().slice(0, 10) ?? ""}
         />
       </Field>
-      <div />
+      <Field label="Estimated duration (minutes)">
+        <Input name="estimatedMinutes" type="number" min={1} defaultValue={task?.estimatedMinutes ?? ""} />
+      </Field>
       <Field label="Goal">
         <select
           name="goalId"
@@ -126,6 +128,15 @@ export function TaskForm({
           defaultValue={task?.description ?? ""}
         />
       </Field>
+      <Field label="Expected result" wide>
+        <Textarea name="expectedResult" maxLength={2000} defaultValue={task?.expectedResult ?? ""} />
+      </Field>
+      <Field label="Resources" wide>
+        <Textarea name="resources" placeholder="Name | type" defaultValue={Array.isArray(task?.resources) ? (task.resources as Array<{name?: string; type?: string}>).map((item) => `${item.name ?? ""} | ${item.type ?? "other"}`).join("\n") : ""} />
+      </Field>
+      <Field label="Source"><Input name="source" maxLength={160} defaultValue={task?.source ?? ""} /></Field>
+      <Field label="External key"><Input name="externalKey" maxLength={255} defaultValue={task?.externalKey ?? ""} /></Field>
+      <label className="flex items-center gap-3 md:col-span-2"><input name="isOptional" type="checkbox" defaultChecked={task?.isOptional ?? false} /><span className="text-sm font-medium">Optional task (excluded from progress)</span></label>
       <div className="md:col-span-2">
         <Button type="submit">{task ? "Lưu thay đổi" : "Tạo Task"}</Button>
       </div>

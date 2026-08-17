@@ -18,6 +18,7 @@ export function listEvents(userId: string, from: Date, to: Date) {
 export function getEvent(userId: string, id: string) {
   return getPrisma().event.findFirst({
     where: { id, userId, deletedAt: null },
+    include: { goal: { select: { id: true, title: true } }, task: { select: { id: true, title: true } }, notes: { where: { deletedAt: null }, select: { id: true, title: true } } },
   });
 }
 
@@ -64,6 +65,10 @@ async function validRelations(
 export function createEvent(userId: string, input: EventInput) {
   return getPrisma().$transaction(async (tx) => {
     if (!(await validRelations(tx, userId, input))) return null;
+    if (input.externalKey) {
+      const existing = await tx.event.findFirst({ where: { userId, externalKey: input.externalKey }, select: { id: true } });
+      if (existing) return tx.event.update({ where: { id: existing.id }, data: { ...input, version: { increment: 1 } } });
+    }
     return tx.event.create({ data: { ...input, userId } });
   });
 }

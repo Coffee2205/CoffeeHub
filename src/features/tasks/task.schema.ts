@@ -16,6 +16,12 @@ export type TaskInput = {
   goalId: string | null;
   roadmapId: string | null;
   roadmapStageId: string | null;
+  estimatedMinutes: number | null;
+  expectedResult: string | null;
+  resources: { name: string; type: string }[];
+  source: string | null;
+  externalKey: string | null;
+  isOptional: boolean;
 };
 
 const value = (form: FormData, key: string) =>
@@ -36,6 +42,16 @@ export function parseTaskForm(form: FormData): {
   const goalId = value(form, "goalId") || null;
   const roadmapId = value(form, "roadmapId") || null;
   const roadmapStageId = value(form, "roadmapStageId") || null;
+  const durationValue = value(form, "estimatedMinutes");
+  const estimatedMinutes = durationValue ? Number(durationValue) : null;
+  const expectedResult = value(form, "expectedResult") || null;
+  const source = value(form, "source") || null;
+  const externalKey = value(form, "externalKey") || null;
+  const isOptional = form.get("isOptional") === "on";
+  const resources = value(form, "resources").split("\n").map((line) => line.trim()).filter(Boolean).map((line) => {
+    const [name, type = "other"] = line.split("|").map((item) => item.trim());
+    return { name, type };
+  });
   const errors: string[] = [];
   if (!title || title.length > 220)
     errors.push("Tiêu đề phải có từ 1 đến 220 ký tự.");
@@ -45,6 +61,11 @@ export function parseTaskForm(form: FormData): {
   if (!priority) errors.push("Mức ưu tiên không hợp lệ.");
   if (dueAt && Number.isNaN(dueAt.valueOf()))
     errors.push("Deadline không hợp lệ.");
+  if (estimatedMinutes !== null && (!Number.isInteger(estimatedMinutes) || estimatedMinutes <= 0)) errors.push("Duration must be a positive number of minutes.");
+  if (expectedResult && expectedResult.length > 2000) errors.push("Expected result is too long.");
+  if (source && source.length > 160) errors.push("Source is too long.");
+  if (externalKey && externalKey.length > 255) errors.push("External key is too long.");
+  if (resources.some((item) => !item.name || item.name.length > 240 || item.type.length > 80)) errors.push("Resources must use Name | type format.");
   if (!status || !priority || errors.length) return { errors };
   return {
     data: {
@@ -56,6 +77,12 @@ export function parseTaskForm(form: FormData): {
       goalId,
       roadmapId,
       roadmapStageId,
+      estimatedMinutes,
+      expectedResult,
+      resources,
+      source,
+      externalKey,
+      isOptional,
     },
     errors,
   };

@@ -150,6 +150,11 @@ export default async function GoalDetailPage({
           error={query.error}
         />
       </div>
+      <section className="grid gap-4 md:grid-cols-3">
+        <Card><CardHeader><CardTitle>Current stage</CardTitle></CardHeader><p className="text-sm">{goal.roadmaps.flatMap((roadmap) => roadmap.stages).find((stage) => stage.status === "ACTIVE")?.title ?? "No active stage"}</p></Card>
+        <Card><CardHeader><CardTitle>Upcoming events</CardTitle></CardHeader>{goal.events.length ? goal.events.map((event) => <Link key={event.id} className="block text-sm text-primary-hover" href={`/app/calendar/${event.id}`}>{event.title}</Link>) : <p className="text-sm text-muted">No upcoming events</p>}</Card>
+        <Card><CardHeader><CardTitle>Related notes</CardTitle></CardHeader><Link className="text-sm font-semibold text-primary-hover" href={`/app/notes/new?goalId=${goal.id}`}>Add note</Link>{goal.notes.map((note) => <Link key={note.id} className="mt-2 block text-sm text-primary-hover" href={`/app/notes/${note.id}`}>{note.title}</Link>)}</Card>
+      </section>
     </div>
   );
 }

@@ -15,6 +15,7 @@ import {
   updateStageAction,
 } from "../roadmap.actions";
 import { milestoneProgress } from "../roadmap.schema";
+import { ROADMAP_STAGE_STATUSES } from "../roadmap.schema";
 import { ArchiveStageButton } from "./archive-stage-button";
 
 type RoadmapData = {
@@ -25,6 +26,10 @@ type RoadmapData = {
     id: string;
     title: string;
     description: string | null;
+    startsAt: Date | null;
+    endsAt: Date | null;
+    status: string;
+    successCriteria: unknown;
     tasks: Array<{ id: string; title: string; status: string }>;
   }>;
 };
@@ -177,6 +182,8 @@ export function RoadmapBoard({
                       defaultValue={stage.description ?? ""}
                       aria-label="Mô tả milestone"
                     />
+                    <div className="grid gap-3 sm:grid-cols-3"><Input name="startsAt" type="date" defaultValue={stage.startsAt?.toISOString().slice(0, 10) ?? ""} /><Input name="endsAt" type="date" defaultValue={stage.endsAt?.toISOString().slice(0, 10) ?? ""} /><select name="status" defaultValue={stage.status} className="min-h-11 rounded-sm border border-border bg-background-secondary px-3">{ROADMAP_STAGE_STATUSES.map((item) => <option key={item}>{item}</option>)}</select></div>
+                    <Textarea name="successCriteria" placeholder="One success criterion per line" defaultValue={Array.isArray(stage.successCriteria) ? stage.successCriteria.filter((item): item is string => typeof item === "string").join("\n") : ""} />
                     <Button
                       type="submit"
                       variant="secondary"
@@ -222,6 +229,10 @@ export function RoadmapBoard({
             placeholder="Kết quả cần đạt để hoàn tất milestone"
           />
         </label>
+        <Input name="startsAt" type="date" aria-label="Stage start" />
+        <Input name="endsAt" type="date" aria-label="Stage end" />
+        <select name="status" defaultValue="PLANNED" className="min-h-11 rounded-sm border border-border bg-background-secondary px-3">{ROADMAP_STAGE_STATUSES.map((item) => <option key={item}>{item}</option>)}</select>
+        <Textarea name="successCriteria" placeholder="One success criterion per line" />
       </form>
     </Card>
   );

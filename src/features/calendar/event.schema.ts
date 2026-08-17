@@ -14,6 +14,8 @@ export type EventInput = {
   recurrence: (typeof EVENT_RECURRENCES)[number];
   goalId: string | null;
   taskId: string | null;
+  source: string | null;
+  externalKey: string | null;
 };
 
 const value = (form: FormData, key: string) =>
@@ -122,6 +124,8 @@ export function parseEventForm(form: FormData): {
   if (startsAt && endsAt && startsAt >= endsAt)
     errors.push("Thời gian bắt đầu phải trước thời gian kết thúc.");
   if (!recurrence) errors.push("Chu kỳ lặp không hợp lệ.");
+  if (value(form, "source").length > 160) errors.push("Source is too long.");
+  if (value(form, "externalKey").length > 255) errors.push("External key is too long.");
   if (!startsAt || !recurrence || errors.length) return { errors };
   return {
     data: {
@@ -133,6 +137,8 @@ export function parseEventForm(form: FormData): {
       recurrence,
       goalId: value(form, "goalId") || null,
       taskId: value(form, "taskId") || null,
+      source: value(form, "source") || null,
+      externalKey: value(form, "externalKey") || null,
     },
     errors,
   };

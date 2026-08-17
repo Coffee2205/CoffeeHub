@@ -7,6 +7,7 @@ import type { RoadmapInput, StageInput } from "./roadmap.schema";
 const activeTask = {
   deletedAt: null,
   status: { not: TaskStatus.CANCELLED },
+  isOptional: false,
 } as const;
 
 export function getGoalRoadmaps(userId: string, goalId: string) {
