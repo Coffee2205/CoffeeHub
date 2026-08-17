@@ -57,6 +57,9 @@ export default async function GoalDetailPage({
           <p className="mt-2 text-foreground-secondary">
             Chi tiết, tiến độ và thiết lập Goal.
           </p>
+          <p className="mt-2 text-sm text-muted">
+            {goal.startsAt?.toLocaleDateString("vi-VN") ?? "Chưa đặt ngày bắt đầu"} → {goal.deadline?.toLocaleDateString("vi-VN") ?? "Chưa đặt target date"}
+          </p>
         </div>
         <div className="flex flex-wrap gap-3">
           <Link
@@ -150,8 +153,9 @@ export default async function GoalDetailPage({
           error={query.error}
         />
       </div>
-      <section className="grid gap-4 md:grid-cols-3">
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <Card><CardHeader><CardTitle>Current stage</CardTitle></CardHeader><p className="text-sm">{goal.roadmaps.flatMap((roadmap) => roadmap.stages).find((stage) => stage.status === "ACTIVE")?.title ?? "No active stage"}</p></Card>
+        <Card><CardHeader><CardTitle>Upcoming tasks</CardTitle></CardHeader>{goal.tasks.filter((task) => task.status !== "COMPLETED" && task.dueAt).sort((a, b) => a.dueAt!.getTime() - b.dueAt!.getTime()).slice(0, 5).map((task) => <Link key={task.id} className="mt-2 block text-sm text-primary-hover" href={`/app/tasks/${task.id}`}>{task.title} · {task.dueAt!.toLocaleDateString("vi-VN")}</Link>)}</Card>
         <Card><CardHeader><CardTitle>Upcoming events</CardTitle></CardHeader>{goal.events.length ? goal.events.map((event) => <Link key={event.id} className="block text-sm text-primary-hover" href={`/app/calendar/${event.id}`}>{event.title}</Link>) : <p className="text-sm text-muted">No upcoming events</p>}</Card>
         <Card><CardHeader><CardTitle>Related notes</CardTitle></CardHeader><Link className="text-sm font-semibold text-primary-hover" href={`/app/notes/new?goalId=${goal.id}`}>Add note</Link>{goal.notes.map((note) => <Link key={note.id} className="mt-2 block text-sm text-primary-hover" href={`/app/notes/${note.id}`}>{note.title}</Link>)}</Card>
       </section>

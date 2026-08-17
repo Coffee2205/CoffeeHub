@@ -76,6 +76,9 @@ export function RoadmapBoard({
                       >
                         {progress.status}
                       </Badge>
+                      <p className="mt-2 text-xs text-muted">
+                        {stage.startsAt?.toLocaleDateString("vi-VN") ?? "—"} → {stage.endsAt?.toLocaleDateString("vi-VN") ?? "—"} · {stage.status}
+                      </p>
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2">
@@ -143,6 +146,11 @@ export function RoadmapBoard({
                   {progress.percentage}% · {progress.completed}/
                   {stage.tasks.length} Task hoàn thành
                 </p>
+                {Array.isArray(stage.successCriteria) ? (
+                  <ul className="mt-3 space-y-1 text-xs text-foreground-secondary">
+                    {stage.successCriteria.filter((item): item is string => typeof item === "string").map((item) => <li key={item}>Milestone: {item}</li>)}
+                  </ul>
+                ) : null}
                 {stage.tasks.length ? (
                   <ul className="mt-3 space-y-1 text-xs text-foreground-secondary">
                     {stage.tasks.map((task) => (

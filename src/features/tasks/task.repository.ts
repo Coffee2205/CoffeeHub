@@ -4,7 +4,7 @@ import { getPrisma } from "@/lib/prisma";
 import type { TaskInput } from "./task.schema";
 
 export type TaskFilters = { q?: string; status?: string; priority?: string };
-export function listTasks(userId: string, filters: TaskFilters) {
+export async function listTasks(userId: string, filters: TaskFilters) {
   const where: Prisma.TaskWhereInput = { userId, deletedAt: null };
   if (filters.q)
     where.OR = [
@@ -19,7 +19,7 @@ export function listTasks(userId: string, filters: TaskFilters) {
     where.status = filters.status as TaskStatus;
   if (["LOW", "MEDIUM", "HIGH", "URGENT"].includes(filters.priority ?? ""))
     where.priority = filters.priority as Prisma.EnumPriorityFilter;
-  return getPrisma().task.findMany({
+  const tasks = await getPrisma().task.findMany({
     where,
     orderBy: [{ dueAt: { sort: "asc", nulls: "last" } }, { createdAt: "desc" }],
     include: {
@@ -27,6 +27,19 @@ export function listTasks(userId: string, filters: TaskFilters) {
       roadmap: { select: { id: true, title: true } },
       roadmapStage: { select: { id: true, title: true } },
     },
+  });
+
+  return tasks.sort((a, b) => {
+    const aFinished =
+      a.status === TaskStatus.COMPLETED || a.status === TaskStatus.CANCELLED;
+    const bFinished =
+      b.status === TaskStatus.COMPLETED || b.status === TaskStatus.CANCELLED;
+    if (aFinished !== bFinished) return aFinished ? 1 : -1;
+
+    if (a.dueAt && b.dueAt) return a.dueAt.getTime() - b.dueAt.getTime();
+    if (a.dueAt) return -1;
+    if (b.dueAt) return 1;
+    return b.createdAt.getTime() - a.createdAt.getTime();
   });
 }
 

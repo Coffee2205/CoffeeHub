@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "postinstall": "prisma generate",
     "prisma:validate": "prisma validate",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "import:japanese-plan": "tsx prisma/import-japanese-study-plan.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "4.0.39",

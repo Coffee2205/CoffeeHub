@@ -109,6 +109,11 @@ export default async function ChecklistsPage({
                   <p className="mt-4 text-xs text-muted">
                     {contextLabel(checklist)}
                   </p>
+                  {checklist.task?.dueAt ? (
+                    <p className="mt-2 text-xs font-semibold text-foreground-secondary">
+                      Hạn Task: {checklist.task.dueAt.toLocaleDateString("vi-VN")}
+                    </p>
+                  ) : null}
                   <div
                     className="mt-3 h-2 overflow-hidden rounded-full bg-background-tertiary"
                     role="progressbar"

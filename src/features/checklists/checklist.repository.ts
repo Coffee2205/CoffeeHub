@@ -31,6 +31,8 @@ const checklistInclude = {
     select: {
       id: true,
       title: true,
+      dueAt: true,
+      status: true,
       goal: { select: { id: true, title: true } },
       roadmap: { select: { id: true, title: true } },
     },
@@ -38,17 +40,33 @@ const checklistInclude = {
   items: itemInclude,
 } satisfies Prisma.ChecklistInclude;
 
-export function listChecklists(userId: string, filters: ChecklistFilters) {
+export async function listChecklists(
+  userId: string,
+  filters: ChecklistFilters,
+) {
   const where: Prisma.ChecklistWhereInput = { userId, deletedAt: null };
   if (filters.q)
     where.OR = [
       { title: { contains: filters.q, mode: "insensitive" } },
       { description: { contains: filters.q, mode: "insensitive" } },
     ];
-  return getPrisma().checklist.findMany({
+  const checklists = await getPrisma().checklist.findMany({
     where,
     orderBy: [{ updatedAt: "desc" }],
     include: checklistInclude,
+  });
+
+  return checklists.sort((a, b) => {
+    const aComplete = a.items.length > 0 && a.items.every((item) => item.completed);
+    const bComplete = b.items.length > 0 && b.items.every((item) => item.completed);
+    if (aComplete !== bComplete) return aComplete ? 1 : -1;
+
+    const aDueAt = a.task?.dueAt;
+    const bDueAt = b.task?.dueAt;
+    if (aDueAt && bDueAt) return aDueAt.getTime() - bDueAt.getTime();
+    if (aDueAt) return -1;
+    if (bDueAt) return 1;
+    return b.updatedAt.getTime() - a.updatedAt.getTime();
   });
 }
 
